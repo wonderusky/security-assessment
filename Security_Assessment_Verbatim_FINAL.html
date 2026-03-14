@@ -3,127 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        @page { size: A4; margin: 0; }
-        body { font-family: Arial, sans-serif; background-color: #525659; margin: 0; padding: 0; color: #333333; }
-        .page { width: 210mm; min-height: 297mm; padding: 20mm 25mm; margin: 10mm auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.5); position: relative; box-sizing: border-box; }
-        .conf-header { font-size: 10px; color: #666666; border-bottom: 1px solid #eee; padding-bottom: 5px; text-transform: uppercase; margin-bottom: 30px; }
-        h1 { color: #FA4616; border-bottom: 2px solid #FA4616; padding-bottom: 5px; margin-top: 30px; text-transform: uppercase; font-size: 18px; letter-spacing: 0.5px; }
-        h2 { font-size: 16px; margin-top: 20px; color: #333333; font-weight: bold; }
-        h3 { font-size: 13px; margin-top: 15px; font-weight: bold; color: #333333; }
-        p, li { font-size: 12px; line-height: 1.5; text-align: justify; }
-        .bullet-list { margin: 10px 0; padding-left: 18px; }
-        .bullet-list li { margin-bottom: 5px; }
-        .so-what-box { margin: 20px 0; border: 1px solid #CCCCCC; page-break-inside: avoid; }
-        .so-what-head { background-color: #FA4616; color: white; padding: 8px 15px; font-weight: bold; font-size: 11px; }
-        .so-what-item { padding: 10px 15px; font-size: 12px; border-bottom: 1px solid #CCCCCC; }
-        .so-what-item:last-child { border-bottom: none; }
-        .so-what-item:nth-child(even) { background-color: #FFF3EE; }
-        .footer-tag { position: absolute; bottom: 15mm; left: 25mm; right: 25mm; font-size: 10px; color: #666666; border-top: 1px solid #eee; padding-top: 5px; display: flex; justify-content: space-between; }
-        .code-block { background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; margin: 10px 0; white-space: pre-wrap; }
-        @media print {
-            body { background: none; }
-            .page { margin: 0; box-shadow: none; page-break-after: always; }
+        /* Gmail Layout Optimizations */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; color: #333333; }
+        .email-container { max-width: 800px; margin: 0 auto; background: white; border: 1px solid #e0e0e0; }
+        .page-block { padding: 40px 50px; border-bottom: 2px solid #eeeeee; position: relative; background: white; }
+        .conf-header { font-size: 10px; color: #666666; text-transform: uppercase; margin-bottom: 30px; letter-spacing: 1px; }
+        h1 { color: #FA4616; border-bottom: 2px solid #FA4616; padding-bottom: 8px; margin-top: 30px; text-transform: uppercase; font-size: 20px; }
+        h2 { font-size: 17px; margin-top: 25px; color: #333333; font-weight: bold; }
+        h3 { font-size: 14px; margin-top: 18px; font-weight: bold; color: #333333; }
+        p, li { font-size: 13px; line-height: 1.6; color: #444444; }
+        .so-what-box { margin: 25px 0; border: 1px solid #CCCCCC; background-color: #ffffff; }
+        .so-what-head { background-color: #FA4616; color: white; padding: 10px 15px; font-weight: bold; font-size: 12px; }
+        .so-what-item { padding: 12px 15px; font-size: 13px; border-bottom: 1px solid #CCCCCC; }
+        .footer-tag { font-size: 10px; color: #666666; margin-top: 40px; padding-top: 10px; border-top: 1px solid #eeeeee; display: block; }
+        table { width: 100% !important; border-collapse: collapse; margin: 20px 0; }
+        .code-block { background-color: #1E1E1E; color: #D4D4D4; padding: 15px; font-family: 'Courier New', monospace; font-size: 12px; border-radius: 4px; margin: 15px 0; overflow-x: auto; }
+        
+        /* Mobile / Gmail App Responsiveness */
+        @media only screen and (max-width: 600px) {
+            .page-block { padding: 20px 15px !important; }
+            h1 { font-size: 18px !important; }
+            .KPI-container { flex-direction: column !important; }
+            .KPI-item { margin: 5px 0 !important; width: 100% !important; }
         }
     </style>
 </head>
 <body>
-    <!-- PAGE 1: COVER -->
-    <div class="page">
-        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
-        <div style="margin-top: 100px;">
-            <div style="color: #FA4616; font-size: 44px; font-weight: bold; line-height: 1;">IDEX Corporation</div>
-            <div style="font-size: 34px; font-weight: bold; margin-bottom: 20px;">Security Assessment</div>
-            <div style="font-size: 16px; color: #666666; font-style: italic; margin-bottom: 10px;">March 2026</div>
-            
-            <div style="margin-top: 20px;">
-                <div style="font-size: 11px; color: #666666; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Data Source Inventories & Periods</div>
+    <div class="email-container">
+        <!-- PAGE 1: COVER -->
+        <div class="page-block">
+            <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+            <div style="margin-top: 60px; margin-bottom: 60px;">
+                <div style="color: #FA4616; font-size: 42px; font-weight: bold; line-height: 1.1;">IDEX Corporation</div>
+                <div style="font-size: 32px; font-weight: bold; margin-bottom: 20px; color: #333333;">Security Assessment</div>
+                <div style="font-size: 16px; color: #666666; font-style: italic;">March 2026</div>
                 
+                <div style="margin-top: 30px; background: #f9f9f9; padding: 15px; border-left: 4px solid #FA4616;">
+                    <div style="font-size: 11px; color: #888888; font-weight: bold; text-transform: uppercase; margin-bottom: 8px;">Data Source Inventories & Periods</div>
+                    
+                </div>
             </div>
-
-            <div style="margin-top: 40px; font-size: 13px; line-height: 1.6;">
+            <div style="font-size: 13px; line-height: 1.6; color: #444;">
                 <strong>Prepared by:</strong> John Shelest | Palo Alto Networks Solutions Consultant<br>
-                <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; 65,534 Threat Log Rows
+                <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Device Groups
             </div>
+            <div class="footer-tag">&copy; 2026 Palo Alto Networks | Page 1</div>
         </div>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 1</span>
-        </div>
-    </div>
 
-    <!-- PAGE 2: KEY FINDINGS -->
-    <div class="page">
-        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
-        <h1>What This Report Means for IDEX Corporation</h1>
-        <p style="font-style: italic; color: #666666; margin-bottom: 20px;">The short version &mdash; before you read the numbers</p>
-        
-        
+        <!-- PAGE 2: KEY FINDINGS -->
+        <div class="page-block">
+            <h1>What This Report Means for IDEX Corporation</h1>
+            <p style="font-style: italic; color: #666; margin-bottom: 20px;">The short version &mdash; before you read the numbers</p>
+            
     <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
         <div style="background-color: #CC0000; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
             1
         </div>
         <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
-            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">You could have an active breach.</div>
-            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">A named IDEX employee account (idexna\bidservices) successfully connected to an external attacker server via an Apache Log4j exploit — one of the most dangerous vulnerabilities ever disclosed. This is a completed connection, not a blocked attempt. The CISO and Legal team need to know today: this may trigger breach notification obligations under GDPR or CCPA, and endpoint 10.100.10.201 requires immediate forensic investigation.</div>
+            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">Active Breach</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">A named employee account (idexna\bidservices) connected to an attacker server via Log4j. Forensic investigation of 10.100.10.201 is required today.</div>
         </div>
     </div>
-        
+            
     <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
         <div style="background-color: #CC0000; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
             2
         </div>
         <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
-            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">Someone built fake IDEX infrastructure to target you specifically.</div>
-            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">The domain idexdmz.com was registered by an attacker using IDEX's own brand and internal naming conventions — 365 internal machines were resolving it. Generic malware doesn't do this. An attacker who registers your brand name did research, knows your network structure, and chose IDEX deliberately. This is targeted, not opportunistic.</div>
+            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">Targeted Infrastructure</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">idexdmz.com was registered specifically to target your brand. 365 machines resolved this domain.</div>
         </div>
     </div>
-        
+            
     <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
         <div style="background-color: #CC0000; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
             3
         </div>
         <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
-            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">1,163 machines may have handed attackers your employees' passwords.</div>
-            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">okta-ema.com is a fake Okta login page designed to steal credentials. Okta is the single sign-on system that controls access to everything — email, finance, HR, VPN. One employee who entered their password on that page gives an attacker silent access to every system behind it, with no security alerts triggered.</div>
+            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">Identity Phishing</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">okta-ema.com is stealing credentials. 1,163 machines resolved this fake login page.</div>
         </div>
     </div>
-        
+            
     <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
         <div style="background-color: #CC0000; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
             4
         </div>
         <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
-            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">Your firewall hasn't learned anything new since September 2025.</div>
-            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible to your security stack. This takes 30 minutes to fix in Panorama and costs nothing. It is the single highest-ROI action in this report.</div>
+            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">Content Staleness</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">Security signatures are 35 days out of date. You are blind to new threats since February 2026.</div>
         </div>
     </div>
-        
-    <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
-        <div style="background-color: #E07800; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
-            5
+            <div class="footer-tag">&copy; 2026 Palo Alto Networks | Page 2</div>
         </div>
-        <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
-            <div style="color: #E07800; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">Your own DNS servers are masking an unknown number of infected machines.</div>
-            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">10.57.11.173 and 10.57.11.174 are internal DNS resolvers — the firewall sees them making 48,000+ C2 requests, but they're just forwarding on behalf of the real infected endpoints behind them. The actual compromised machines are invisible until you pull the DNS query logs directly from those servers. It could be two machines. It could be two hundred.</div>
-        </div>
-    </div>
-        
-    <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
-        <div style="background-color: #E07800; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
-            6
-        </div>
-        <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
-            <div style="color: #E07800; font-size: 15px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase;">Ransomware has a clear, open path through your network right now.</div>
-            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway to turn one infected workstation into a company-wide encryption event. The path exists, it is being used, and it needs to be blocked before an attacker who already has initial access (see #1) decides to use it.</div>
-        </div>
-    </div>
-
-        <p style="margin-top: 25px; font-size: 11px; color: #666666;">The detailed technical evidence supporting each of the findings above follows in the sections below.</p>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 2</span>
-        </div>
-    </div>
 
     <!-- PAGE 3: EXECUTIVE SUMMARY -->
     <div class="page">

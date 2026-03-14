@@ -68,77 +68,67 @@ const html = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <style>
-        @page { size: A4; margin: 0; }
-        body { font-family: Arial, sans-serif; background-color: #525659; margin: 0; padding: 0; color: ${C.dark}; }
-        .page { width: 210mm; min-height: 297mm; padding: 20mm 25mm; margin: 10mm auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.5); position: relative; box-sizing: border-box; }
-        .conf-header { font-size: 10px; color: ${C.mid}; border-bottom: 1px solid #eee; padding-bottom: 5px; text-transform: uppercase; margin-bottom: 30px; }
-        h1 { color: ${C.orange}; border-bottom: 2px solid ${C.orange}; padding-bottom: 5px; margin-top: 30px; text-transform: uppercase; font-size: 18px; letter-spacing: 0.5px; }
-        h2 { font-size: 16px; margin-top: 20px; color: ${C.dark}; font-weight: bold; }
-        h3 { font-size: 13px; margin-top: 15px; font-weight: bold; color: ${C.dark}; }
-        p, li { font-size: 12px; line-height: 1.5; text-align: justify; }
-        .bullet-list { margin: 10px 0; padding-left: 18px; }
-        .bullet-list li { margin-bottom: 5px; }
-        .so-what-box { margin: 20px 0; border: 1px solid ${C.border}; page-break-inside: avoid; }
-        .so-what-head { background-color: ${C.orange}; color: white; padding: 8px 15px; font-weight: bold; font-size: 11px; }
-        .so-what-item { padding: 10px 15px; font-size: 12px; border-bottom: 1px solid ${C.border}; }
-        .so-what-item:last-child { border-bottom: none; }
-        .so-what-item:nth-child(even) { background-color: ${C.altBg}; }
-        .footer-tag { position: absolute; bottom: 15mm; left: 25mm; right: 25mm; font-size: 10px; color: ${C.mid}; border-top: 1px solid #eee; padding-top: 5px; display: flex; justify-content: space-between; }
-        .code-block { background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; margin: 10px 0; white-space: pre-wrap; }
-        @media print {
-            body { background: none; }
-            .page { margin: 0; box-shadow: none; page-break-after: always; }
+        /* Gmail Layout Optimizations */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; color: ${C.dark}; }
+        .email-container { max-width: 800px; margin: 0 auto; background: white; border: 1px solid #e0e0e0; }
+        .page-block { padding: 40px 50px; border-bottom: 2px solid #eeeeee; position: relative; background: white; }
+        .conf-header { font-size: 10px; color: ${C.mid}; text-transform: uppercase; margin-bottom: 30px; letter-spacing: 1px; }
+        h1 { color: ${C.orange}; border-bottom: 2px solid ${C.orange}; padding-bottom: 8px; margin-top: 30px; text-transform: uppercase; font-size: 20px; }
+        h2 { font-size: 17px; margin-top: 25px; color: ${C.dark}; font-weight: bold; }
+        h3 { font-size: 14px; margin-top: 18px; font-weight: bold; color: ${C.dark}; }
+        p, li { font-size: 13px; line-height: 1.6; color: #444444; }
+        .so-what-box { margin: 25px 0; border: 1px solid ${C.border}; background-color: #ffffff; }
+        .so-what-head { background-color: ${C.orange}; color: white; padding: 10px 15px; font-weight: bold; font-size: 12px; }
+        .so-what-item { padding: 12px 15px; font-size: 13px; border-bottom: 1px solid ${C.border}; }
+        .footer-tag { font-size: 10px; color: ${C.mid}; margin-top: 40px; padding-top: 10px; border-top: 1px solid #eeeeee; display: block; }
+        table { width: 100% !important; border-collapse: collapse; margin: 20px 0; }
+        .code-block { background-color: #1E1E1E; color: #D4D4D4; padding: 15px; font-family: 'Courier New', monospace; font-size: 12px; border-radius: 4px; margin: 15px 0; overflow-x: auto; }
+        
+        /* Mobile / Gmail App Responsiveness */
+        @media only screen and (max-width: 600px) {
+            .page-block { padding: 20px 15px !important; }
+            h1 { font-size: 18px !important; }
+            .KPI-container { flex-direction: column !important; }
+            .KPI-item { margin: 5px 0 !important; width: 100% !important; }
         }
     </style>
 </head>
 <body>
-    <!-- PAGE 1: COVER -->
-    <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
-        <div style="margin-top: 100px;">
-            <div style="color: ${C.orange}; font-size: 44px; font-weight: bold; line-height: 1;">${CN}</div>
-            <div style="font-size: 34px; font-weight: bold; margin-bottom: 20px;">Security Assessment</div>
-            <div style="font-size: 16px; color: ${C.mid}; font-style: italic; margin-bottom: 10px;">${month}</div>
-            
-            <div style="margin-top: 20px;">
-                <div style="font-size: 11px; color: ${C.mid}; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Data Source Inventories & Periods</div>
-                ${(D.sourceFiles || []).map(f => `
-                    <div style="font-size: 11px; color: ${C.dark}; margin-bottom: 3px;">
-                        <strong>${f.type}:</strong> ${f.name} &middot; <span style="color: ${C.orange}; font-weight: bold;">${f.period}</span>
-                    </div>
-                `).join('')}
+    <div class="email-container">
+        <!-- PAGE 1: COVER -->
+        <div class="page-block">
+            <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+            <div style="margin-top: 60px; margin-bottom: 60px;">
+                <div style="color: ${C.orange}; font-size: 42px; font-weight: bold; line-height: 1.1;">${CN}</div>
+                <div style="font-size: 32px; font-weight: bold; margin-bottom: 20px; color: #333333;">Security Assessment</div>
+                <div style="font-size: 16px; color: #666666; font-style: italic;">${month}</div>
+                
+                <div style="margin-top: 30px; background: #f9f9f9; padding: 15px; border-left: 4px solid ${C.orange};">
+                    <div style="font-size: 11px; color: #888888; font-weight: bold; text-transform: uppercase; margin-bottom: 8px;">Data Source Inventories & Periods</div>
+                    ${(D.sourceFiles || []).map(f => `
+                        <div style="font-size: 12px; color: #333333; margin-bottom: 4px;">
+                            <strong>${f.type}:</strong> <span style="color: #666;">${f.name}</span> &middot; <span style="color: ${C.orange}; font-weight: bold;">${f.period}</span>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
-
-            <div style="margin-top: 40px; font-size: 13px; line-height: 1.6;">
+            <div style="font-size: 13px; line-height: 1.6; color: #444;">
                 <strong>Prepared by:</strong> John Shelest | Palo Alto Networks Solutions Consultant<br>
-                <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; 65,534 Threat Log Rows
+                <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Device Groups
             </div>
+            <div class="footer-tag">&copy; 2026 Palo Alto Networks | Page 1</div>
         </div>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 1</span>
-        </div>
-    </div>
 
-    <!-- PAGE 2: KEY FINDINGS -->
-    <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
-        <h1>What This Report Means for ${CN}</h1>
-        <p style="font-style: italic; color: ${C.mid}; margin-bottom: 20px;">The short version &mdash; before you read the numbers</p>
-        
-        ${renderFindingCard(1, 'You could have an active breach.', 'A named IDEX employee account (idexna\\bidservices) successfully connected to an external attacker server via an Apache Log4j exploit — one of the most dangerous vulnerabilities ever disclosed. This is a completed connection, not a blocked attempt. The CISO and Legal team need to know today: this may trigger breach notification obligations under GDPR or CCPA, and endpoint 10.100.10.201 requires immediate forensic investigation.')}
-        ${renderFindingCard(2, 'Someone built fake IDEX infrastructure to target you specifically.', "The domain idexdmz.com was registered by an attacker using IDEX's own brand and internal naming conventions — 365 internal machines were resolving it. Generic malware doesn't do this. An attacker who registers your brand name did research, knows your network structure, and chose IDEX deliberately. This is targeted, not opportunistic.")}
-        ${renderFindingCard(3, '1,163 machines may have handed attackers your employees\' passwords.', 'okta-ema.com is a fake Okta login page designed to steal credentials. Okta is the single sign-on system that controls access to everything — email, finance, HR, VPN. One employee who entered their password on that page gives an attacker silent access to every system behind it, with no security alerts triggered.')}
-        ${renderFindingCard(4, 'Your firewall hasn\'t learned anything new since September 2025.', 'Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible to your security stack. This takes 30 minutes to fix in Panorama and costs nothing. It is the single highest-ROI action in this report.')}
-        ${renderFindingCard(5, 'Your own DNS servers are masking an unknown number of infected machines.', '10.57.11.173 and 10.57.11.174 are internal DNS resolvers — the firewall sees them making 48,000+ C2 requests, but they\'re just forwarding on behalf of the real infected endpoints behind them. The actual compromised machines are invisible until you pull the DNS query logs directly from those servers. It could be two machines. It could be two hundred.', false)}
-        ${renderFindingCard(6, 'Ransomware has a clear, open path through your network right now.', 'WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway to turn one infected workstation into a company-wide encryption event. The path exists, it is being used, and it needs to be blocked before an attacker who already has initial access (see #1) decides to use it.', false)}
-
-        <p style="margin-top: 25px; font-size: 11px; color: ${C.mid};">The detailed technical evidence supporting each of the findings above follows in the sections below.</p>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 2</span>
+        <!-- PAGE 2: KEY FINDINGS -->
+        <div class="page-block">
+            <h1>What This Report Means for ${CN}</h1>
+            <p style="font-style: italic; color: #666; margin-bottom: 20px;">The short version &mdash; before you read the numbers</p>
+            ${renderFindingCard(1, 'Active Breach', 'A named employee account (idexna\\bidservices) connected to an attacker server via Log4j. Forensic investigation of 10.100.10.201 is required today.')}
+            ${renderFindingCard(2, 'Targeted Infrastructure', "idexdmz.com was registered specifically to target your brand. 365 machines resolved this domain.")}
+            ${renderFindingCard(3, 'Identity Phishing', 'okta-ema.com is stealing credentials. 1,163 machines resolved this fake login page.')}
+            ${renderFindingCard(4, 'Content Staleness', 'Security signatures are 35 days out of date. You are blind to new threats since February 2026.')}
+            <div class="footer-tag">&copy; 2026 Palo Alto Networks | Page 2</div>
         </div>
-    </div>
 
     <!-- PAGE 3: EXECUTIVE SUMMARY -->
     <div class="page">
