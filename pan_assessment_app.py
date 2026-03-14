@@ -329,7 +329,15 @@ class App(tk.Tk):
     
     def _run_generate(self):
         self._save_prefs()
+        # Use self._log instead of self.tk._log
         threading.Thread(target=lambda: generate(self.src.get(), self.cust.get(), self.out.get(), self._log), daemon=True).start()
+
+    def _log(self, msg):
+        self.log_box.configure(state='normal')
+        self.log_box.insert('end', msg + '\n')
+        self.log_box.see('end')
+        self.log_box.configure(state='disabled')
+        self.update_idletasks()
 
 if __name__ == '__main__':
     App().mainloop()
