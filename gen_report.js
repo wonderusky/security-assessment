@@ -1,7 +1,9 @@
 #!/opt/homebrew/bin/node
 /**
  * gen_report.js
- * VERBATIM HIGH-FIDELITY SECURITY ASSESSMENT GENERATOR (8-PAGE + APPENDIX)
+ * VERBATIM HIGH-FIDELITY SECURITY ASSESSMENT GENERATOR (16-PAGE STANDARD)
+ * This engine generates a 1:1 pixel-perfect and verbatim copy of the 
+ * "IDEX Corp Security Assessment" gold-standard PDF, including ALL "So What" sections.
  */
 const fs = require('fs');
 
@@ -76,7 +78,7 @@ const html = `<!DOCTYPE html>
         p, li { font-size: 12px; line-height: 1.5; text-align: justify; }
         .bullet-list { margin: 10px 0; padding-left: 18px; }
         .bullet-list li { margin-bottom: 5px; }
-        .so-what-box { margin: 20px 0; border: 1px solid ${C.border}; }
+        .so-what-box { margin: 20px 0; border: 1px solid ${C.border}; page-break-inside: avoid; }
         .so-what-head { background-color: ${C.orange}; color: white; padding: 8px 15px; font-weight: bold; font-size: 11px; }
         .so-what-item { padding: 10px 15px; font-size: 12px; border-bottom: 1px solid ${C.border}; }
         .so-what-item:last-child { border-bottom: none; }
@@ -189,6 +191,13 @@ const html = `<!DOCTYPE html>
             ['idexdmz.com (TID 109010003)', 'IDEX Brand Squatting', '365', { text: '⚠ CRITICAL', color: C.red }]
         ], ['35%', '35%', '15%', '15%'])}
 
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› Persistent Beaconing</strong> &mdash; 55 internal IPs are actively "calling home." This isn't just malware; it's a persistent foothold. The attacker is waiting for the right moment to pivot.</div>
+            <div class="so-what-item"><strong>› Targeted Domains</strong> &mdash; Attackers are spoofing Akamai, Azure, and Okta. This is designed to bypass human suspicion and DNS security filters.</div>
+            <div class="so-what-item"><strong>› Intempio Persistence</strong> &mdash; 16k hits across multiple hosts indicates a coordinated C2 campaign inside the ${CN} network.</div>
+        </div>
+
         <h3>2.2 Top Compromised Source IPs</h3>
         ${renderTable(['Source IP', 'Zone', 'Hits', 'Unique Threats', 'Primary C2 Domains'], [
             ['10.57.11.173', 'Internal → MPLS', '24,011', '24', 'azure* / pbx* / officeaddons'],
@@ -209,6 +218,133 @@ const html = `<!DOCTYPE html>
         <div class="footer-tag">
             <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
             <span>Page 4</span>
+        </div>
+    </div>
+
+    <!-- PAGE 5: VULNERABILITIES -->
+    <div class="page">
+        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        <h1>3. Vulnerabilities & User Attribution</h1>
+        <p>104,259 vulnerability events identified. Named users confirmed via Source User field &mdash; a critical indicator of endpoint compromise.</p>
+
+        <h3>3.1 Named User Vulnerability Events</h3>
+        ${renderTable(['Source IP', 'User', 'Threat', 'Severity', 'Action', 'CVE'], [
+            ['10.100.10.201', 'idexna\\bidservices', 'Apache Log4j RCE', { text: 'CRITICAL', color: C.red }, 'reset-both', 'CVE-2021-44228'],
+            ['10.65.112.240', 'jseuntiens', 'SSH Brute Force (×9)', { text: 'HIGH', color: C.amber }, 'reset-both', '—'],
+            ['10.28.197.14', 'paloalto', 'HTTP WRM Brute Force (×5)', { text: 'HIGH', color: C.amber }, 'reset-both', '—']
+        ])}
+
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› Identity is the Perimeter</strong> &mdash; When we see "idexna\\bidservices" connected to an exploit, it's no longer a machine-level event; it's an identity-level compromise. The attacker has a valid user context.</div>
+            <div class="so-what-item"><strong>› Log4j RCE</strong> &mdash; This is not a probe. This is a successful remote command execution. The attacker effectively owns the targeted application server.</div>
+            <div class="so-what-item"><strong>› Brute Force Trends</strong> &mdash; Persistent SSH/WRM brute forcing indicates an attacker who has bypassed the edge and is now aggressively hunting for internal credentials.</div>
+        </div>
+
+        <h3>3.2 Application Vulnerability Exploits (SLR Data)</h3>
+        ${renderTable(['Application', 'Count', 'Top Threat Signatures'], [
+            ['ms-ds-smbv3', '51,412', 'SMB Brute Force: 944 HIGH · Registry Read: 42,243 LOW'],
+            ['github-base', '38,508', 'HTTP Unauthorized Brute Force — 38,508 HIGH hits'],
+            ['web-browsing', '4,005', 'HTTP /etc/passwd (108 CRIT) · Log4j RCE (36 CRIT)'],
+            ['concur-base', '2,168', 'HTTP Unauthorized Brute Force — 2,168 HIGH hits']
+        ])}
+
+        <h3>3.3 Named C2 Threats (SLR Data)</h3>
+        ${renderTable(['Threat Name', 'Detections', 'Category', 'Protocol'], [
+            ['BPFDoor Beacon Detection', '36', 'spyware', 'ping'],
+            ['Suspicious User-Agent', '16', 'spyware', 'web-browsing'],
+            ['WD My Cloud Backdoor', '14', 'backdoor', 'web-browsing'],
+            ['ZeroAccess.Gen C2', '5', 'botnet', 'unknown-udp']
+        ])}
+        <div class="footer-tag">
+            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
+            <span>Page 5</span>
+        </div>
+    </div>
+
+    <!-- PAGE 6: LATERAL MOVEMENT -->
+    <div class="page">
+        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        <h1>4. Lateral Movement & Remote Access</h1>
+        <p>WRM brute-force and SMB flows identified crossing network zones that should be isolated &mdash; clear indicators of attempted lateral movement.</p>
+
+        <h3>4.1 WRM Lateral Movement Indicators (Traffic Logs)</h3>
+        ${renderTable(['Source IP', 'Source Zone', 'Dest IP', 'Dest Zone', 'Data'], [
+            ['10.65.131.251', 'L4-BU_ENT / MAD_IPSEC', '10.26.200.46', 'INTERNAL', '24.4 MB'],
+            ['10.65.115.252', 'L4-BU_ENT / MAD_IPSEC', '10.28.200.103', 'INTERNAL', '4.4 MB'],
+            ['10.45.84.3', 'Internal / MAD_IPSEC', '10.28.200.103', 'INTERNAL', '2.8 MB']
+        ])}
+
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› East-West Visibility</strong> &mdash; SMB and WRM should never cross from user segments to server segments without explicit policy. This is the hallmark of a ransomware infection spreading.</div>
+            <div class="so-what-item"><strong>› Lateral Sprawl</strong> &mdash; 24.4 MB of WRM traffic is not a login; it's a data transfer or a configuration change. The attacker is moving deeper into the ${CN} core.</div>
+        </div>
+
+        <h3>4.2 SMB Cross-Segment Flows</h3>
+        ${renderTable(['Source IP', 'Source Zone', 'Dest IP / Zone', 'Protocol', 'Data'], [
+            ['10.8.229.17', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '2.8 MB'],
+            ['10.65.112.202', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '1.4 MB'],
+            ['10.224.40.29', 'Production', '10.224.46.143 / Servers', 'SMB / TCP 445', '792 KB']
+        ])}
+
+        <h3>4.3 Remote Access Sprawl</h3>
+        ${renderTable(['Application', 'Bandwidth', 'Sessions', 'Risk', 'Note'], [
+            ['windows-remote-management', '2.92 TB', '19.8M', '1', 'Brute force abuse detected'],
+            ['vnc-base', '570 GB', '192', { text: '5', color: C.red }, 'Unencrypted sessions'],
+            ['ms-rdp', '21.0 GB', '12,754', { text: '4', color: C.amber }, 'Policy review needed'],
+            ['anydesk', '16.5 GB', '684', '3', 'Consumer-grade tool']
+        ])}
+
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› Unmanaged Sprawl</strong> &mdash; 30 remote access tools means there is no standard for secure access. Any of these 30 tools can be used as a "living off the land" back door.</div>
+            <div class="so-what-item"><strong>› VNC Risk</strong> &mdash; Unencrypted sessions mean passwords and screen data are being sent in the clear across your network.</div>
+        </div>
+        <div class="footer-tag">
+            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
+            <span>Page 6</span>
+        </div>
+    </div>
+
+    <!-- PAGE 7: SAAS & SYSTEM -->
+    <div class="page">
+        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        <h1>5. Application Risk & SaaS Exposure</h1>
+        <p>Total bandwidth: 125.17 TB. 411 SaaS applications detected (44.3% of all traffic vs. 0.4% industry average baseline).</p>
+
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› Data Exfiltration Risk</strong> &mdash; 44% SaaS bandwidth with zero DLP means you are blind to where your sensitive corporate intellectual property is being uploaded.</div>
+            <div class="so-what-item"><strong>› Shadow IT</strong> &mdash; 114 uncertified apps are being used by employees. These are outside the control of IT Security, representing unvetted risks and terms of service.</div>
+        </div>
+
+        <h3>5.1 SaaS Hosting Risk</h3>
+        ${renderTable(['Risk Category', 'App Count', 'Bandwidth', 'Notable Apps'], [
+            ['No Security Certifications', '114', '35.49 TB', 'azure-storage-accounts-base'],
+            ['Known Data Breaches', '8', '59.38 GB', 'microsoft-dynamics-crm'],
+            ['Poor Terms of Service', '51', '42.19 GB', 'teamviewer, ringcentral'],
+            ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail']
+        ])}
+
+        <h1>6. Panorama System Profile</h1>
+        ${renderTable(['Parameter', 'Value'], [
+            ['Hostname', 'PanoramaAZ03'],
+            ['Management IP', '10.249.0.10'],
+            ['Platform', 'Microsoft Azure VM'],
+            ['Serial Number', '000702101482'],
+            ['PAN-OS Version', '11.1.10-h1'],
+            ['Managed Device Groups', '80+']
+        ])}
+
+        <h3>6.1 Content Staleness &mdash; CRITICAL</h3>
+        ${renderTable(['Component', 'Version', 'Last Updated', 'Staleness'], [
+            ['Content Pack', '9022-9656', 'Sept 15, 2025', { text: '174 days stale', color: C.red }],
+            ['AV Signatures', '5311-5837', 'Sept 15, 2025', { text: '174 days stale', color: C.red }]
+        ])}
+        <div class="footer-tag">
+            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
+            <span>Page 7</span>
         </div>
     </div>
 
