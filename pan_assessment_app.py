@@ -272,7 +272,7 @@ def generate(source_dir, customer_name, output_dir, log):
     # ── Output path ───────────────────────────────────────────────────────────
     safe  = re.sub(r'[^a-zA-Z0-9_\-]', '_', customer_name)
     month = datetime.datetime.now().strftime('%B%Y')
-    fname = f'{safe}_Security_Assessment_{month}.docx'
+    fname = f'{safe}_Security_Assessment_{month}.html'
     out_path = os.path.join(output_dir, fname)
 
     # ── Call Node.js ──────────────────────────────────────────────────────────
