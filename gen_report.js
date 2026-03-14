@@ -350,7 +350,7 @@ const html = `<!DOCTYPE html>
         ${renderTable(['Parameter', 'Value'], [
             ['Hostname', 'PanoramaAZ03'],
             ['Management IP', '10.249.0.10'],
-            ['Platform', 'Microsoft Azure VM'],
+            ['Platform', 'VMware Virtual Platform'],
             ['Serial Number', '000702101482'],
             ['PAN-OS Version', '11.1.10-h1'],
             ['Managed Device Groups', '80+']
@@ -358,8 +358,8 @@ const html = `<!DOCTYPE html>
 
         <h3>6.1 Content Staleness &mdash; CRITICAL</h3>
         ${renderTable(['Component', 'Version', 'Last Updated', 'Staleness'], [
-            ['Content Pack', '9022-9656', 'Sept 15, 2025', { text: '174 days stale', color: C.red }],
-            ['AV Signatures', '5311-5837', 'Sept 15, 2025', { text: '174 days stale', color: C.red }]
+            ['Content Pack', '9063-9866', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }],
+            ['AV Signatures', '5454-5981', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }]
         ])}
         <div class="footer-tag">
             <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
