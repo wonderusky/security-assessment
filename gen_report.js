@@ -113,10 +113,10 @@ const html = `<!DOCTYPE html>
         
         ${renderFindingCard(1, 'You could have an active breach.', `A named ${CN} employee account (idexna\\bidservices) successfully connected to an external attacker server via an Apache Log4j exploit — one of the most dangerous vulnerabilities ever disclosed. This is a completed connection, not a blocked attempt. The CISO and Legal team need to know today: this may trigger breach notification obligations under GDPR or CCPA, and endpoint 10.100.10.201 requires immediate forensic investigation.`)}
         ${renderFindingCard(2, 'Someone built fake infrastructure to target you specifically.', `The domain idexdmz.com was registered by an attacker using your brand and internal naming conventions — 365 internal machines were resolving it. Generic malware doesn't do this. An attacker who registers your brand name did research, knows your network structure, and chose ${CN} deliberately. This is targeted, not opportunistic.`)}
-        ${renderFindingCard(3, '1,163 machines may have handed attackers passwords.', `okta-ema.com is a fake Okta login page designed to steal credentials. Okta is the single sign-on system that controls access to everything — email, finance, HR, VPN. One employee who entered their password on that page gives an attacker silent access to every system behind it.`)}
-        ${renderFindingCard(4, 'Your firewall hasn\'t learned anything new since September 2025.', `Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible. This takes 30 minutes to fix in Panorama and costs nothing.`)}
-        ${renderFindingCard(5, 'Internal DNS servers are masking infected machines.', `10.57.11.173 and 10.57.11.174 are internal DNS resolvers — the firewall sees them making 48,000+ C2 requests, but they're just forwarding on behalf of the real infected endpoints. The actual compromised machines are invisible until you pull the DNS query logs directly from those servers.`, false)}
-        ${renderFindingCard(6, 'Ransomware has a clear, open path through your network right now.', `WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway. The path exists, it is being used, and it needs to be blocked.`, false)}
+        ${renderFindingCard(3, '1,163 machines may have handed attackers your employees\' passwords.', `okta-ema.com is a fake Okta login page designed to steal credentials. Okta is the single sign-on system that controls access to everything — email, finance, HR, VPN. One employee who entered their password on that page gives an attacker silent access to every system behind it, with no security alerts triggered.`)}
+        ${renderFindingCard(4, 'Your firewall hasn\'t learned anything new since September 2025.', `Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible to your security stack. This takes 30 minutes to fix in Panorama and costs nothing. It is the single highest-ROI action in this report.`)}
+        ${renderFindingCard(5, 'Your own DNS servers are masking an unknown number of infected machines.', `10.57.11.173 and 10.57.11.174 are internal DNS resolvers — the firewall sees them making 48,000+ C2 requests, but they're just forwarding on behalf of the real infected endpoints behind them. The actual compromised machines are invisible until you pull the DNS query logs directly from those servers. It could be two machines. It could be two hundred.`, false)}
+        ${renderFindingCard(6, 'Ransomware has a clear, open path through your network right now.', `WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway to turn one infected workstation into a company-wide encryption event. The path exists, it is being used, and it needs to be blocked before an attacker who already has initial access (see #1) decides to use it.`, false)}
 
         <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 2</div>
     </div>
@@ -140,22 +140,22 @@ const html = `<!DOCTYPE html>
 
         <h3>Key Findings</h3>
         <ul class="bullet-list">
-            <li><strong>739 total applications observed</strong> (171% above peer group baseline).</li>
+            <li><strong>739 total applications observed</strong> (171% above peer group baseline of 273).</li>
             <li><strong>104,259 vulnerability exploits detected</strong> &mdash; top: ms-ds-smbv3 (51,412), github-base (38,508).</li>
             <li><strong>Active C2 beaconing confirmed</strong> from 18+ internal IPs to 24+ known malicious domains (intempio.com: 2.1M hits).</li>
             <li><strong>CRITICAL: Brand-squatting domain idexdmz.com detected</strong> &mdash; 365 internal hits (idexcorpnet\\paloalto user).</li>
-            <li><strong>Named user confirmed in Log4j RCE exploit</strong>: idexna\\bidservices &rarr; 35.201.101.243:443.</li>
+            <li><strong>Named user confirmed in Log4j RCE exploit</strong>: idexna\\bidservices &rarr; 35.201.101.243:443 (CVE-2021-44228).</li>
             <li><strong>Content definitions are 174 days out of date</strong> (last updated September 15, 2025).</li>
-            <li><strong>SaaS bandwidth at 55.43 TB (44.3%)</strong> &mdash; massively above peer baseline.</li>
-            <li><strong>30 remote access applications detected</strong> &mdash; unmanaged sprawl (VNC, AnyDesk, ScreenConnect).</li>
+            <li><strong>SaaS bandwidth at 55.43 TB (44.3%)</strong> &mdash; massive cloud storage footprint (azure-storage-accounts-base).</li>
+            <li><strong>30 remote access applications detected</strong> vs. industry average of 9 (unmanaged sprawl).</li>
         </ul>
 
         <div class="so-what-box">
             <div class="so-what-head">⚠ SO WHAT — WHY THIS MATTERS</div>
-            <div class="so-what-item"><strong>› 739 apps</strong> — attack surface is 3&times; larger than peers. Every unmanaged app is a potential entry point.</div>
-            <div class="so-what-item"><strong>› 104,259 exploits</strong> means attackers are actively probing IDEX systems. Blocked attempts do NOT mean the threat is gone.</div>
-            <div class="so-what-item"><strong>› 174-day content gap</strong> is critical. Any new malware or exploit since Sept 2025 is completely invisible.</div>
-            <div class="so-what-item"><strong>› SaaS bandwidth at 44%</strong> with zero DLP oversight means sensitive data exposure via cloud storage.</div>
+            <div class="so-what-item"><strong>› 739 apps</strong> — your attack surface is 3&times; larger than peers. Every unmanaged app is a potential entry point.</div>
+            <div class="so-what-item"><strong>› 104,259 exploits</strong> means attackers are actively probing IDEX systems. The fact that most are being blocked does NOT mean the threat is gone.</div>
+            <div class="so-what-item"><strong>› 174-day content gap</strong> is the single most dangerous item. Any new malware since Sept 2025 is completely invisible.</div>
+            <div class="so-what-item"><strong>› SaaS bandwidth at 44%</strong> with zero DLP oversight means sensitive IDEX data could be leaving the network via cloud storage.</div>
         </div>
 
         <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 3</div>

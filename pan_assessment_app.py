@@ -247,22 +247,30 @@ class App(tk.Tk):
         init_db(); self._build()
 
     def _build(self):
+        # Prefs handling
+        self._prefs_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prefs.json')
+        self._prefs = {}
+        if os.path.exists(self._prefs_file):
+            try:
+                with open(self._prefs_file, 'r') as f: self._prefs = json.load(f)
+            except: pass
+
         tk.Label(self, text='PAN Security Assessment Generator', bg=self.BG, fg=self.ORG, font=('Arial', 16, 'bold')).pack(pady=(16, 2))
         
         f1 = tk.Frame(self, bg=self.BG); f1.pack(fill='x', padx=16, pady=4)
         tk.Label(f1, text='Customer Name:', bg=self.BG, fg=self.FG, width=16, anchor='w').pack(side='left')
-        self.cust = tk.StringVar(value='IDEX Corp')
+        self.cust = tk.StringVar(value=self._prefs.get('last_customer', 'IDEX Corp'))
         tk.Entry(f1, textvariable=self.cust, bg=self.BG2, fg=self.FG, relief='flat').pack(side='left', fill='x', expand=True)
 
         f2 = tk.Frame(self, bg=self.BG); f2.pack(fill='x', padx=16, pady=4)
         tk.Label(f2, text='Source Folder:', bg=self.BG, fg=self.FG, width=16, anchor='w').pack(side='left')
-        self.src = tk.StringVar()
+        self.src = tk.StringVar(value=self._prefs.get('last_source', ''))
         tk.Entry(f2, textvariable=self.src, bg=self.BG2, fg=self.FG, relief='flat').pack(side='left', fill='x', expand=True, padx=(0,8))
         tk.Button(f2, text='Browse', command=self._browse_src, bg=self.ORG, fg=self.FG).pack(side='left')
 
         f3 = tk.Frame(self, bg=self.BG); f3.pack(fill='x', padx=16, pady=4)
         tk.Label(f3, text='Output Folder:', bg=self.BG, fg=self.FG, width=16, anchor='w').pack(side='left')
-        self.out = tk.StringVar()
+        self.out = tk.StringVar(value=self._prefs.get('last_output', ''))
         tk.Entry(f3, textvariable=self.out, bg=self.BG2, fg=self.FG, relief='flat').pack(side='left', fill='x', expand=True, padx=(0,8))
         tk.Button(f3, text='Browse', command=self._browse_out, bg=self.ORG, fg=self.FG).pack(side='left')
 
@@ -271,16 +279,26 @@ class App(tk.Tk):
         self.log_box = scrolledtext.ScrolledText(self, height=16, bg='#0d1117', fg=self.GRN, font=('Courier New', 9))
         self.log_box.pack(fill='both', expand=True, padx=16, pady=16)
 
+    def _save_prefs(self):
+        self._prefs['last_customer'] = self.cust.get()
+        self._prefs['last_source'] = self.src.get()
+        self._prefs['last_output'] = self.out.get()
+        with open(self._prefs_file, 'w') as f: json.dump(self._prefs, f)
+
     def _browse_src(self):
         d = filedialog.askdirectory()
-        if d: self.src.set(d); self.out.set(str(Path(d).parent))
+        if d: 
+            self.src.set(d)
+            if not self.out.get(): self.out.set(str(Path(d).parent))
+            self._save_prefs()
     def _browse_out(self):
         d = filedialog.askdirectory()
-        if d: self.out.set(d)
-    def _log(self, msg):
-        self.log_box.configure(state='normal'); self.log_box.insert('end', msg + '\n'); self.log_box.see('end'); self.log_box.configure(state='disabled'); self.update_idletasks()
-
+        if d: 
+            self.out.set(d)
+            self._save_prefs()
+    
     def _run_generate(self):
+        self._save_prefs()
         threading.Thread(target=lambda: generate(self.src.get(), self.cust.get(), self.out.get(), self._log), daemon=True).start()
 
 if __name__ == '__main__':
