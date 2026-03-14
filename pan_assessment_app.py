@@ -9,7 +9,7 @@ import csv, re, os, sys, json, subprocess, threading, datetime, tempfile, tarfil
 from collections import defaultdict
 from pathlib import Path
 import tkinter as tk
-from tkinter import filedialog, messagebox, scrolledtext
+from tkinter import filedialog, messagebox, scrolledtext, simpledialog
 
 SKIP_ZONES  = {'untrust', 'guest', 'Guest'}
 DNS_HIT_MIN = 5000
@@ -400,23 +400,34 @@ class App(tk.Tk):
         if not out_path or not os.path.exists(out_path):
             messagebox.showerror("Error", "No report found. Please generate an assessment first.")
             return
+
+        # Prompt for recipient email
+        last_email = self._prefs.get('last_recipient_email', 'jshelest@paloaltonetworks.com')
+        recipient = tk.simpledialog.askstring("Email Assessment", "Enter recipient email address:", initialvalue=last_email)
+        
+        if not recipient:
+            return
+
+        # Save recipient preference
+        self._prefs['last_recipient_email'] = recipient
+        self._save_prefs()
             
-        self._log(f"Sending PDF to jshelest@paloaltonetworks.com...")
+        self._log(f"Sending PDF to {recipient}...")
         self.email_btn.configure(state='disabled', text='SENDING...')
         
         def worker():
             try:
                 cmd = [
                     'gog', 'gmail', 'send',
-                    '--to', 'jshelest@paloaltonetworks.com',
+                    '--to', recipient,
                     '--subject', f"Security Assessment: {self.cust.get()} - {datetime.datetime.now().strftime('%B %Y')}",
                     '--body', f"Attached is the finalized security assessment for {self.cust.get()}.",
                     '--attach', out_path
                 ]
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 if result.returncode == 0:
-                    self._log("✅ Email sent successfully via Gmail API.")
-                    self.after(0, lambda: messagebox.showinfo("Success", "Report emailed successfully!"))
+                    self._log(f"✅ Email sent successfully to {recipient}.")
+                    self.after(0, lambda: messagebox.showinfo("Success", f"Report emailed successfully to {recipient}!"))
                 else:
                     raise RuntimeError(result.stderr)
             except Exception as e:
