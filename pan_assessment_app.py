@@ -29,7 +29,8 @@ def init_db():
                   vulnerabilities INTEGER,
                   infected_ips INTEGER,
                   data JSON, 
-                  html_path TEXT)''')
+                  html_path TEXT,
+                  UNIQUE(customer_name, report_date))''')
     c.execute('''CREATE TABLE IF NOT EXISTS findings 
                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                   assessment_id INTEGER, 
@@ -44,30 +45,34 @@ def init_db():
 def save_assessment(customer_name, data, out_path):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute('''INSERT INTO assessments 
-                 (customer_name, report_date, total_threats, vulnerabilities, infected_ips, data, html_path) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?)''',
-              (customer_name, datetime.datetime.now().strftime('%Y-%m-%d'), 
-               data['totalRows'], data['vulnCount'], data['infectedCount'],
-               json.dumps(data), out_path))
-    aid = c.lastrowid
-    
-    # Save key findings for quick historical lookups
-    # In a real app, we'd loop through dynamically identified findings
-    # For now, we save the core finding headlines
-    findings = [
-        ('Breach', 'Active Breach Indicator', True),
-        ('Brand', 'Brand Squatting Detected', True),
-        ('Phishing', 'Identity Phishing Risk', True),
-        ('Policy', 'Signature Staleness', False)
-    ]
-    for ftype, head, crit in findings:
-        c.execute("INSERT INTO findings (assessment_id, type, headline, body, critical) VALUES (?, ?, ?, ?, ?)",
-                  (aid, ftype, head, "Verbatim data preserved in JSON blob", crit))
-    
-    conn.commit()
-    conn.close()
-    return aid
+    report_date = datetime.datetime.now().strftime('%Y-%m-%d')
+    try:
+        c.execute('''INSERT OR REPLACE INTO assessments 
+                     (customer_name, report_date, total_threats, vulnerabilities, infected_ips, data, html_path) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?)''',
+                  (customer_name, report_date, 
+                   data['totalRows'], data['vulnCount'], data['infectedCount'],
+                   json.dumps(data), out_path))
+        aid = c.lastrowid
+        
+        # Clear old findings for this specific customer/date if replacing
+        if aid:
+            c.execute("DELETE FROM findings WHERE assessment_id = ?", (aid,))
+        
+        findings = [
+            ('Breach', 'Active Breach Indicator', True),
+            ('Brand', 'Brand Squatting Detected', True),
+            ('Phishing', 'Identity Phishing Risk', True),
+            ('Policy', 'Signature Staleness', False)
+        ]
+        for ftype, head, crit in findings:
+            c.execute("INSERT INTO findings (assessment_id, type, headline, body, critical) VALUES (?, ?, ?, ?, ?)",
+                      (aid, ftype, head, "Verbatim data preserved in JSON blob", crit))
+        
+        conn.commit()
+        return aid
+    finally:
+        conn.close()
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # PRE-FLIGHT VALIDATION
