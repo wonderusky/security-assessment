@@ -264,7 +264,7 @@ class App(tk.Tk):
         # Header with Logo-style text
         header_frame = tk.Frame(self, bg=self.BG, pady=20)
         header_frame.pack(fill='x')
-        tk.Label(header_frame, text='PALO ALTO NETWORKS', bg=self.BG, fg=self.ORG, font=('Arial', 10, 'bold'), letterspacing=2).pack()
+        tk.Label(header_frame, text='P A L O   A L T O   N E T W O R K S', bg=self.BG, fg=self.ORG, font=('Arial', 10, 'bold')).pack()
         tk.Label(header_frame, text='Security Assessment Generator', bg=self.BG, fg=self.FG, font=('Arial', 18, 'bold')).pack()
         
         # Form Container
