@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>IDEX Corporation Security Assessment | CONFIDENTIAL</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; color: #333333; line-height: 1.5; }
+        .page { width: 950px; margin: 0 auto; background: white; padding: 50px 70px; box-shadow: 0 0 20px rgba(0,0,0,0.1); position: relative; margin-bottom: 40px; min-height: 1200px; }
+        .conf-header { font-size: 10px; color: #666666; margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
+        h1 { color: #FA4616; border-bottom: 2px solid #FA4616; padding-bottom: 8px; margin-top: 35px; text-transform: uppercase; font-size: 20px; letter-spacing: 0.5px; }
+        h2 { font-size: 17px; margin-top: 25px; color: #333333; font-weight: bold; }
+        h3 { font-size: 13px; margin-top: 18px; font-weight: bold; color: #333333; }
+        .meta-text { color: #666666; font-size: 13px; margin-top: 5px; }
+        .so-what-box { margin: 25px 0; border: 1px solid #CCCCCC; page-break-inside: avoid; }
+        .so-what-head { background-color: #FA4616; color: white; padding: 8px 15px; font-weight: bold; font-size: 11px; }
+        .so-what-item { padding: 10px 15px; font-size: 12px; border-bottom: 1px solid #CCCCCC; line-height: 1.4; }
+        .so-what-item:last-child { border-bottom: none; }
+        .so-what-item:nth-child(even) { background-color: #FFF3EE; }
+        .bullet-list { margin: 12px 0; padding-left: 18px; }
+        .bullet-list li { font-size: 12px; margin-bottom: 6px; color: #333333; }
+        .industry-callout { font-style: italic; color: #666666; font-size: 11px; margin-bottom: 10px; }
+        .footer-tag { position: absolute; bottom: 20px; right: 70px; font-size: 10px; color: #666666; }
+        .code-block { background-color: #1E1E1E; color: #00FF88; padding: 15px; font-family: 'Courier New', monospace; font-size: 12px; border-radius: 2px; margin: 10px 0; white-space: pre-wrap; word-wrap: break-word; }
+        @media print {
+            body { padding: 0; background: white; }
+            .page { box-shadow: none; width: 100%; padding: 40px; margin-bottom: 0; page-break-after: always; }
+        }
+    </style>
+</head>
+<body>
+    <!-- PAGE 1: COVER -->
+    <div class="page">
+        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+        <div style="margin-bottom: 100px; margin-top: 50px;">
+            <div style="color: #FA4616; font-size: 48px; font-weight: bold; line-height: 1;">IDEX Corporation</div>
+            <div style="font-size: 36px; font-weight: bold; margin-bottom: 20px;">Security Assessment</div>
+            <div class="meta-text" style="font-style: italic; font-size: 16px;">March 2026 &middot; Report Period: February 27 &ndash; March 9, 2026</div>
+            <div class="meta-text" style="font-size: 14px; margin-top: 20px;">
+                Prepared by: <strong>John Shelest</strong> | Palo Alto Networks Solutions Consultant<br>
+                Source Data: Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; 65,534 Threat Log Rows
+            </div>
+        </div>
+        <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 1</div>
+    </div>
+
+    <!-- PAGE 2: FINDINGS -->
+    <div class="page">
+        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+        <h1>What This Report Means for IDEX Corporation</h1>
+        <p class="industry-callout">The short version &mdash; before you read the numbers</p>
+        
+        
+    <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
+        <div style="background-color: #CC0000; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
+            1
+        </div>
+        <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
+            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px;">You could have an active breach.</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">A named IDEX Corporation employee account (idexna\bidservices) successfully connected to an external attacker server via an Apache Log4j exploit — one of the most dangerous vulnerabilities ever disclosed. This is a completed connection, not a blocked attempt. The CISO and Legal team need to know today: this may trigger breach notification obligations under GDPR or CCPA, and endpoint 10.100.10.201 requires immediate forensic investigation.</div>
+        </div>
+    </div>
+        
+    <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
+        <div style="background-color: #CC0000; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
+            2
+        </div>
+        <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
+            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px;">Someone built fake infrastructure to target you specifically.</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">The domain idexdmz.com was registered by an attacker using your brand and internal naming conventions — 365 internal machines were resolving it. Generic malware doesn't do this. An attacker who registers your brand name did research, knows your network structure, and chose IDEX Corporation deliberately. This is targeted, not opportunistic.</div>
+        </div>
+    </div>
+        
+    <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
+        <div style="background-color: #CC0000; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
+            3
+        </div>
+        <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
+            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px;">1,163 machines may have handed attackers passwords.</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">okta-ema.com is a fake Okta login page designed to steal credentials. Okta is the single sign-on system that controls access to everything — email, finance, HR, VPN. One employee who entered their password on that page gives an attacker silent access to every system behind it.</div>
+        </div>
+    </div>
+        
+    <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
+        <div style="background-color: #CC0000; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
+            4
+        </div>
+        <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
+            <div style="color: #CC0000; font-size: 15px; font-weight: bold; margin-bottom: 6px;">Your firewall hasn't learned anything new since September 2025.</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible. This takes 30 minutes to fix in Panorama and costs nothing.</div>
+        </div>
+    </div>
+        
+    <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
+        <div style="background-color: #E07800; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
+            5
+        </div>
+        <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
+            <div style="color: #E07800; font-size: 15px; font-weight: bold; margin-bottom: 6px;">Internal DNS servers are masking infected machines.</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">10.57.11.173 and 10.57.11.174 are internal DNS resolvers — the firewall sees them making 48,000+ C2 requests, but they're just forwarding on behalf of the real infected endpoints. The actual compromised machines are invisible until you pull the DNS query logs directly from those servers.</div>
+        </div>
+    </div>
+        
+    <div style="display: flex; border: 1px solid #CCCCCC; margin-bottom: 15px; font-family: Arial, sans-serif; min-height: 100px; page-break-inside: avoid;">
+        <div style="background-color: #E07800; color: white; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; flex-shrink: 0;">
+            6
+        </div>
+        <div style="background-color: #F2F2F2; padding: 12px 18px; flex-grow: 1;">
+            <div style="color: #E07800; font-size: 15px; font-weight: bold; margin-bottom: 6px;">Ransomware has a clear, open path through your network right now.</div>
+            <div style="font-size: 12px; color: #333333; line-height: 1.5; text-align: justify;">WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway. The path exists, it is being used, and it needs to be blocked.</div>
+        </div>
+    </div>
+
+        <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 2</div>
+    </div>
+
+    <!-- PAGE 3: EXECUTIVE SUMMARY -->
+    <div class="page">
+        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+        <h1>1. Executive Summary</h1>
+        <p class="meta-text">This Security Assessment analyzes IDEX Corporation's network security posture based on Panorama archives and 65,534 Threat Log Rows. All traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
+
+        <div style="display: flex; margin: 20px -8px;">
+            
+    <div style="background-color: #333333; color: white; padding: 18px; text-align: center; border-radius: 2px; flex: 1; margin: 0 8px;">
+        <div style="font-size: 32px; font-weight: bold;">739</div>
+        <div style="font-size: 11px; text-transform: uppercase; margin-top: 4px; font-weight: bold;">Total Applications</div>
+    </div>
+            
+    <div style="background-color: #FA4616; color: white; padding: 18px; text-align: center; border-radius: 2px; flex: 1; margin: 0 8px;">
+        <div style="font-size: 32px; font-weight: bold;">58</div>
+        <div style="font-size: 11px; text-transform: uppercase; margin-top: 4px; font-weight: bold;">High-Risk Apps</div>
+    </div>
+            
+    <div style="background-color: #666666; color: white; padding: 18px; text-align: center; border-radius: 2px; flex: 1; margin: 0 8px;">
+        <div style="font-size: 32px; font-weight: bold;">411</div>
+        <div style="font-size: 11px; text-transform: uppercase; margin-top: 4px; font-weight: bold;">SaaS Applications</div>
+    </div>
+        </div>
+        <div style="display: flex; margin: 0 -8px 30px -8px;">
+            
+    <div style="background-color: #CC0000; color: white; padding: 18px; text-align: center; border-radius: 2px; flex: 1; margin: 0 8px;">
+        <div style="font-size: 32px; font-weight: bold;">104,259</div>
+        <div style="font-size: 11px; text-transform: uppercase; margin-top: 4px; font-weight: bold;">Vulnerability Exploits</div>
+    </div>
+            
+    <div style="background-color: #CC0000; color: white; padding: 18px; text-align: center; border-radius: 2px; flex: 1; margin: 0 8px;">
+        <div style="font-size: 32px; font-weight: bold;">104,358</div>
+        <div style="font-size: 11px; text-transform: uppercase; margin-top: 4px; font-weight: bold;">Total Threats</div>
+    </div>
+            
+    <div style="background-color: #E07800; color: white; padding: 18px; text-align: center; border-radius: 2px; flex: 1; margin: 0 8px;">
+        <div style="font-size: 32px; font-weight: bold;">20</div>
+        <div style="font-size: 11px; text-transform: uppercase; margin-top: 4px; font-weight: bold;">Malware Detected</div>
+    </div>
+        </div>
+
+        <h3>Key Findings</h3>
+        <ul class="bullet-list">
+            <li><strong>739 total applications observed</strong> (171% above peer group baseline).</li>
+            <li><strong>104,259 vulnerability exploits detected</strong> &mdash; top: ms-ds-smbv3 (51,412), github-base (38,508).</li>
+            <li><strong>Active C2 beaconing confirmed</strong> from 18+ internal IPs to 24+ known malicious domains (intempio.com: 2.1M hits).</li>
+            <li><strong>CRITICAL: Brand-squatting domain idexdmz.com detected</strong> &mdash; 365 internal hits (idexcorpnet\paloalto user).</li>
+            <li><strong>Named user confirmed in Log4j RCE exploit</strong>: idexna\bidservices &rarr; 35.201.101.243:443.</li>
+            <li><strong>Content definitions are 174 days out of date</strong> (last updated September 15, 2025).</li>
+            <li><strong>SaaS bandwidth at 55.43 TB (44.3%)</strong> &mdash; massively above peer baseline.</li>
+            <li><strong>30 remote access applications detected</strong> &mdash; unmanaged sprawl (VNC, AnyDesk, ScreenConnect).</li>
+        </ul>
+
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT — WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› 739 apps</strong> — attack surface is 3&times; larger than peers. Every unmanaged app is a potential entry point.</div>
+            <div class="so-what-item"><strong>› 104,259 exploits</strong> means attackers are actively probing IDEX systems. Blocked attempts do NOT mean the threat is gone.</div>
+            <div class="so-what-item"><strong>› 174-day content gap</strong> is critical. Any new malware or exploit since Sept 2025 is completely invisible.</div>
+            <div class="so-what-item"><strong>› SaaS bandwidth at 44%</strong> with zero DLP oversight means sensitive data exposure via cloud storage.</div>
+        </div>
+
+        <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 3</div>
+    </div>
+
+    <!-- PAGE 4: C2 ACTIVITY -->
+    <div class="page">
+        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+        <h1>2. Active Command & Control (C2) & Malware</h1>
+        <p class="meta-text">Analysis identified persistent DNS-based C2 beaconing from 55 unique source IP addresses. Aggregate statsv2 XML confirms 8.8M DNS malware/spyware events.</p>
+
+        <h3>2.1 Top C2 Domains</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 30%;">Domain</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 40%;">Category / Threat ID</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 15%;">Hits</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 15%;">Risk Note</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">intempio.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">DNS C2 Beacon (TID 397955421)</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">16,019</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Persistent multi-host</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">soyoungjun.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Spyware</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2,555</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; "></td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">pbxcloudeservices.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Fake PBX / Spyware</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2,545</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; "></td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">azuredeploystore.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Fake Azure / C2</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2,544</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; "></td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">officeaddons.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Fake Office / Spyware</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2,537</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; "></td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">msedgepackageinfo.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Fake Edge / C2</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2,528</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; "></td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">akamaitechcloudservices.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Fake Akamai / C2</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2,219</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; "></td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">okta-ema.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Okta Impersonation (TID 109010003)</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1,163</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Identity phishing</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">idexdmz.com</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">IDEX Brand Squatting (TID 109010003)</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">365</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #CC0000; font-weight: bold;">⚠ CRITICAL</td></tr></tbody></table>
+
+        <h3>2.2 Top Compromised Source IPs</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 15%;">Source IP</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 25%;">Zone</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 10%;">Hits</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 10%;">Unique</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 40%;">Primary C2 Domains</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.57.11.173</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Internal → MPLS</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">24,011</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">24</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">azure* / pbx* / officeaddons</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.57.11.174</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Internal → MPLS</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">24,002</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">24</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">azure* / pbx* / officeaddons</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.65.131.251</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L4-BU_ENT → idex_ipsec</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1,066</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">intempio.com</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">10.58.163.251</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L4-BU_ENT → idex_ipsec</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1,062</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">intempio.com</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.65.114.9</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L4-BU_ENT → idex_ipsec</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1,304</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">intempio.com (two dest)</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.45.84.3</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Internal → idex_ipsec</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1,037+946</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">intempio.com (two dest)</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.100.10.201</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Internal</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1,250</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">5</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">idexna\bidservices</td></tr></tbody></table>
+
+        <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 4</div>
+    </div>
+
+    <!-- PAGE 5: WILDFIRE & VULNERABILITIES -->
+    <div class="page">
+        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+        
+        <h3>2.3 WildFire Detections (statsv2 XML, zone-filtered)</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Detection Type</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Count</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Severity / Note</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">DNS Malware / Spyware</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">8,825,702</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Aggregate statsv2</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">DNS C2 / Spyware</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">322,389</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Aggregate statsv2</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Brute Force (vuln)</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">44,838</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">HIGH</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Code Execution</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">200</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #CC0000; font-weight: bold;">CRITICAL</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Information Leak</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">60</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #CC0000; font-weight: bold;">CRITICAL</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">PE Virus</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">20</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">ms-ds-smbv3 (11), web-browsing (9)</td></tr></tbody></table>
+
+        <h1>3. Vulnerabilities & User Attribution</h1>
+        <p class="meta-text">104,259 vulnerability events identified. Named users confirmed via Source User field &mdash; a critical indicator of endpoint compromise.</p>
+
+        <h3>3.1 Named User Vulnerability Events</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Source IP</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">User</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Threat</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Sev</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Action</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">CVE</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.100.10.201</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">idexna\bidservices</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Apache Log4j RCE</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #CC0000; font-weight: bold;">CRITICAL</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">reset-both</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">CVE-2021-44228</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.65.112.240</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">jseuntiens</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">SSH Brute Force (×9)</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">HIGH</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">reset-both</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">—</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">10.28.197.14</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">paloalto</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">HTTP WRM Brute Force (×5)</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">HIGH</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">reset-both</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">—</td></tr></tbody></table>
+
+        <h3>3.2 Application Vulnerability Exploits (SLR Data)</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 20%;">Application</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 15%;">Count</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; width: 65%;">Top Threat Signatures</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">ms-ds-smbv3</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">51,412</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">SMB Brute Force: 944 HIGH · Registry Read: 42,243 LOW</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">github-base</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">38,508</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">HTTP Unauthorized Brute Force — 38,508 HIGH hits</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">web-browsing</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">4,005</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">HTTP /etc/passwd (108 CRIT) · Log4j RCE (36 CRIT)</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">concur-base</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2,168</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">HTTP Unauthorized Brute Force — 2,168 HIGH hits</td></tr></tbody></table>
+
+        <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 5</div>
+    </div>
+
+    <!-- PAGE 6: LATERAL MOVEMENT -->
+    <div class="page">
+        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+        <h1>4. Lateral Movement & Remote Access</h1>
+        <p class="meta-text">WRM brute-force and SMB flows identified crossing network zones that should be isolated &mdash; clear indicators of attempted lateral movement.</p>
+
+        <h3>4.1 WRM Lateral Movement Indicators (Traffic Logs)</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Source IP</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Source Zone</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Dest IP</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Dest Zone</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Data</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.65.131.251</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L4-BU_ENT / MAD_IPSEC</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.26.200.46</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">INTERNAL</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">24.4 MB</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.65.115.252</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L4-BU_ENT / MAD_IPSEC</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.28.200.103</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">INTERNAL</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">4.4 MB</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.45.84.3</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Internal / MAD_IPSEC</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.28.200.103</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">INTERNAL</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2.8 MB</td></tr></tbody></table>
+
+        <h3>4.2 SMB Cross-Segment Flows</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Source IP</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Source Zone</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Dest IP / Zone</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Protocol</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Data</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.8.229.17</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L5-BU_OFFICE</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L4-BU_ENT</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">SMB / TCP 445</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2.8 MB</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.65.112.202</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L5-BU_OFFICE</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">L4-BU_ENT</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">SMB / TCP 445</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1.4 MB</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.224.40.29</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Production</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.224.46.143 / Servers</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">SMB / TCP 445</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">792 KB</td></tr></tbody></table>
+
+        <h3>4.3 Remote Access Sprawl</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Application</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Bandwidth</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Sessions</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Risk</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Note</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">windows-remote-management</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">2.92 TB</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #CC0000; font-weight: bold;">19.8M</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Brute force abuse detected</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">vnc-base</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">570 GB</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">192</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #CC0000; font-weight: bold;">5</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Unencrypted sessions</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">ms-rdp</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">21.0 GB</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">12,754</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #E07800; font-weight: bold;">4</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Policy review needed</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">anydesk</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">16.5 GB</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">684</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">3</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Consumer-grade tool</td></tr></tbody></table>
+
+        <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 6</div>
+    </div>
+
+    <!-- PAGE 7: SAAS RISK & SYSTEM PROFILE -->
+    <div class="page">
+        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+        <h1>5. Application Risk & SaaS Exposure</h1>
+        <p class="meta-text">Total bandwidth: 125.17 TB. 411 SaaS applications detected (44.3% of all traffic vs 0.4% industry baseline).</p>
+
+        <h3>5.1 SaaS Hosting Risk</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Risk Category</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">App Count</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Bandwidth</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Notable Apps</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">No Security Certifications</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">114</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">35.49 TB</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">azure-storage-accounts-base</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Known Data Breaches</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">8</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">59.38 GB</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">microsoft-dynamics-crm</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Poor Terms of Service</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">51</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">42.19 GB</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">teamviewer, ringcentral</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Poor Financial Viability</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">15</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">1.4 GB</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">realtimeboard, gmx-mail</td></tr></tbody></table>
+
+        <h1>6. Panorama System Profile</h1>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Parameter</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Value</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Hostname</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">PanoramaAZ03</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Management IP</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">10.249.0.10</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Platform</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Microsoft Azure VM</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Serial Number</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">000702101482</td></tr><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">PAN-OS Version</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">11.1.10-h1</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Managed Device Groups</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">80+</td></tr></tbody></table>
+
+        <h3>6.1 Content Staleness &mdash; CRITICAL</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Component</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Version</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Last Updated</th><th style="background-color: #FA4616; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid #CCCCCC; ">Staleness</th></tr></thead><tbody><tr style="background-color: #FFFFFF;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Content Pack</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">9022-9656</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Sept 15, 2025</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #CC0000; font-weight: bold;">174 days stale</td></tr><tr style="background-color: #FFF3EE;"><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">AV Signatures</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">5311-5837</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; ">Sept 15, 2025</td><td style="padding: 8px 12px; font-size: 11px; border: 1px solid #CCCCCC; color: #CC0000; font-weight: bold;">174 days stale</td></tr></tbody></table>
+
+        <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 7</div>
+    </div>
+
+    <!-- PAGE 8: REMEDIATION & APPENDIX -->
+    <div class="page">
+        <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
+        <h1>8. Prioritized Remediation Roadmap</h1>
+        <h3>P1 — Immediate Actions (0–7 Days)</h3>
+        <ul class="bullet-list">
+            <li><strong>Update Signatures</strong>: Immediately remediate 174-day exposure gap.</li>
+            <li><strong>Isolate Resolvers</strong>: Investigate 10.57.11.173 and 10.57.11.174 C2 traffic.</li>
+            <li><strong>Forensic Investigation</strong>: Initiate for idexna\bidservices (confirmed Log4j RCE).</li>
+            <li><strong>Block C2 Domains</strong>: Block idexdmz.com and okta-ema.com at DNS/Firewall.</li>
+        </ul>
+
+        <h1>Appendix: Identifying Infected Clients</h1>
+        <p class="meta-text">Run on DNS resolvers (10.57.11.173/174) to reveal true infected hosts:</p>
+        <div class="code-block">Set-DnsServerDiagnostics -All $true
+Select-String -Path 'C:\Windows\System32\dns\dns.log' -Pattern 'intempio|idexdmz|okta-ema'</div>
+
+        <div style="margin-top: 100px; padding-top: 20px; border-top: 1px solid #eee; font-size: 13px;">
+            <strong>John Shelest</strong> | Palo Alto Networks | <span style="color: #1F5F9E">jshelest@paloaltonetworks.com</span><br>
+            &copy; 2026 Palo Alto Networks, Inc.
+        </div>
+
+        <div class="footer-tag">&copy; 2026 Palo Alto Networks | Proprietary & Confidential | Page 8</div>
+    </div>
+</body>
+</html>
