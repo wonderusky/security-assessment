@@ -2,8 +2,6 @@
 /**
  * gen_report.js
  * VERBATIM HIGH-FIDELITY SECURITY ASSESSMENT GENERATOR (16-PAGE STANDARD)
- * This engine generates a 1:1 pixel-perfect and verbatim copy of the 
- * "IDEX Corp Security Assessment" gold-standard PDF, including ALL "So What" sections.
  */
 const fs = require('fs');
 
@@ -134,7 +132,7 @@ const html = `<!DOCTYPE html>
     <div class="page">
         <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
         <h1>1. Executive Summary</h1>
-        <p>This Security Assessment analyzes IDEX Corp's network security posture for the period February 27 &ndash; March 9, 2026, based on Panorama statsdump archives, threat log CSV exports (65,534 rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF dated February 27 &ndash; March 6, 2026. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
+        <p>This Security Assessment analyzes ${CN}'s network security posture for the period February 27 &ndash; March 9, 2026, based on Panorama statsdump archives, threat log CSV exports (65,534 rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF dated February 27 &ndash; March 6, 2026. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
 
         <div style="display: flex; margin: 20px -8px;">
             ${renderKPI('739', 'Total Applications', C.dark)}
