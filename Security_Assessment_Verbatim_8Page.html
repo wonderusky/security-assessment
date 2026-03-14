@@ -253,19 +253,29 @@
         <h1>8. Prioritized Remediation Roadmap</h1>
         <h3>P1 — Immediate Actions (0–7 Days)</h3>
         <ul class="bullet-list">
-            <li><strong>Update Signatures</strong>: Immediately remediate 174-day exposure gap.</li>
+            <li><strong>Update Panorama Content Pack</strong>: Immediately remediate 174-day gap (September 15, 2025).</li>
             <li><strong>Isolate Resolvers</strong>: Investigate 10.57.11.173 and 10.57.11.174 C2 traffic.</li>
-            <li><strong>Forensic Investigation</strong>: Initiate for idexna\bidservices (confirmed Log4j RCE).</li>
-            <li><strong>Block C2 Domains</strong>: Block idexdmz.com and okta-ema.com at DNS/Firewall.</li>
+            <li><strong>Forensic Investigation</strong>: Initiate for idexna\bidservices endpoint (confirmed Log4j RCE).</li>
+            <li><strong>Block C2 Domains</strong>: Block idexdmz.com and okta-ema.com at edge.</li>
         </ul>
 
         <h1>Appendix: Identifying Infected Clients</h1>
-        <p class="meta-text">Run on DNS resolvers (10.57.11.173/174) to reveal true infected hosts:</p>
-        <div class="code-block">Set-DnsServerDiagnostics -All $true
-Select-String -Path 'C:\Windows\System32\dns\dns.log' -Pattern 'intempio|idexdmz|okta-ema'</div>
+        <p class="meta-text" style="margin-bottom: 20px;">The internal DNS resolvers (10.57.11.173 and 10.57.11.174) are masking the true infected endpoints. To identify the specific machines making these C2 requests, you must enable DNS query logging on those Windows DNS servers and search for the malicious patterns identified in this report.</p>
+
+        <h3>Step 1: Enable DNS Query Logging</h3>
+        <p class="meta-text">Run the following PowerShell command on the DNS resolvers to enable diagnostic logging:</p>
+        <div class="code-block">Set-DnsServerDiagnostics -All $true</div>
+
+        <h3>Step 2: Search for Indicators of Compromise (IOCs)</h3>
+        <p class="meta-text">Once logging is enabled, use the command below to search the DNS log for the confirmed C2 domains targeting IDEX:</p>
+        <div class="code-block">Select-String -Path 'C:\Windows\System32\dns\dns.log' -Pattern 'intempio|idexdmz|okta-ema'</div>
+
+        <h3>Step 3: Remediate Identified Endpoints</h3>
+        <p class="meta-text">Any internal IP address appearing in the results of Step 2 should be immediately isolated from the network and submitted for full forensic imaging.</p>
 
         <div style="margin-top: 100px; padding-top: 20px; border-top: 1px solid #eee; font-size: 13px;">
-            <strong>John Shelest</strong> | Palo Alto Networks | <span style="color: #1F5F9E">jshelest@paloaltonetworks.com</span><br>
+            <strong>John Shelest</strong> | Palo Alto Networks | Solutions Consultant<br>
+            <span style="color: #1F5F9E">jshelest@paloaltonetworks.com</span><br>
             &copy; 2026 Palo Alto Networks, Inc.
         </div>
 
