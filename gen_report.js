@@ -1,10 +1,7 @@
 #!/opt/homebrew/bin/node
 /**
  * gen_report.js
- * VERBATIM HIGH-FIDELITY SECURITY ASSESSMENT GENERATOR (8-PAGE STANDARD)
- * 
- * This engine generates a 1:1 pixel-perfect and verbatim copy of the 
- * "IDEX Corp Security Assessment" gold-standard PDF.
+ * VERBATIM HIGH-FIDELITY SECURITY ASSESSMENT GENERATOR (8-PAGE + APPENDIX)
  */
 const fs = require('fs');
 
@@ -85,7 +82,7 @@ const html = `<!DOCTYPE html>
         .so-what-item:last-child { border-bottom: none; }
         .so-what-item:nth-child(even) { background-color: ${C.altBg}; }
         .footer-tag { position: absolute; bottom: 15mm; left: 25mm; right: 25mm; font-size: 10px; color: ${C.mid}; border-top: 1px solid #eee; padding-top: 5px; display: flex; justify-content: space-between; }
-        .code-block { background-color: ${C.codeBg}; border: 1px solid ${C.border}; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; margin: 10px 0; white-space: pre-wrap; }
+        .code-block { background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; margin: 10px 0; white-space: pre-wrap; }
         @media print {
             body { background: none; }
             .page { margin: 0; box-shadow: none; page-break-after: always; }
@@ -118,15 +115,10 @@ const html = `<!DOCTYPE html>
         <p style="font-style: italic; color: ${C.mid}; margin-bottom: 20px;">The short version &mdash; before you read the numbers</p>
         
         ${renderFindingCard(1, 'You could have an active breach.', 'A named IDEX employee account (idexna\\bidservices) successfully connected to an external attacker server via an Apache Log4j exploit — one of the most dangerous vulnerabilities ever disclosed. This is a completed connection, not a blocked attempt. The CISO and Legal team need to know today: this may trigger breach notification obligations under GDPR or CCPA, and endpoint 10.100.10.201 requires immediate forensic investigation.')}
-        
         ${renderFindingCard(2, 'Someone built fake IDEX infrastructure to target you specifically.', "The domain idexdmz.com was registered by an attacker using IDEX's own brand and internal naming conventions — 365 internal machines were resolving it. Generic malware doesn't do this. An attacker who registers your brand name did research, knows your network structure, and chose IDEX deliberately. This is targeted, not opportunistic.")}
-        
         ${renderFindingCard(3, '1,163 machines may have handed attackers your employees\' passwords.', 'okta-ema.com is a fake Okta login page designed to steal credentials. Okta is the single sign-on system that controls access to everything — email, finance, HR, VPN. One employee who entered their password on that page gives an attacker silent access to every system behind it, with no security alerts triggered.')}
-        
         ${renderFindingCard(4, 'Your firewall hasn\'t learned anything new since September 2025.', 'Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible to your security stack. This takes 30 minutes to fix in Panorama and costs nothing. It is the single highest-ROI action in this report.')}
-        
         ${renderFindingCard(5, 'Your own DNS servers are masking an unknown number of infected machines.', '10.57.11.173 and 10.57.11.174 are internal DNS resolvers — the firewall sees them making 48,000+ C2 requests, but they\'re just forwarding on behalf of the real infected endpoints behind them. The actual compromised machines are invisible until you pull the DNS query logs directly from those servers. It could be two machines. It could be two hundred.', false)}
-        
         ${renderFindingCard(6, 'Ransomware has a clear, open path through your network right now.', 'WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway to turn one infected workstation into a company-wide encryption event. The path exists, it is being used, and it needs to be blocked before an attacker who already has initial access (see #1) decides to use it.', false)}
 
         <p style="margin-top: 25px; font-size: 11px; color: ${C.mid};">The detailed technical evidence supporting each of the findings above follows in the sections below.</p>
@@ -220,105 +212,44 @@ const html = `<!DOCTYPE html>
         </div>
     </div>
 
-    <!-- PAGE 5: VULNERABILITIES -->
+    <!-- PAGE 8: ROADMAP -->
     <div class="page">
         <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
-        <h1>3. Vulnerabilities & User Attribution</h1>
-        <p>104,259 vulnerability events identified. Named users confirmed via Source User field &mdash; a critical indicator of endpoint compromise.</p>
+        <h1>8. Prioritized Remediation Roadmap</h1>
+        <p>Remediation items are ordered by risk priority. P1 items represent confirmed active threats or critical infrastructure gaps requiring immediate attention.</p>
 
-        <h3>3.1 Named User Vulnerability Events</h3>
-        ${renderTable(['Source IP', 'User', 'Threat', 'Severity', 'Action', 'CVE'], [
-            ['10.100.10.201', 'idexna\\bidservices', 'Apache Log4j RCE', { text: 'CRITICAL', color: C.red }, 'reset-both', 'CVE-2021-44228'],
-            ['10.65.112.240', 'jseuntiens', 'SSH Brute Force (×9)', { text: 'HIGH', color: C.amber }, 'reset-both', '—'],
-            ['10.28.197.14', 'paloalto', 'HTTP WRM Brute Force (×5)', { text: 'HIGH', color: C.amber }, 'reset-both', '—']
-        ])}
+        <h3>P1 &mdash; Immediate Actions (0&ndash;7 Days)</h3>
+        <ul class="bullet-list">
+            <li><strong>Update Panorama content pack, AV, and threat signatures immediately</strong> &mdash; 174 days of exposure to undetected threats</li>
+            <li><strong>Isolate 10.57.11.173 and 10.57.11.174</strong> &mdash; 24,000+ spyware hits each, 24 unique C2 domains, Internal zone</li>
+            <li><strong>Initiate incident investigation for idexna\\bidservices</strong> &mdash; confirmed Log4j RCE (CVE-2021-44228) to external IP 35.201.101.243</li>
+            <li><strong>Block idexdmz.com at DNS and firewall layer</strong> &mdash; IDEX brand squatting, internal hosts actively resolving this domain</li>
+            <li><strong>Block okta-ema.com</strong> &mdash; Okta impersonation domain, 1,163 hits from internal hosts (identity credential risk)</li>
+        </ul>
 
-        <h3>3.2 Application Vulnerability Exploits (SLR Data)</h3>
-        ${renderTable(['Application', 'Count', 'Top Threat Signatures'], [
-            ['ms-ds-smbv3', '51,412', 'SMB Brute Force: 944 HIGH · Registry Read: 42,243 LOW'],
-            ['github-base', '38,508', 'HTTP Unauthorized Brute Force — 38,508 HIGH hits'],
-            ['web-browsing', '4,005', 'HTTP /etc/passwd (108 CRIT) · Log4j RCE (36 CRIT)'],
-            ['concur-base', '2,168', 'HTTP Unauthorized Brute Force — 2,168 HIGH hits']
-        ])}
+        <h3>P2 &mdash; Short-Term Actions (7&ndash;30 Days)</h3>
+        <ul class="bullet-list">
+            <li><strong>Remediate idexcorpnet\\jseuntiens</strong> &mdash; SSH brute force from L5-BU_OFFICE to L2-Cont (9 events, reset-both)</li>
+            <li><strong>Investigate WRM lateral movement: 10.65.131.251 &rarr; INTERNAL</strong> (24.4 MB cross-segment flow on port 5985)</li>
+            <li><strong>Audit and restrict VNC (570 GB, Risk-5, 192 sessions)</strong> &mdash; determine if managed or shadow deployment</li>
+            <li><strong>Restrict BitTorrent, FTP, open-vpn, and zerotier per acceptable use policy</strong> &mdash; Risk-4/5 personal apps</li>
+            <li><strong>Conduct SaaS app review for 114 uncertified SaaS apps</strong> accounting for 35.49 TB of bandwidth</li>
+            <li><strong>Review and remediate 51 SaaS apps with poor Terms of Service</strong> (42.19 GB)</li>
+            <li><strong>Validate all 30 remote access tools against approved application catalog</strong> &mdash; disable unauthorized tools</li>
+        </ul>
 
-        <h3>3.3 Named C2 Threats (SLR Data)</h3>
-        ${renderTable(['Threat Name', 'Detections', 'Category', 'Protocol'], [
-            ['BPFDoor Beacon Detection', '36', 'spyware', 'ping'],
-            ['Suspicious User-Agent', '16', 'spyware', 'web-browsing'],
-            ['WD My Cloud Backdoor', '14', 'backdoor', 'web-browsing'],
-            ['ZeroAccess.Gen C2', '5', 'botnet', 'unknown-udp']
-        ])}
+        <h3>P3 &mdash; Strategic Investments (30&ndash;90 Days)</h3>
+        <ul class="bullet-list">
+            <li><strong>Deploy Advanced DNS Security</strong> to block C2 beaconing in real-time (BPFDoor, NJRat, Gh0st signatures active)</li>
+            <li><strong>Implement Next-Generation CASB</strong> for 65K+ SaaS application visibility, data classification, and DLP enforcement</li>
+            <li><strong>Enforce network micro-segmentation</strong> to prevent WRM/SMB cross-segment lateral movement (L4-BU_ENT &harr; INTERNAL)</li>
+            <li><strong>Enable Cortex XDR on endpoints</strong> to correlate network telemetry with host-level activity for named users</li>
+            <li><strong>Deploy SSL/TLS inspection</strong> to gain visibility into 33.6 TB of currently opaque SSL traffic</li>
+        </ul>
+
         <div class="footer-tag">
             <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 5</span>
-        </div>
-    </div>
-
-    <!-- PAGE 6: LATERAL MOVEMENT -->
-    <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
-        <h1>4. Lateral Movement & Remote Access</h1>
-        <p>WRM brute-force and SMB flows identified crossing network zones that should be isolated &mdash; clear indicators of attempted lateral movement.</p>
-
-        <h3>4.1 WRM Lateral Movement Indicators (Traffic Logs)</h3>
-        ${renderTable(['Source IP', 'Source Zone', 'Dest IP', 'Dest Zone', 'Data'], [
-            ['10.65.131.251', 'L4-BU_ENT / MAD_IPSEC', '10.26.200.46', 'INTERNAL', '24.4 MB'],
-            ['10.65.115.252', 'L4-BU_ENT / MAD_IPSEC', '10.28.200.103', 'INTERNAL', '4.4 MB'],
-            ['10.45.84.3', 'Internal / MAD_IPSEC', '10.28.200.103', 'INTERNAL', '2.8 MB']
-        ])}
-
-        <h3>4.2 SMB Cross-Segment Flows</h3>
-        ${renderTable(['Source IP', 'Source Zone', 'Dest IP / Zone', 'Protocol', 'Data'], [
-            ['10.8.229.17', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '2.8 MB'],
-            ['10.65.112.202', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '1.4 MB'],
-            ['10.224.40.29', 'Production', '10.224.46.143 / Servers', 'SMB / TCP 445', '792 KB']
-        ])}
-
-        <h3>4.3 Remote Access Sprawl</h3>
-        ${renderTable(['Application', 'Bandwidth', 'Sessions', 'Risk', 'Note'], [
-            ['windows-remote-management', '2.92 TB', '19.8M', '1', 'Brute force abuse detected'],
-            ['vnc-base', '570 GB', '192', { text: '5', color: C.red }, 'Unencrypted sessions'],
-            ['ms-rdp', '21.0 GB', '12,754', { text: '4', color: C.amber }, 'Policy review needed'],
-            ['anydesk', '16.5 GB', '684', '3', 'Consumer-grade tool']
-        ])}
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 6</span>
-        </div>
-    </div>
-
-    <!-- PAGE 7: SAAS & SYSTEM -->
-    <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
-        <h1>5. Application Risk & SaaS Exposure</h1>
-        <p>Total bandwidth: 125.17 TB. 411 SaaS applications detected (44.3% of all traffic vs. 0.4% industry average baseline).</p>
-
-        <h3>5.1 SaaS Hosting Risk</h3>
-        ${renderTable(['Risk Category', 'App Count', 'Bandwidth', 'Notable Apps'], [
-            ['No Security Certifications', '114', '35.49 TB', 'azure-storage-accounts-base'],
-            ['Known Data Breaches', '8', '59.38 GB', 'microsoft-dynamics-crm'],
-            ['Poor Terms of Service', '51', '42.19 GB', 'teamviewer, ringcentral'],
-            ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail']
-        ])}
-
-        <h1>6. Panorama System Profile</h1>
-        ${renderTable(['Parameter', 'Value'], [
-            ['Hostname', 'PanoramaAZ03'],
-            ['Management IP', '10.249.0.10'],
-            ['Platform', 'Microsoft Azure VM'],
-            ['Serial Number', '000702101482'],
-            ['PAN-OS Version', '11.1.10-h1'],
-            ['Managed Device Groups', '80+']
-        ])}
-
-        <h3>6.1 Content Staleness &mdash; CRITICAL</h3>
-        ${renderTable(['Component', 'Version', 'Last Updated', 'Staleness'], [
-            ['Content Pack', '9022-9656', 'Sept 15, 2025', { text: '174 days stale', color: C.red }],
-            ['AV Signatures', '5311-5837', 'Sept 15, 2025', { text: '174 days stale', color: C.red }]
-        ])}
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 7</span>
+            <span>Page 8</span>
         </div>
     </div>
 
@@ -329,7 +260,7 @@ const html = `<!DOCTYPE html>
         <h2 style="font-size: 18px; margin-top: 0;">Step 1 &mdash; Enable Windows DNS Debug Logging</h2>
         <p style="margin-bottom: 10px;">Run on each DNS server (10.57.11.173 and 10.57.11.174):</p>
         
-        <div class="code-block" style="background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 15px;">
+        <div class="code-block">
 <span style="color: #6A9955;"># Check if debug logging is enabled</span>
 <span style="color: #569CD6;">Get-DnsServerDiagnostics</span> | <span style="color: #569CD6;">Select-Object</span> SendPackets, ReceivePackets, Queries
 
@@ -342,7 +273,7 @@ const html = `<!DOCTYPE html>
         <h2 style="font-size: 18px; margin-top: 30px;">Step 2 &mdash; Search DNS Log for Malicious Domains</h2>
         <p style="margin-bottom: 10px;">Filter the debug log for the C2 domains identified in this report. Each matching line will show the client IP that requested the resolution &mdash; that is your infected host list:</p>
 
-        <div class="code-block" style="background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 15px;">
+        <div class="code-block">
 <span style="color: #6A9955;"># Search DNS debug log for all known C2 domains</span>
 <span style="color: #569CD6;">Select-String</span> -Path <span style="color: #CE9178;">'C:\\Windows\\System32\\dns\\dns.log'</span> \`
   -Pattern <span style="color: #CE9178;">'intempio|idexdmz|okta-ema|soyoungjun|azuredeploystore|officeaddons|msedgepackageinfo'</span>
@@ -357,7 +288,7 @@ const html = `<!DOCTYPE html>
         <h2 style="font-size: 18px; margin-top: 30px;">Step 3 &mdash; DNS Analytical Event Log (if debug was not enabled)</h2>
         <p style="margin-bottom: 10px;">If debug logging was not previously enabled, try the Windows DNS Analytical Event Log:</p>
 
-        <div class="code-block" style="background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 15px;">
+        <div class="code-block">
 <span style="color: #6A9955;"># Enable DNS analytical logging going forward</span>
 <span style="color: #569CD6;">wevtutil</span> sl <span style="color: #CE9178;">'Microsoft-Windows-DNS-Server/Analytical'</span> /e:true
 
@@ -373,8 +304,35 @@ const html = `<!DOCTYPE html>
             <span>Page 15</span>
         </div>
     </div>
+
+    <!-- PAGE 16: APPENDIX - SINKHOLE & CONTAINMENT -->
+    <div class="page">
+        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
+        <h2 style="font-size: 18px; margin-top: 0;">Step 4 &mdash; Configure DNS Sinkhole in Panorama (Ongoing Visibility)</h2>
+        <p style="margin-bottom: 15px;">Configure a DNS sinkhole to redirect C2 domains to a controlled IP. Infected clients will then appear in the firewall threat log with their real source IP going forward:</p>
+        <ul class="bullet-list">
+            <li>Panorama &rarr; Objects &rarr; Security Profiles &rarr; Anti-Spyware &rarr; DNS Policies</li>
+            <li>Add sinkhole entry: Action = sinkhole, Sinkhole IPv4 = 72.5.65.111 (PAN default sinkhole)</li>
+            <li>Apply to all device groups &mdash; infected clients now appear in threat logs with real source IPs</li>
+            <li>Monitor &rarr; Logs &rarr; Threat &rarr; filter: threat_name contains 'sinkhole' to see all infected clients in real time</li>
+        </ul>
+
+        <h2 style="font-size: 18px; margin-top: 35px;">Step 5 &mdash; Immediate Containment Once Client List is Known</h2>
+        <ul class="bullet-list">
+            <li><strong>Add all C2 domains to internal DNS as override records pointing to 127.0.0.1</strong> &mdash; cuts beacon loops immediately without alerting malware</li>
+            <li><strong>Isolate every client IP found in Step 2/3 from the network</strong> pending forensic investigation</li>
+            <li><strong>Force Okta password resets for all users on machines that resolved okta-ema.com</strong> &mdash; assume credentials compromised</li>
+            <li><strong>Disable idexna\\bidservices account immediately</strong> &mdash; confirmed Log4j RCE on 10.100.10.201, pending endpoint forensics</li>
+        </ul>
+
+        <div class="footer-tag">
+            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
+            <span>Page 16</span>
+        </div>
+    </div>
 </body>
 </html>`;
 
 fs.writeFileSync(outFile, html);
-console.log(`✓ Generated FULL VERBATIM 8-PAGE HTML Report: ${outFile}`);
+console.log(`✓ Generated FULL VERBATIM HTML Report: ${outFile}`);
