@@ -203,15 +203,33 @@ def get_csv_date_range(path):
     """Estimate date range by looking at first and last lines of CSV."""
     try:
         with open(path, 'r', encoding='utf-8', errors='replace') as f:
-            lines = f.readlines()
-            if len(lines) < 2: return None
-            # PAN logs typically have timestamp in col 1 or col 3 depending on export
+            # Efficiently read start and end without loading entire large log
+            header = f.readline()
+            first_data = f.readline()
+            
+            # Jump to end for the last date
+            f.seek(0, os.SEEK_END)
+            filesize = f.tell()
+            offset = min(filesize, 4096)
+            f.seek(filesize - offset)
+            last_lines = f.readlines()
+            last_data = last_lines[-1] if last_lines else ""
+
             def extract_date(line):
+                # Search for YYYY/MM/DD or common PAN log date formats
                 m = re.search(r'(\d{4}/\d{2}/\d{2})', line)
                 return m.group(1) if m else None
-            start = extract_date(lines[1])
-            end = extract_date(lines[-1])
-            if start and end: return f"{start} - {end}"
+
+            start = extract_date(first_data)
+            end = extract_date(last_data)
+            
+            if start and end:
+                if start == end:
+                    # If start and end match, check if it's actually a multi-day file 
+                    # and we just caught same-day entries. For QBR/SLR, show the range leading to it.
+                    # Or check for second column which often has the 'Generate Time' vs 'Log Time'
+                    return f"Through {end}"
+                return f"{start} - {end}"
     except: pass
     return "Period Unknown"
 
