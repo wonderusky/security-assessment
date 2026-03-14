@@ -402,7 +402,10 @@ const html = `<!DOCTYPE html>
     <div class="page">
         <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
         
-        <h2 style="font-size: 18px; margin-top: 0;">Step 1 &mdash; Enable Windows DNS Debug Logging</h2>
+        <h1 style="font-size: 20px; margin-top: 0;">Appendix: Identifying Infected Clients Behind DNS Servers</h1>
+        <p style="margin-bottom: 20px; font-weight: bold; color: #CC0000;">Because 10.57.11.173 and 10.57.11.174 are internal DNS resolvers, the firewall cannot show you the real infected endpoints &mdash; it only sees the DNS server forwarding requests on behalf of clients. The actual compromised machines are invisible at the firewall layer.</p>
+
+        <h2 style="font-size: 18px; margin-top: 30px;">Step 1 &mdash; Enable Windows DNS Debug Logging</h2>
         <p style="margin-bottom: 10px;">Run on each DNS server (10.57.11.173 and 10.57.11.174):</p>
         
         <div class="code-block">
