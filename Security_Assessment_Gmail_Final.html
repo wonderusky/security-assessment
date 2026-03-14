@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Security Assessment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin: 0; padding: 0; background-color: #F4F4F4;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td align="center" style="padding: 20px 0 20px 0;">
+                <!-- Main Container -->
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="700" style="background-color: #FFFFFF; border: 1px solid #DDDDDD; font-family: Arial, sans-serif;">
+                    
+                    <!-- HEADER -->
+                    <tr>
+                        <td align="left" style="padding: 15px 30px; border-bottom: 1px solid #EEEEEE; font-size: 10px; color: #888888; text-transform: uppercase;">
+                            IDEX Corporation SECURITY ASSESSMENT | March 2026 | CONFIDENTIAL
+                        </td>
+                    </tr>
+
+                    <!-- COVER PAGE BLOCK -->
+                    <tr>
+                        <td style="padding: 60px 40px;">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="color: #FA4616; font-size: 48px; font-weight: bold; line-height: 1;">IDEX Corporation</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #333333; font-size: 36px; font-weight: bold; padding-top: 10px;">Security Assessment</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #666666; font-size: 18px; font-style: italic; padding-top: 15px;">March 2026</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 40px;">
+                                        <table width="100%" bgcolor="#F9F9F9" style="border-left: 5px solid #FA4616;">
+                                            <tr>
+                                                <td style="padding: 15px; font-size: 12px; color: #444444;">
+                                                    <div style="font-weight: bold; color: #888; text-transform: uppercase; margin-bottom: 8px;">Source Inventories</div>
+                                                    
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 50px; font-size: 13px; color: #555555; line-height: 1.6;">
+                                        <strong>Prepared by:</strong> John Shelest | Palo Alto Networks Solutions Consultant<br/>
+                                        <strong>Environment:</strong> Panorama PAN-OS 11.1.10-h1 &bull; 80+ Managed Device Groups
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- SECTION 1: EXECUTIVE SUMMARY -->
+                    <tr><td bgcolor="#FA4616" style="padding: 12px 40px; color: #FFFFFF; font-size: 18px; font-weight: bold; text-transform: uppercase;">1. Executive Summary</td></tr>
+                    <tr>
+                        <td style="padding: 30px 40px;">
+                            <p style="font-size: 14px; color: #444444; line-height: 1.6; margin-bottom: 25px;">
+                                Analysis of IDEX Corp's network security posture based on techsupport files and 65,534 threat log rows (March 9, 2026). 
+                                Internal zone filter applied: Source Zone &ne; 'untrust' and &ne; 'guest'.
+                            </p>
+                            
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    
+    <td width="33%" align="center" bgcolor="#333333" style="padding: 20px; border: 4px solid #FFFFFF;">
+        <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">739</div>
+        <div style="color: #FFFFFF; font-size: 10px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif; margin-top: 5px;">Applications</div>
+    </td>
+                                    
+    <td width="33%" align="center" bgcolor="#FA4616" style="padding: 20px; border: 4px solid #FFFFFF;">
+        <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">58</div>
+        <div style="color: #FFFFFF; font-size: 10px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif; margin-top: 5px;">High Risk</div>
+    </td>
+                                    
+    <td width="33%" align="center" bgcolor="#666666" style="padding: 20px; border: 4px solid #FFFFFF;">
+        <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">411</div>
+        <div style="color: #FFFFFF; font-size: 10px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif; margin-top: 5px;">SaaS Apps</div>
+    </td>
+                                </tr>
+                                <tr>
+                                    
+    <td width="33%" align="center" bgcolor="#CC0000" style="padding: 20px; border: 4px solid #FFFFFF;">
+        <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">104,259</div>
+        <div style="color: #FFFFFF; font-size: 10px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif; margin-top: 5px;">Exploits</div>
+    </td>
+                                    
+    <td width="33%" align="center" bgcolor="#CC0000" style="padding: 20px; border: 4px solid #FFFFFF;">
+        <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">104,358</div>
+        <div style="color: #FFFFFF; font-size: 10px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif; margin-top: 5px;">Threats</div>
+    </td>
+                                    
+    <td width="33%" align="center" bgcolor="#E07800" style="padding: 20px; border: 4px solid #FFFFFF;">
+        <div style="color: #FFFFFF; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">20</div>
+        <div style="color: #FFFFFF; font-size: 10px; font-weight: bold; text-transform: uppercase; font-family: Arial, sans-serif; margin-top: 5px;">Malware</div>
+    </td>
+                                </tr>
+                            </table>
+
+                            <h3 style="color: #333; margin-top: 30px;">Key Findings</h3>
+                            <ul style="font-size: 13px; color: #444; line-height: 1.8; padding-left: 20px;">
+                                <li><strong>739 total applications observed</strong> (171% above Manufacturing peer group baseline).</li>
+                                <li><strong>Active C2 beaconing confirmed</strong> from 18+ internal IPs to 24+ malicious domains.</li>
+                                <li><strong>CRITICAL: Log4j RCE exploit confirmed</strong> for user idexna\bidservices.</li>
+                                <li><strong>174-day content gap</strong> discovered in Panorama signature updates.</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+                    <!-- SECTION: WHAT THIS MEANS (The "So What") -->
+                    <tr><td bgcolor="#333333" style="padding: 12px 40px; color: #FFFFFF; font-size: 18px; font-weight: bold; text-transform: uppercase;">Critical Findings & Risk Impact</td></tr>
+                    <tr>
+                        <td style="padding: 30px 40px;">
+                            
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px; border: 1px solid #E0E0E0;">
+        <tr>
+            <td width="60" bgcolor="#CC0000" align="center" valign="middle" style="color: #FFFFFF; font-size: 32px; font-weight: bold; font-family: Arial, sans-serif;">
+                1
+            </td>
+            <td bgcolor="#F2F2F2" style="padding: 15px; font-family: Arial, sans-serif;">
+                <div style="color: #CC0000; font-size: 15px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Active Breach</div>
+                <div style="font-size: 13px; color: #333333; line-height: 1.5;">A named employee account (idexna\bidservices) connected to an attacker server via Log4j. Forensic investigation required.</div>
+            </td>
+        </tr>
+    </table>
+                            
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px; border: 1px solid #E0E0E0;">
+        <tr>
+            <td width="60" bgcolor="#CC0000" align="center" valign="middle" style="color: #FFFFFF; font-size: 32px; font-weight: bold; font-family: Arial, sans-serif;">
+                2
+            </td>
+            <td bgcolor="#F2F2F2" style="padding: 15px; font-family: Arial, sans-serif;">
+                <div style="color: #CC0000; font-size: 15px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Targeted Infrastructure</div>
+                <div style="font-size: 13px; color: #333333; line-height: 1.5;">Attacker registered idexdmz.com specifically to impersonate your brand and capture internal data.</div>
+            </td>
+        </tr>
+    </table>
+                            
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px; border: 1px solid #E0E0E0;">
+        <tr>
+            <td width="60" bgcolor="#CC0000" align="center" valign="middle" style="color: #FFFFFF; font-size: 32px; font-weight: bold; font-family: Arial, sans-serif;">
+                3
+            </td>
+            <td bgcolor="#F2F2F2" style="padding: 15px; font-family: Arial, sans-serif;">
+                <div style="color: #CC0000; font-size: 15px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Identity Phishing</div>
+                <div style="font-size: 13px; color: #333333; line-height: 1.5;">1,163 machines resolved okta-ema.com, a fake login page designed to steal SSO credentials.</div>
+            </td>
+        </tr>
+    </table>
+                            
+                            <table width="100%" bgcolor="#FFF3EE" style="border: 1px solid #FA4616; margin-top: 20px;">
+                                <tr>
+                                    <td style="padding: 20px; font-size: 13px; color: #444; line-height: 1.5;">
+                                        <strong style="color: #FA4616; text-transform: uppercase;">&bull; SO WHAT — WHY THIS MATTERS</strong><br/><br/>
+                                        &raquo; 739 apps means your attack surface is 3x larger than peers. Every unmanaged app is an entry point.<br/>
+                                        &raquo; The 174-day content gap is the single most dangerous item; you are blind to 6 months of intelligence.<br/>
+                                        &raquo; 44% SaaS bandwidth with zero DLP oversight represents critical data exposure risk.
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td align="center" style="padding: 30px; border-top: 1px solid #EEEEEE; font-size: 11px; color: #999999;">
+                            &copy; 2026 Palo Alto Networks | Proprietary & Confidential | 3000 Tannery Way, Santa Clara, CA 95054
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

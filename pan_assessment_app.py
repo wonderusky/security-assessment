@@ -260,21 +260,27 @@ def generate(source_dir, customer_name, output_dir, log):
     }
 
     safe = re.sub(r'[^a-zA-Z0-9_\-]', '_', customer_name)
-    out_path = os.path.join(output_dir, f'{safe}_Security_Assessment_{datetime.datetime.now().strftime("%B%Y")}.html')
+    base_name = f'{safe}_Security_Assessment_{datetime.datetime.now().strftime("%B%Y")}'
+    out_html = os.path.join(output_dir, f'{base_name}.html')
+    out_pdf = os.path.join(output_dir, f'{base_name}.pdf')
     
     tmp = tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False)
     json.dump(data, tmp, indent=2); tmp.close()
     
     gen_js = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gen_report.js')
     log('Building HTML document...')
-    result = subprocess.run(['/opt/homebrew/bin/node', gen_js, tmp.name, out_path], capture_output=True, text=True, timeout=120)
+    result = subprocess.run(['/opt/homebrew/bin/node', gen_js, tmp.name, out_html], capture_output=True, text=True, timeout=120)
     os.unlink(tmp.name)
     
     if result.returncode == 0:
-        aid = save_assessment(customer_name, data, out_path)
+        log('Converting to PDF...')
+        chrome_bin = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        subprocess.run([chrome_bin, '--headless', '--disable-gpu', f'--print-to-pdf={out_pdf}', out_html], capture_output=True)
+        
+        aid = save_assessment(customer_name, data, out_html)
         log(f'✅ Saved Assessment ID: {aid}')
-        log(f'✅ Report: {out_path}')
-        return out_path
+        log(f'✅ PDF Report: {out_pdf}')
+        return out_pdf
     else: raise RuntimeError(f'Node.js error: {result.stderr}')
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -339,12 +345,17 @@ class App(tk.Tk):
         tk.Button(f3, text='BROWSE', command=self._browse_out, **btn_style).pack(side='left')
 
         # Action Button
-        gen_frame = tk.Frame(self, bg=self.BG, pady=20)
+        gen_frame = tk.Frame(self, bg=self.BG, pady=10)
         gen_frame.pack(fill='x')
-        self.gen_btn = tk.Button(gen_frame, text='GENERATE SECURITY ASSESSMENT', command=self._run_generate, 
+        self.gen_btn = tk.Button(gen_frame, text='⚡ GENERATE ASSESSMENT', command=self._run_generate, 
                                  bg=self.ORG, fg='white', activebackground='#E63E00', activeforeground='white',
-                                 font=('Arial', 12, 'bold'), padx=40, pady=12, relief='flat', cursor='hand2')
-        self.gen_btn.pack()
+                                 font=('Arial', 11, 'bold'), padx=30, pady=10, relief='flat', cursor='hand2')
+        self.gen_btn.pack(side='left', padx=(40, 10))
+
+        self.email_btn = tk.Button(gen_frame, text='✉ EMAIL TO ME', command=self._run_email, 
+                                 bg='#333333', fg='white', activebackground='#555555', activeforeground='white',
+                                 font=('Arial', 11, 'bold'), padx=30, pady=10, relief='flat', cursor='hand2')
+        self.email_btn.pack(side='left', padx=10)
         
         # Log Box with better contrast
         tk.Label(self, text='GENERATION LOG', bg=self.BG, fg=self.FG2, font=('Arial', 9, 'bold'), padx=40, anchor='w').pack(fill='x')
@@ -371,8 +382,50 @@ class App(tk.Tk):
     
     def _run_generate(self):
         self._save_prefs()
-        # Use self._log instead of self.tk._log
-        threading.Thread(target=lambda: generate(self.src.get(), self.cust.get(), self.out.get(), self._log), daemon=True).start()
+        self.gen_btn.configure(state='disabled', text='GENERATING...')
+        def worker():
+            try:
+                pdf_path = generate(self.src.get(), self.cust.get(), self.out.get(), self._log)
+                self._prefs['last_generated_pdf'] = pdf_path
+                self._save_prefs()
+                self._log(f"✅ Ready to email: {os.path.basename(pdf_path)}")
+            except Exception as e:
+                self._log(f"❌ Error: {str(e)}")
+            finally:
+                self.after(0, lambda: self.gen_btn.configure(state='normal', text='⚡ GENERATE ASSESSMENT'))
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _run_email(self):
+        out_path = self._prefs.get('last_generated_pdf')
+        if not out_path or not os.path.exists(out_path):
+            messagebox.showerror("Error", "No report found. Please generate an assessment first.")
+            return
+            
+        self._log(f"Sending PDF to jshelest@paloaltonetworks.com...")
+        self.email_btn.configure(state='disabled', text='SENDING...')
+        
+        def worker():
+            try:
+                cmd = [
+                    'gog', 'gmail', 'send',
+                    '--to', 'jshelest@paloaltonetworks.com',
+                    '--subject', f"Security Assessment: {self.cust.get()} - {datetime.datetime.now().strftime('%B %Y')}",
+                    '--body', f"Attached is the finalized security assessment for {self.cust.get()}.",
+                    '--attach', out_path
+                ]
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                if result.returncode == 0:
+                    self._log("✅ Email sent successfully via Gmail API.")
+                    self.after(0, lambda: messagebox.showinfo("Success", "Report emailed successfully!"))
+                else:
+                    raise RuntimeError(result.stderr)
+            except Exception as e:
+                self._log(f"❌ Email failed: {str(e)}")
+                self.after(0, lambda: messagebox.showerror("Email Error", str(e)))
+            finally:
+                self.after(0, lambda: self.email_btn.configure(state='normal', text='✉ EMAIL TO ME'))
+        
+        threading.Thread(target=worker, daemon=True).start()
 
     def _log(self, msg):
         self.log_box.configure(state='normal')
