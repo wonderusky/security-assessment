@@ -239,15 +239,21 @@ def generate(source_dir, customer_name, output_dir, log):
 # GUI
 # ═══════════════════════════════════════════════════════════════════════════════
 class App(tk.Tk):
-    BG, BG2, BG3, FG, ORG, GRN, RED = '#1a1a1a', '#252525', '#2e2e2e', '#ffffff', '#FA4616', '#00ff88', '#ff4444'
+    # Professional Palo Alto Networks Theme (Light/Clean)
+    BG, BG2, BG3 = '#FFFFFF', '#F2F2F2', '#E5E5E5'
+    FG, FG2 = '#333333', '#666666'
+    ORG, GRN, RED = '#FA4616', '#1E7A1E', '#CC0000'
+    
     def __init__(self):
         super().__init__()
         self.title('PAN Security Assessment Generator')
-        self.geometry('760x620'); self.configure(bg=self.BG)
-        init_db(); self._build()
+        self.geometry('800x650')
+        self.configure(bg=self.BG)
+        init_db()
+        self._build()
 
     def _build(self):
-        # Prefs handling - ensure it survives first run
+        # Prefs handling
         self._prefs_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prefs.json')
         self._prefs = {}
         if os.path.exists(self._prefs_file):
@@ -255,36 +261,53 @@ class App(tk.Tk):
                 with open(self._prefs_file, 'r') as f: self._prefs = json.load(f)
             except: pass
 
-        tk.Label(self, text='PAN Security Assessment Generator', bg=self.BG, fg=self.ORG, font=('Arial', 16, 'bold')).pack(pady=(16, 2))
+        # Header with Logo-style text
+        header_frame = tk.Frame(self, bg=self.BG, pady=20)
+        header_frame.pack(fill='x')
+        tk.Label(header_frame, text='PALO ALTO NETWORKS', bg=self.BG, fg=self.ORG, font=('Arial', 10, 'bold'), letterspacing=2).pack()
+        tk.Label(header_frame, text='Security Assessment Generator', bg=self.BG, fg=self.FG, font=('Arial', 18, 'bold')).pack()
         
-        # Style configuration for visibility
-        entry_style = {'bg': self.BG2, 'fg': self.FG, 'insertbackground': self.FG, 'relief': 'flat', 'font': ('Arial', 10)}
-        btn_style = {'bg': self.ORG, 'fg': self.FG, 'activebackground': self.BG3, 'activeforeground': self.FG, 'relief': 'flat', 'padx': 10}
+        # Form Container
+        form = tk.Frame(self, bg=self.BG, padx=40)
+        form.pack(fill='x')
 
-        f1 = tk.Frame(self, bg=self.BG); f1.pack(fill='x', padx=16, pady=4)
-        tk.Label(f1, text='Customer Name:', bg=self.BG, fg=self.FG, width=16, anchor='w').pack(side='left')
+        # Style configuration
+        lbl_style = {'bg': self.BG, 'fg': self.FG, 'font': ('Arial', 10, 'bold'), 'width': 18, 'anchor': 'w'}
+        entry_style = {'bg': self.BG2, 'fg': self.FG, 'insertbackground': self.FG, 'relief': 'flat', 'font': ('Arial', 11), 'highlightthickness': 1, 'highlightbackground': self.BG3}
+        btn_style = {'bg': self.ORG, 'fg': 'white', 'activebackground': '#E63E00', 'activeforeground': 'white', 'relief': 'flat', 'font': ('Arial', 10, 'bold'), 'padx': 15, 'pady': 5}
+
+        # Customer Name
+        f1 = tk.Frame(form, bg=self.BG, pady=8); f1.pack(fill='x')
+        tk.Label(f1, text='CUSTOMER NAME', **lbl_style).pack(side='left')
         self.cust = tk.StringVar(value=self._prefs.get('last_customer', 'IDEX Corp'))
         tk.Entry(f1, textvariable=self.cust, **entry_style).pack(side='left', fill='x', expand=True)
 
-        f2 = tk.Frame(self, bg=self.BG); f2.pack(fill='x', padx=16, pady=4)
-        tk.Label(f2, text='Source Folder:', bg=self.BG, fg=self.FG, width=16, anchor='w').pack(side='left')
+        # Source Folder
+        f2 = tk.Frame(form, bg=self.BG, pady=8); f2.pack(fill='x')
+        tk.Label(f2, text='SOURCE DIRECTORY', **lbl_style).pack(side='left')
         self.src = tk.StringVar(value=self._prefs.get('last_source', ''))
-        tk.Entry(f2, textvariable=self.src, **entry_style).pack(side='left', fill='x', expand=True, padx=(0,8))
-        tk.Button(f2, text='Browse', command=self._browse_src, **btn_style).pack(side='left')
+        tk.Entry(f2, textvariable=self.src, **entry_style).pack(side='left', fill='x', expand=True, padx=(0,10))
+        tk.Button(f2, text='BROWSE', command=self._browse_src, **btn_style).pack(side='left')
 
-        f3 = tk.Frame(self, bg=self.BG); f3.pack(fill='x', padx=16, pady=4)
-        tk.Label(f3, text='Output Folder:', bg=self.BG, fg=self.FG, width=16, anchor='w').pack(side='left')
+        # Output Folder
+        f3 = tk.Frame(form, bg=self.BG, pady=8); f3.pack(fill='x')
+        tk.Label(f3, text='OUTPUT DIRECTORY', **lbl_style).pack(side='left')
         self.out = tk.StringVar(value=self._prefs.get('last_output', ''))
-        tk.Entry(f3, textvariable=self.out, **entry_style).pack(side='left', fill='x', expand=True, padx=(0,8))
-        tk.Button(f3, text='Browse', command=self._browse_out, **btn_style).pack(side='left')
+        tk.Entry(f3, textvariable=self.out, **entry_style).pack(side='left', fill='x', expand=True, padx=(0,10))
+        tk.Button(f3, text='BROWSE', command=self._browse_out, **btn_style).pack(side='left')
 
-        self.gen_btn = tk.Button(self, text='⚡  Generate Report', command=self._run_generate, bg=self.ORG, fg=self.FG, 
-                                 activebackground=self.BG3, activeforeground=self.FG, font=('Arial', 13, 'bold'), 
-                                 padx=24, pady=8, relief='flat')
-        self.gen_btn.pack(pady=10)
+        # Action Button
+        gen_frame = tk.Frame(self, bg=self.BG, pady=20)
+        gen_frame.pack(fill='x')
+        self.gen_btn = tk.Button(gen_frame, text='GENERATE SECURITY ASSESSMENT', command=self._run_generate, 
+                                 bg=self.ORG, fg='white', activebackground='#E63E00', activeforeground='white',
+                                 font=('Arial', 12, 'bold'), padx=40, pady=12, relief='flat', cursor='hand2')
+        self.gen_btn.pack()
         
-        self.log_box = scrolledtext.ScrolledText(self, height=16, bg='#0d1117', fg=self.GRN, font=('Courier New', 9), relief='flat')
-        self.log_box.pack(fill='both', expand=True, padx=16, pady=16)
+        # Log Box with better contrast
+        tk.Label(self, text='GENERATION LOG', bg=self.BG, fg=self.FG2, font=('Arial', 9, 'bold'), padx=40, anchor='w').pack(fill='x')
+        self.log_box = scrolledtext.ScrolledText(self, height=12, bg=self.BG2, fg=self.FG, font=('Menlo', 10), relief='flat', padx=10, pady=10)
+        self.log_box.pack(fill='both', expand=True, padx=40, pady=(5, 40))
 
     def _save_prefs(self):
         self._prefs['last_customer'] = self.cust.get()
