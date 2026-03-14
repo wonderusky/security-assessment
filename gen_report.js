@@ -74,7 +74,7 @@ const pb = () => new Paragraph({ children: [new PageBreak()] });
 
 
 // ── CELL — always PERCENTAGE width ───────────────────────────────────────────
-function cell(content, bg, pct, opts = {}) {
+function cell(content, bg, widthVal, opts = {}) {
   let children;
   if (Array.isArray(content)) {
     children = content;
@@ -92,7 +92,7 @@ function cell(content, bg, pct, opts = {}) {
   return new TableCell({
     children,
     shading: { type: ShadingType.CLEAR, color: 'auto', fill: bg || C.white },
-    width: { size: pct, type: WidthType.PERCENTAGE },
+    width: { size: widthVal, type: opts.widthType || WidthType.PERCENTAGE },
     margins: { top: 80, bottom: 80, left: 120, right: 120 },
     borders: opts.borders || thinB,
   });
@@ -136,17 +136,11 @@ function findingCard(num, headline, bodyText, critical = true) {
         children: [tr(String(num), { color: C.white, bold: true, sz: 16 })],
         alignment: AlignmentType.CENTER,
         spacing: { before: 100, after: 100 },
-      })], numBg, 8),
-      new TableCell({
-        children: [
+      })], numBg, 800, { widthType: WidthType.DXA }),
+      cell([
           new Paragraph({ children: [tr(headline, { color: headFg, bold: true, sz: 10 })], spacing: { before: 80, after: 40 } }),
           new Paragraph({ children: [tr(bodyText, { sz: 9 })], spacing: { before: 40, after: 80 } }),
-        ],
-        shading: { type: ShadingType.CLEAR, color: 'auto', fill: C.f2 },
-        width: { size: 92, type: WidthType.PERCENTAGE },
-        margins: { top: 80, bottom: 80, left: 160, right: 120 },
-        borders: thinB,
-      }),
+      ], C.f2, 8500, { widthType: WidthType.DXA, margins: { top: 80, bottom: 80, left: 160, right: 120 } }),
     ]})],
     width: { size: 100, type: WidthType.PERCENTAGE },
     borders: thinB,
