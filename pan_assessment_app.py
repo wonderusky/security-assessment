@@ -199,12 +199,32 @@ def analyze_spyware(rows, log):
         else: infected[ip] = {'hits': hits, 'zone': ip_zone[ip], 'unique': ud, 'users': '—'}
     return dns, infected, sorted(dom_hits.items(), key=lambda x: -x[1])[:10], dom_tids, sorted(infected.items(), key=lambda x: -x[1]['hits'])[:10]
 
+def get_csv_date_range(path):
+    """Estimate date range by looking at first and last lines of CSV."""
+    try:
+        with open(path, 'r', encoding='utf-8', errors='replace') as f:
+            lines = f.readlines()
+            if len(lines) < 2: return None
+            # PAN logs typically have timestamp in col 1 or col 3 depending on export
+            def extract_date(line):
+                m = re.search(r'(\d{4}/\d{2}/\d{2})', line)
+                return m.group(1) if m else None
+            start = extract_date(lines[1])
+            end = extract_date(lines[-1])
+            if start and end: return f"{start} - {end}"
+    except: pass
+    return "Period Unknown"
+
 def generate(source_dir, customer_name, output_dir, log):
     files = preflight(source_dir, log)
     if files is None: raise ValueError('Pre-flight failed.')
     
     sp, vu = load_threat_csv(files['threat'], log)
     dns, infected, top_doms, dom_tids, top_ips = analyze_spyware(sp, log)
+    
+    # Extract specific file periods
+    threat_period = get_csv_date_range(files['threat'])
+    traffic_period = get_csv_date_range(files['traffic']) if files['traffic'] else "N/A"
     
     data = {
         'customerName': customer_name,
@@ -214,7 +234,11 @@ def generate(source_dir, customer_name, output_dir, log):
         'dnsResolvers': [{'ip': ip, 'zone': d['zone'], 'hits': d['hits'], 'unique': d['unique']} for ip, d in dns.items()],
         'topDomains': [{'domain': dom, 'hits': hits, 'tid': dom_tids.get(dom, '')} for dom, hits in top_doms],
         'topIPs': [{'ip': ip, 'zone': d['zone'], 'hits': d['hits'], 'unique': d['unique'], 'users': d['users']} for ip, d in top_ips],
-        'smbFlows': [], 'vulnEvents': []
+        'smbFlows': [], 'vulnEvents': [],
+        'sourceFiles': [
+            {'name': os.path.basename(files['threat']), 'type': 'Threat Logs', 'period': threat_period},
+            {'name': os.path.basename(files['traffic']) if files['traffic'] else 'None', 'type': 'Traffic Logs', 'period': traffic_period}
+        ]
     }
 
     safe = re.sub(r'[^a-zA-Z0-9_\-]', '_', customer_name)

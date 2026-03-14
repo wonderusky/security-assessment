@@ -33,7 +33,13 @@
         <div style="margin-top: 100px;">
             <div style="color: #FA4616; font-size: 44px; font-weight: bold; line-height: 1;">IDEX Corporation</div>
             <div style="font-size: 34px; font-weight: bold; margin-bottom: 20px;">Security Assessment</div>
-            <div style="font-size: 16px; color: #666666; font-style: italic;">March 2026 &middot; Report Period: February 27 &ndash; March 9, 2026</div>
+            <div style="font-size: 16px; color: #666666; font-style: italic; margin-bottom: 10px;">March 2026</div>
+            
+            <div style="margin-top: 20px;">
+                <div style="font-size: 11px; color: #666666; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Data Source Inventories & Periods</div>
+                
+            </div>
+
             <div style="margin-top: 40px; font-size: 13px; line-height: 1.6;">
                 <strong>Prepared by:</strong> John Shelest | Palo Alto Networks Solutions Consultant<br>
                 <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; 65,534 Threat Log Rows
@@ -343,7 +349,7 @@
         <div class="conf-header">IDEX Corporation Security Assessment | March 2026 | CONFIDENTIAL</div>
         
         <h1 style="font-size: 20px; margin-top: 0;">Appendix: Identifying Infected Clients Behind DNS Servers</h1>
-        <p style="margin-bottom: 20px; font-weight: bold; color: #CC0000;">Because 10.57.11.173 and 10.57.11.174 are internal DNS resolvers, the firewall cannot show you the real infected endpoints &mdash; it only sees the DNS server forwarding requests on behalf of clients. The actual compromised machines are invisible at the firewall layer.</p>
+        <p style="margin-bottom: 20px; font-weight: bold; color: #000000;">Because 10.57.11.173 and 10.57.11.174 are internal DNS resolvers, the firewall cannot show you the real infected endpoints &mdash; it only sees the DNS server forwarding requests on behalf of clients. The actual compromised machines are invisible at the firewall layer.</p>
 
         <h2 style="font-size: 18px; margin-top: 30px;">Step 1 &mdash; Enable Windows DNS Debug Logging</h2>
         <p style="margin-bottom: 10px;">Run on each DNS server (10.57.11.173 and 10.57.11.174):</p>
