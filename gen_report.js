@@ -367,6 +367,30 @@ const html = `<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- PAGE 7.5: INDUSTRY BENCHMARKS -->
+    <div class="page">
+        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        <h1>7. Industry Benchmarks (Manufacturing Peer Group)</h1>
+        <p>All benchmark data sourced from the Security Lifecycle Review (SLR) report, February 27 &ndash; March 6, 2026. Peer group: Manufacturing industry vertical.</p>
+
+        ${renderTable(['Metric', 'IDEX Corp', 'Industry Avg', 'Assessment'], [
+            ['Total Applications', '739', '273', { text: '171% above avg ⚠', color: C.amber }],
+            ['High-Risk Applications', '58', '22', { text: '2.6× above avg ⚠', color: C.amber }],
+            ['SaaS Applications', '411', '134', { text: '3× above avg', color: C.amber }],
+            ['SaaS % of All Apps', '55.62%', '49.08%', 'Slightly above avg'],
+            ['Total Bandwidth', '125.17 TB', '1.19 PB', 'Expected for org size'],
+            ['SaaS Bandwidth', '55.43 TB (44.3%)', '0.4% of total', { text: '110× above avg ⚠', color: C.red }],
+            ['Remote Access Apps', '30 apps', '9 apps', { text: '3.3× above avg ⚠', color: C.amber }],
+            ['Known Malware Events', '20', '3,036', { text: 'Blocking effective ✓', color: C.green }],
+            ['C2 Connections', '79', 'Industry varies', { text: 'Active threat &mdash; see §2', color: C.red }]
+        ], ['25%', '25%', '25%', '25%'])}
+
+        <div class="footer-tag">
+            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
+            <span>Page 7.5</span>
+        </div>
+    </div>
+
     <!-- PAGE 8: ROADMAP -->
     <div class="page">
         <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
