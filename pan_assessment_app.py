@@ -24,13 +24,13 @@ def init_db():
     c.execute('''CREATE TABLE IF NOT EXISTS assessments 
                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                   customer_name TEXT, 
-                  report_date TEXT, 
+                  report_quarter TEXT, 
                   total_threats INTEGER,
                   vulnerabilities INTEGER,
                   infected_ips INTEGER,
                   data JSON, 
                   html_path TEXT,
-                  UNIQUE(customer_name, report_date))''')
+                  UNIQUE(customer_name, report_quarter))''')
     c.execute('''CREATE TABLE IF NOT EXISTS findings 
                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                   assessment_id INTEGER, 
@@ -42,22 +42,28 @@ def init_db():
     conn.commit()
     conn.close()
 
+def get_quarter():
+    now = datetime.datetime.now()
+    quarter = (now.month - 1) // 3 + 1
+    return f"{now.year}-Q{quarter}"
+
 def save_assessment(customer_name, data, out_path):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    report_date = datetime.datetime.now().strftime('%Y-%m-%d')
+    report_quarter = get_quarter()
     try:
         c.execute('''INSERT OR REPLACE INTO assessments 
-                     (customer_name, report_date, total_threats, vulnerabilities, infected_ips, data, html_path) 
+                     (customer_name, report_quarter, total_threats, vulnerabilities, infected_ips, data, html_path) 
                      VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                  (customer_name, report_date, 
+                  (customer_name, report_quarter, 
                    data['totalRows'], data['vulnCount'], data['infectedCount'],
                    json.dumps(data), out_path))
-        aid = c.lastrowid
         
-        # Clear old findings for this specific customer/date if replacing
-        if aid:
-            c.execute("DELETE FROM findings WHERE assessment_id = ?", (aid,))
+        # When using INSERT OR REPLACE, we need to find the ID of what we just inserted/replaced
+        c.execute("SELECT id FROM assessments WHERE customer_name = ? AND report_quarter = ?", (customer_name, report_quarter))
+        aid = c.fetchone()[0]
+        
+        c.execute("DELETE FROM findings WHERE assessment_id = ?", (aid,))
         
         findings = [
             ('Breach', 'Active Breach Indicator', True),
