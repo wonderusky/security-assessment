@@ -21,14 +21,19 @@ CONFIG_PATH = os.path.join(SCRIPT_DIR, 'config.json')
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 def load_config():
+    env_key = os.environ.get('GEMINI_API_KEY')
+    config = {}
     try:
-        with open(CONFIG_PATH) as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
+        if os.path.exists(CONFIG_PATH):
+            with open(CONFIG_PATH) as f:
+                config = json.load(f)
     except Exception as e:
         print(f"Warning: could not load config.json: {e}")
-        return {}
+    
+    # Environment variable overrides config.json
+    if env_key:
+        config['gemini_api_key'] = env_key
+    return config
 
 # ── DATABASE ──────────────────────────────────────────────────────────────────
 def init_db():
