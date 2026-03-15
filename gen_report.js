@@ -199,13 +199,6 @@ const html = `<!DOCTYPE html>
             ['idexdmz.com (TID 109010003)', 'IDEX Brand Squatting', '365', { text: '⚠ CRITICAL', color: C.red }]
         ], ['35%', '35%', '15%', '15%'])}
 
-        <div class="so-what-box">
-            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
-            <div class="so-what-item"><strong>› Persistent Beaconing</strong> &mdash; 55 internal IPs are actively "calling home." This isn't just malware; it's a persistent foothold. The attacker is waiting for the right moment to pivot.</div>
-            <div class="so-what-item"><strong>› Targeted Domains</strong> &mdash; Attackers are spoofing Akamai, Azure, and Okta. This is designed to bypass human suspicion and DNS security filters.</div>
-            <div class="so-what-item"><strong>› Intempio Persistence</strong> &mdash; 16k hits across multiple hosts indicates a coordinated C2 campaign inside the ${CN} network.</div>
-        </div>
-
         <div class="keep-together">
             <h3>2.2 Top Compromised Source IPs</h3>
             ${renderTable(['Source IP', 'Zone', 'Hits', 'Unique Threats', 'Primary C2 Domains'], [
@@ -226,6 +219,13 @@ const html = `<!DOCTYPE html>
                 ['DNS Malware / Spyware', '8,825,702', 'Aggregate statsv2'],
                 ['DNS C2 / Spyware', '322,389', 'Aggregate statsv2']
             ])}
+        </div>
+
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› Persistent Beaconing</strong> &mdash; 55 internal IPs are actively "calling home." This isn't just malware; it's a persistent foothold. The attacker is waiting for the right moment to pivot.</div>
+            <div class="so-what-item"><strong>› Targeted Domains</strong> &mdash; Attackers are spoofing Akamai, Azure, and Okta. This is designed to bypass human suspicion and DNS security filters.</div>
+            <div class="so-what-item"><strong>› Intempio Persistence</strong> &mdash; 16k hits across multiple hosts indicates a coordinated C2 campaign inside the ${CN} network.</div>
         </div>
         <div class="footer-tag">
             <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
@@ -248,13 +248,6 @@ const html = `<!DOCTYPE html>
             ['10.45.88.3', 'idexna\\admin', 'SIPVicious Scanner Detection', { text: 'HIGH', color: C.amber }, 'reset-both', '—']
         ])}
 
-        <div class="so-what-box">
-            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
-            <div class="so-what-item"><strong>› Identity is the Perimeter</strong> &mdash; When we see "idexna\\bidservices" connected to an exploit, it's no longer a machine-level event; it's an identity-level compromise. The attacker has a valid user context.</div>
-            <div class="so-what-item"><strong>› Log4j RCE</strong> &mdash; This is not a probe. This is a successful remote command execution. The attacker effectively owns the targeted application server.</div>
-            <div class="so-what-item"><strong>› Brute Force Trends</strong> &mdash; Persistent SSH/WRM brute forcing indicates an attacker who has bypassed the edge and is now aggressively hunting for internal credentials.</div>
-        </div>
-
         <h3>3.2 Application Vulnerability Exploits (SLR Data)</h3>
         ${renderTable(['Application', 'Count', 'Top Threat Signatures'], [
             ['ms-ds-smbv3', '51,412', 'SMB Brute Force: 944 HIGH · Registry Read: 42,243 LOW'],
@@ -273,6 +266,13 @@ const html = `<!DOCTYPE html>
             ['Gh0st.Gen C2', '2', 'botnet', 'unknown-tcp'],
             ['DNS Tunnel Data Infiltration', '1', 'spyware', 'dns']
         ])}
+
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› Identity is the Perimeter</strong> &mdash; When we see "idexna\\bidservices" connected to an exploit, it's no longer a machine-level event; it's an identity-level compromise. The attacker has a valid user context.</div>
+            <div class="so-what-item"><strong>› Log4j RCE</strong> &mdash; This is not a probe. This is a successful remote command execution. The attacker effectively owns the targeted application server.</div>
+            <div class="so-what-item"><strong>› Brute Force Trends</strong> &mdash; Persistent SSH/WRM brute forcing indicates an attacker who has bypassed the edge and is now aggressively hunting for internal credentials.</div>
+        </div>
         <div class="footer-tag">
             <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
             <span>Page 5</span>
@@ -292,12 +292,6 @@ const html = `<!DOCTYPE html>
             ['10.45.84.3', 'Internal / MAD_IPSEC', '10.28.200.103', 'INTERNAL', '2.8 MB'],
             ['10.58.147.251', 'L4-BU_ENT / idex_ipsec', '10.26.200.46', 'INTERNAL', '1.2 MB']
         ])}
-
-        <div class="so-what-box">
-            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
-            <div class="so-what-item"><strong>› East-West Visibility</strong> &mdash; SMB and WRM should never cross from user segments to server segments without explicit policy. This is the hallmark of a ransomware infection spreading.</div>
-            <div class="so-what-item"><strong>› Lateral Sprawl</strong> &mdash; 24.4 MB of WRM traffic is not a login; it's a data transfer or a configuration change. The attacker is moving deeper into the ${CN} core.</div>
-        </div>
 
         <div class="keep-together">
             <h3>4.2 SMB Cross-Segment Flows</h3>
@@ -323,6 +317,8 @@ const html = `<!DOCTYPE html>
 
         <div class="so-what-box">
             <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› East-West Visibility</strong> &mdash; SMB and WRM should never cross from user segments to server segments without explicit policy. This is the hallmark of a ransomware infection spreading.</div>
+            <div class="so-what-item"><strong>› Lateral Sprawl</strong> &mdash; 24.4 MB of WRM traffic is not a login; it's a data transfer or a configuration change. The attacker is moving deeper into the ${CN} core.</div>
             <div class="so-what-item"><strong>› Unmanaged Sprawl</strong> &mdash; 30 remote access tools means there is no standard for secure access. Any of these 30 tools can be used as a "living off the land" back door.</div>
             <div class="so-what-item"><strong>› VNC Risk</strong> &mdash; Unencrypted sessions mean passwords and screen data are being sent in the clear across your network.</div>
         </div>
@@ -338,12 +334,6 @@ const html = `<!DOCTYPE html>
         <h1>5. Application Risk & SaaS Exposure</h1>
         <p>Total bandwidth: 125.17 TB. 411 SaaS applications detected (44.3% of all traffic vs. 0.4% industry average baseline).</p>
 
-        <div class="so-what-box">
-            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
-            <div class="so-what-item"><strong>› Data Exfiltration Risk</strong> &mdash; 44% SaaS bandwidth with zero DLP means you are blind to where your sensitive corporate intellectual property is being uploaded.</div>
-            <div class="so-what-item"><strong>› Shadow IT</strong> &mdash; 114 uncertified apps are being used by employees. These are outside the control of IT Security, representing unvetted risks and terms of service.</div>
-        </div>
-
         <div class="keep-together">
             <h3>5.1 SaaS Hosting Risk</h3>
             ${renderTable(['Risk Category', 'App Count', 'Bandwidth', 'Notable Apps'], [
@@ -352,6 +342,12 @@ const html = `<!DOCTYPE html>
                 ['Poor Terms of Service', '51', '42.19 GB', 'teamviewer, ringcentral'],
                 ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail']
             ])}
+        </div>
+
+        <div class="so-what-box">
+            <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
+            <div class="so-what-item"><strong>› Data Exfiltration Risk</strong> &mdash; 44% SaaS bandwidth with zero DLP means you are blind to where your sensitive corporate intellectual property is being uploaded.</div>
+            <div class="so-what-item"><strong>› Shadow IT</strong> &mdash; 114 uncertified apps are being used by employees. These are outside the control of IT Security, representing unvetted risks and terms of service.</div>
         </div>
 
         <div class="keep-together">
