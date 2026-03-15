@@ -103,17 +103,8 @@ const html = `<!DOCTYPE html>
         <div style="margin-top: 100px;">
             <div style="color: ${C.orange}; font-size: 44px; font-weight: bold; line-height: 1;">${CN}</div>
             <div style="font-size: 34px; font-weight: bold; margin-bottom: 20px;">Security Assessment</div>
-            <div style="font-size: 16px; color: ${C.mid}; font-style: italic; margin-bottom: 10px;">${month}</div>
+            <div style="font-size: 16px; color: ${C.mid}; font-style: italic; margin-bottom: 10px;">${month} &middot; Report Period: February 27 &ndash; March 9, 2026</div>
             
-            <div style="margin-top: 20px;">
-                <div style="font-size: 11px; color: ${C.mid}; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Data Source Inventories & Periods</div>
-                ${(D.sourceFiles || []).map(f => `
-                    <div style="font-size: 11px; color: ${C.dark}; margin-bottom: 3px;">
-                        <strong>${f.type}:</strong> ${f.name} &middot; <span style="color: ${C.orange}; font-weight: bold;">${f.period}</span>
-                    </div>
-                `).join('')}
-            </div>
-
             <div style="margin-top: 40px; font-size: 13px; line-height: 1.6;">
                 <strong>Prepared by:</strong> John Shelest | Palo Alto Networks Solutions Consultant<br>
                 <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; 65,534 Threat Log Rows
@@ -164,7 +155,7 @@ const html = `<!DOCTYPE html>
             <li><strong>CRITICAL: Brand-squatting domain idexdmz.com detected</strong> &mdash; 365 internal hits (idexcorpnet\\paloalto user), IDEX corporate brand impersonation</li>
             <li><strong>Named user confirmed in Apache Log4j RCE exploit (CVE-2021-44228)</strong>: idexna\\bidservices &rarr; external IP 35.201.101.243:443</li>
             <li><strong>Panorama content pack, AV, and threat definitions are 174 days out of date</strong> (last updated September 15, 2025)</li>
-            <li><strong>SaaS bandwidth at 55.43 TB (44.3% of all traffic)</strong> &mdash; SaaS apps make up 55.62% of all apps vs. 49% industry average</li>
+            <li><strong>SaaS bandwidth at 55.43 TB (44.3% of all traffic)</strong> vs. 0.4% industry average &mdash; massive cloud storage footprint via azure-storage-accounts-base</li>
             <li><strong>30 remote access applications detected</strong> vs. industry average of 9 &mdash; unmanaged tool sprawl including VNC (Risk-5), AnyDesk, ScreenConnect</li>
         </ul>
 
@@ -387,7 +378,7 @@ const html = `<!DOCTYPE html>
     </div>
 
     <!-- PAGE 7.5: INDUSTRY BENCHMARKS -->
-    <div class="page">
+    <div class="page" style="page-break-before: always;">
         
         <h1>7. Industry Benchmarks (Manufacturing Peer Group)</h1>
         <p>All benchmark data sourced from the Security Lifecycle Review (SLR) report, February 27 &ndash; March 6, 2026. Peer group: Manufacturing industry vertical.</p>
