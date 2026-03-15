@@ -389,9 +389,9 @@ def preflight(directory, log):
     cloud_warnings = []
     for key, label, required in [
         ('threat',    'Threat Logs CSV',   True),
-        ('traffic',   'Traffic Logs CSV',  False),
-        ('statsdump', 'Techsupport/Stats', False),
-        ('slr',       'SLR PDF Report',    False),
+        ('traffic',   'Traffic Logs CSV',  True),
+        ('statsdump', 'Techsupport/Stats', True),
+        ('slr',       'SLR PDF Report',    True),
     ]:
         path = found[key]
         if path:
@@ -432,8 +432,9 @@ def preflight(directory, log):
             log('     Panorama, and Benchmark sections will show "—".')
     else:
         log('')
-        log('  ✘  CANNOT PROCEED — Threat Logs CSV is required.')
-        log('     Point to a folder containing Panorama threat log exports.')
+        log('  ✘  CANNOT PROCEED — ALL 4 DATA SOURCES ARE NOW STRICTLY REQUIRED.')
+        log('     (Threat CSV, Traffic CSV, Statsdump, SLR PDF)')
+        log('     Ensure all files are fully downloaded from Google Drive locally.')
     log('━' * 52)
     log('')
     return found if all_ok else None
