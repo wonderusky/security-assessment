@@ -323,17 +323,15 @@ def sniff_statsdump(path):
     """Detect statsdump archives (.tgz/.tar/.gz/.zip) OR extracted directories."""
     try:
         if os.path.isdir(path):
-            # Extracted techsupport directory — must contain both opt AND (var or tmp)
             entries = set(e.lower() for e in os.listdir(path))
             return ('opt' in entries) and bool({'var', 'tmp', 'etc'} & entries)
-        # Verify the file is actually readable (not a Google Drive stub)
-        with open(path, 'rb') as f:
-            header = f.read(4)
-        if len(header) < 4: return False
-        if not tarfile.is_tarfile(path): return False
-        with tarfile.open(path, 'r:*') as t:
-            names = t.getnames()
-        return any(any(k in n.lower() for k in ['opt','pancfg','panrepo','stat','dump','techsupport','tech_support']) for n in names)
+        
+        name = os.path.basename(path).lower()
+        if path.endswith('.tgz') or path.endswith('.tar.gz') or path.endswith('.zip'):
+            if 'techsupport' in name or 'statsdump' in name or 'stats' in name:
+                return True
+        
+        return False
     except: return False
 
 def sniff_pdf(path):
