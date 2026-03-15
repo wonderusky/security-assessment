@@ -40,7 +40,7 @@ function renderKPI(val, label, bg) {
 }
 
 function renderTable(headers, rows, widths) {
-    let headerHtml = headers.map((h, i) => `<th style="background-color: ${C.orange}; color: white; padding: 8px 12px; text-align: left; font-size: 11px; border: 1px solid ${C.border}; ${widths ? `width: ${widths[i]};` : ''}">${h}</th>`).join('');
+    let headerHtml = headers.map((h, i) => `<th style="background-color: ${C.orange}; color: white; padding: 6px 10px; text-align: left; font-size: 10px; border: 1px solid ${C.border}; ${widths ? `width: ${widths[i]};` : ''}">${h}</th>`).join('');
     let rowHtml = rows.map((row, i) => {
         const bg = i % 2 === 0 ? C.white : C.altBg;
         return `<tr style="background-color: ${bg};">` + row.map(cell => {
@@ -54,10 +54,10 @@ function renderTable(headers, rows, widths) {
             } else if (typeof cell === 'string' && (cell.includes('HIGH') || cell.includes('8.1'))) {
                 style = `color: ${C.amber}; font-weight: bold;`;
             }
-            return `<td style="padding: 8px 12px; font-size: 11px; border: 1px solid ${C.border}; ${style}">${text}</td>`;
+            return `<td style="padding: 6px 10px; font-size: 10px; border: 1px solid ${C.border}; ${style}">${text}</td>`;
         }).join('') + `</tr>`;
     }).join('');
-    return `<table style="width: 100%; border-collapse: collapse; margin: 15px 0; page-break-inside: avoid;"><thead><tr>${headerHtml}</tr></thead><tbody>${rowHtml}</tbody></table>`;
+    return `<table style="width: 100%; border-collapse: collapse; margin: 10px 0; page-break-inside: avoid;"><thead><tr>${headerHtml}</tr></thead><tbody>${rowHtml}</tbody></table>`;
 }
 
 const html = `<!DOCTYPE html>
@@ -67,25 +67,25 @@ const html = `<!DOCTYPE html>
     <style>
         @page { size: A4; margin: 0; }
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; color: ${C.dark}; }
-        .page { width: 210mm; min-height: 297mm; padding: 20mm 25mm; margin: 10mm auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; box-sizing: border-box; }
-        .conf-header { font-size: 10px; color: ${C.mid}; border-bottom: 1px solid #eee; padding-bottom: 5px; text-transform: uppercase; margin-bottom: 30px; }
-        h1 { color: ${C.orange}; border-bottom: 2px solid ${C.orange}; padding-bottom: 5px; margin-top: 30px; text-transform: uppercase; font-size: 18px; letter-spacing: 0.5px; }
-        h2 { font-size: 16px; margin-top: 20px; color: ${C.dark}; font-weight: bold; }
-        h3 { font-size: 13px; margin-top: 15px; font-weight: bold; color: ${C.dark}; }
-        p, li { font-size: 12px; line-height: 1.5; text-align: justify; }
-        .bullet-list { margin: 10px 0; padding-left: 18px; }
-        .bullet-list li { margin-bottom: 5px; }
-        .so-what-box { margin: 20px 0; border: 1px solid ${C.border}; page-break-inside: avoid; }
-        .so-what-head { background-color: ${C.orange}; color: white; padding: 8px 15px; font-weight: bold; font-size: 11px; }
-        .so-what-item { padding: 10px 15px; font-size: 12px; border-bottom: 1px solid ${C.border}; }
+        .page { width: 210mm; height: 297mm; padding: 15mm 20mm; margin: 10mm auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; box-sizing: border-box; overflow: hidden; page-break-after: always; }
+        .conf-header { font-size: 9px; color: ${C.mid}; border-bottom: 1px solid #eee; padding-bottom: 4px; text-transform: uppercase; margin-bottom: 15px; }
+        h1 { color: ${C.orange}; border-bottom: 2px solid ${C.orange}; padding-bottom: 4px; margin-top: 15px; text-transform: uppercase; font-size: 16px; letter-spacing: 0.5px; margin-bottom: 10px; }
+        h2 { font-size: 14px; margin-top: 15px; color: ${C.dark}; font-weight: bold; margin-bottom: 5px; }
+        h3 { font-size: 12px; margin-top: 12px; font-weight: bold; color: ${C.dark}; margin-bottom: 5px; }
+        p, li { font-size: 11px; line-height: 1.4; text-align: justify; margin-top: 5px; margin-bottom: 5px; }
+        .bullet-list { margin: 8px 0; padding-left: 18px; }
+        .bullet-list li { margin-bottom: 4px; }
+        .so-what-box { margin: 12px 0; border: 1px solid ${C.border}; page-break-inside: avoid; }
+        .so-what-head { background-color: ${C.orange}; color: white; padding: 6px 12px; font-weight: bold; font-size: 10px; }
+        .so-what-item { padding: 8px 12px; font-size: 10px; border-bottom: 1px solid ${C.border}; }
         .so-what-item:last-child { border-bottom: none; }
         .so-what-item:nth-child(even) { background-color: ${C.altBg}; }
-        .footer-tag { position: absolute; bottom: 15mm; left: 25mm; right: 25mm; font-size: 10px; color: ${C.mid}; border-top: 1px solid #eee; padding-top: 5px; display: flex; justify-content: space-between; }
-        .code-block { background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; margin: 10px 0; white-space: pre-wrap; }
+        .footer-tag { position: absolute; bottom: 12mm; left: 20mm; right: 20mm; font-size: 9px; color: ${C.mid}; border-top: 1px solid #eee; padding-top: 5px; display: flex; justify-content: space-between; }
+        .code-block { background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 10px; font-family: 'Courier New', monospace; font-size: 10px; margin: 8px 0; white-space: pre-wrap; }
         .keep-together { page-break-inside: avoid; }
         @media print {
             body { background: none; }
-            .page { margin: 0; box-shadow: none; min-height: 297mm; height: auto; overflow: visible; padding: 15mm 20mm; page-break-after: always; }
+            .page { margin: 0; box-shadow: none; height: 297mm; overflow: hidden; padding: 15mm 20mm; page-break-after: always; position: relative; }
         }
     </style>
 </head>
