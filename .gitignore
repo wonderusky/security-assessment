@@ -1,1 +1,25 @@
+# API keys and credentials — NEVER commit these
 config.json
+
+# Local user preferences (contain absolute paths)
+prefs.json
+
+# SQLite database (contains customer data)
+assessments.db
+
+# Generated reports (customer data)
+*.html
+*.pdf
+
+# Temp files
+*.json.tmp
+data.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# macOS
+.DS_Store
