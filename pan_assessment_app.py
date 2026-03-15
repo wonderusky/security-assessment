@@ -847,9 +847,10 @@ class App(tk.Tk):
             path = generate(src, name, out, self._log)
             self._prefs['last_generated'] = path
             self._save_prefs()
-            self.after(0, lambda: self._done(path))
+            self.after(0, lambda p=path: self._done(p))
         except Exception as e:
-            self.after(0, lambda: self._err(str(e)))
+            err_msg = str(e)
+            self.after(0, lambda m=err_msg: self._err(m))
 
     def _done(self, path):
         self.gen_btn.configure(state='normal', text='⚡  GENERATE ASSESSMENT')
