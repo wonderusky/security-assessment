@@ -67,8 +67,8 @@ const html = `<!DOCTYPE html>
     <style>
         @page { size: A4; margin: 0; }
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; color: ${C.dark}; }
-        .page { width: 210mm; height: 297mm; padding: 15mm 20mm; margin: 10mm auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; box-sizing: border-box; overflow: hidden; page-break-after: always; }
-        .conf-header { font-size: 9px; color: ${C.mid}; border-bottom: 1px solid #eee; padding-bottom: 4px; text-transform: uppercase; margin-bottom: 15px; }
+        .page { width: 210mm; height: auto; padding: 0 20mm; margin: 0 auto; background: white; position: relative; box-sizing: border-box; overflow: visible; page-break-after: auto; }
+        .conf-header { position: fixed; top: 12mm; left: 15mm; right: 15mm; font-size: 9px; color: ${C.mid}; border-bottom: 1px solid #eee; padding-bottom: 4px; text-transform: uppercase; margin-bottom: 15px; }
         h1 { color: ${C.orange}; border-bottom: 2px solid ${C.orange}; padding-bottom: 4px; margin-top: 15px; text-transform: uppercase; font-size: 16px; letter-spacing: 0.5px; margin-bottom: 10px; }
         h2 { font-size: 14px; margin-top: 15px; color: ${C.dark}; font-weight: bold; margin-bottom: 5px; }
         h3 { font-size: 12px; margin-top: 12px; font-weight: bold; color: ${C.dark}; margin-bottom: 5px; }
@@ -80,19 +80,26 @@ const html = `<!DOCTYPE html>
         .so-what-item { padding: 8px 12px; font-size: 10px; border-bottom: 1px solid ${C.border}; }
         .so-what-item:last-child { border-bottom: none; }
         .so-what-item:nth-child(even) { background-color: ${C.altBg}; }
-        .footer-tag { position: absolute; bottom: 12mm; left: 20mm; right: 20mm; font-size: 9px; color: ${C.mid}; border-top: 1px solid #eee; padding-top: 5px; display: flex; justify-content: space-between; }
+        .footer-tag { position: fixed; bottom: 12mm; left: 20mm; right: 20mm; font-size: 9px; color: ${C.mid}; border-top: 1px solid #eee; padding-top: 5px; display: flex; justify-content: space-between; }
         .code-block { background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 10px; font-family: 'Courier New', monospace; font-size: 10px; margin: 8px 0; white-space: pre-wrap; }
         .keep-together { page-break-inside: avoid; }
         @media print {
             body { background: none; }
-            .page { margin: 0; box-shadow: none; height: 297mm; overflow: hidden; padding: 15mm 20mm; page-break-after: always; position: relative; }
+            .page { margin: 0; box-shadow: none; height: auto; overflow: visible; padding: 0 20mm; page-break-after: auto; position: relative; }
+            h1, h2, h3 { page-break-after: avoid; break-after: avoid; }
+            p { orphans: 3; widows: 3; }
         }
     </style>
 </head>
 <body>
+    <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+    <div class="footer-tag"><span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span></div>
+    <table style="width: 100%; border: none; border-collapse: collapse;">
+        <thead><tr><td style="height: 18mm; border: none; padding: 0;"></td></tr></thead>
+        <tbody><tr><td style="border: none; padding: 0;">
     <!-- PAGE 1: COVER -->
-    <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+    <div class="page" style="page-break-after: always; min-height: 250mm; display: flex; flex-direction: column; justify-content: center;">
+        
         <div style="margin-top: 100px;">
             <div style="color: ${C.orange}; font-size: 44px; font-weight: bold; line-height: 1;">${CN}</div>
             <div style="font-size: 34px; font-weight: bold; margin-bottom: 20px;">Security Assessment</div>
@@ -112,15 +119,12 @@ const html = `<!DOCTYPE html>
                 <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; 65,534 Threat Log Rows
             </div>
         </div>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 1</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 2: KEY FINDINGS -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         <h1>What This Report Means for ${CN}</h1>
         <p style="font-style: italic; color: ${C.mid}; margin-bottom: 20px;">The short version &mdash; before you read the numbers</p>
         
@@ -132,15 +136,12 @@ const html = `<!DOCTYPE html>
         ${renderFindingCard(6, 'Ransomware has a clear, open path through your network right now.', 'WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway to turn one infected workstation into a company-wide encryption event. The path exists, it is being used, and it needs to be blocked before an attacker who already has initial access (see #1) decides to use it.', false)}
 
         <p style="margin-top: 25px; font-size: 11px; color: ${C.mid};">The detailed technical evidence supporting each of the findings above follows in the sections below.</p>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 2</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 3: EXECUTIVE SUMMARY -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         <h1>1. Executive Summary</h1>
         <p>This Security Assessment analyzes IDEX Corp's network security posture for the period February 27 &ndash; March 9, 2026, based on Panorama statsdump archives, threat log CSV exports (65,534 rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF dated February 27 &ndash; March 6, 2026. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
 
@@ -174,15 +175,12 @@ const html = `<!DOCTYPE html>
             <div class="so-what-item"><strong>› The 174-day content gap</strong> is the single most dangerous item in this report. Any new malware or exploit technique released since September 15, 2025 is completely invisible to your security stack.</div>
             <div class="so-what-item"><strong>› SaaS bandwidth at 44% of all traffic</strong> with zero DLP oversight means sensitive IDEX data could be leaving the network right now via cloud storage &mdash; and you would not know.</div>
         </div>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 3</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 4: C2 & MALWARE -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         <h1>2. Active Command & Control (C2) & Malware Activity</h1>
         <p>Analysis of 65,534 threat log rows (internal zones only) identified persistent DNS-based C2 beaconing from 55 unique source IP addresses. The statsv2 ThreatReport.xml aggregate confirms 10.2M total events including 8.8M DNS malware/spyware events.</p>
 
@@ -227,15 +225,12 @@ const html = `<!DOCTYPE html>
             <div class="so-what-item"><strong>› Targeted Domains</strong> &mdash; Attackers are spoofing Akamai, Azure, and Okta. This is designed to bypass human suspicion and DNS security filters.</div>
             <div class="so-what-item"><strong>› Intempio Persistence</strong> &mdash; 16k hits across multiple hosts indicates a coordinated C2 campaign inside the ${CN} network.</div>
         </div>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 4</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 5: VULNERABILITIES -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         <h1>3. Vulnerabilities & User Attribution</h1>
         <p>104,259 vulnerability events identified. Named users confirmed via Source User field &mdash; a critical indicator of endpoint compromise.</p>
 
@@ -273,15 +268,12 @@ const html = `<!DOCTYPE html>
             <div class="so-what-item"><strong>› Log4j RCE</strong> &mdash; This is not a probe. This is a successful remote command execution. The attacker effectively owns the targeted application server.</div>
             <div class="so-what-item"><strong>› Brute Force Trends</strong> &mdash; Persistent SSH/WRM brute forcing indicates an attacker who has bypassed the edge and is now aggressively hunting for internal credentials.</div>
         </div>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 5</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 6: LATERAL MOVEMENT -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         <h1>4. Lateral Movement & Remote Access</h1>
         <p>WRM brute-force and SMB flows identified crossing network zones that should be isolated &mdash; clear indicators of attempted lateral movement.</p>
 
@@ -322,15 +314,12 @@ const html = `<!DOCTYPE html>
             <div class="so-what-item"><strong>› Unmanaged Sprawl</strong> &mdash; 30 remote access tools means there is no standard for secure access. Any of these 30 tools can be used as a "living off the land" back door.</div>
             <div class="so-what-item"><strong>› VNC Risk</strong> &mdash; Unencrypted sessions mean passwords and screen data are being sent in the clear across your network.</div>
         </div>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 6</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 7: SAAS & SYSTEM -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         <h1>5. Application Risk & SaaS Exposure</h1>
         <p>Total bandwidth: 125.17 TB. 411 SaaS applications detected (44.3% of all traffic vs. 0.4% industry average baseline).</p>
 
@@ -369,15 +358,12 @@ const html = `<!DOCTYPE html>
                 ['AV Signatures', '5454-5981', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }]
             ])}
         </div>
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 7</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 7.5: INDUSTRY BENCHMARKS -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         <h1>7. Industry Benchmarks (Manufacturing Peer Group)</h1>
         <p>All benchmark data sourced from the Security Lifecycle Review (SLR) report, February 27 &ndash; March 6, 2026. Peer group: Manufacturing industry vertical.</p>
 
@@ -393,15 +379,12 @@ const html = `<!DOCTYPE html>
             ['C2 Connections', '79', 'Industry varies', { text: 'Active threat &mdash; see §2', color: C.red }]
         ], ['25%', '25%', '25%', '25%'])}
 
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 7.5</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 8: ROADMAP -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         <h1>8. Prioritized Remediation Roadmap</h1>
         <p>Remediation items are ordered by risk priority. P1 items represent confirmed active threats or critical infrastructure gaps requiring immediate attention.</p>
 
@@ -434,15 +417,12 @@ const html = `<!DOCTYPE html>
             <li><strong>Deploy SSL/TLS inspection</strong> to gain visibility into 33.6 TB of currently opaque SSL traffic</li>
         </ul>
 
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 8</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 15: APPENDIX - DNS INVESTIGATION -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         
         <h1 style="font-size: 20px; margin-top: 0;">Appendix: Identifying Infected Clients Behind DNS Servers</h1>
         <p style="margin-bottom: 20px; font-weight: bold; color: #000000;">Because 10.57.11.173 and 10.57.11.174 are internal DNS resolvers, the firewall cannot show you the real infected endpoints &mdash; it only sees the DNS server forwarding requests on behalf of clients. The actual compromised machines are invisible at the firewall layer.</p>
@@ -489,15 +469,12 @@ const html = `<!DOCTYPE html>
   <span style="color: #569CD6;">Export-Csv</span> <span style="color: #CE9178;">C:\\dns_event_hits.csv</span> -NoTypeInformation
         </div>
 
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 15</span>
-        </div>
+        
     </div>
 
     <!-- PAGE 16: APPENDIX - SINKHOLE & CONTAINMENT -->
     <div class="page">
-        <div class="conf-header">${CN} Security Assessment | ${month} | CONFIDENTIAL</div>
+        
         
         <h2 style="font-size: 18px; margin-top: 0;">Step 4 &mdash; Configure DNS Sinkhole in Panorama (Ongoing Visibility)</h2>
         <p style="margin-bottom: 15px;">Configure a DNS sinkhole to redirect C2 domains to a controlled IP. Infected clients will then appear in the firewall threat log with their real source IP going forward:</p>
@@ -516,11 +493,11 @@ const html = `<!DOCTYPE html>
             <li><strong>Disable idexna\\bidservices account immediately</strong> &mdash; confirmed Log4j RCE on 10.100.10.201, pending endpoint forensics</li>
         </ul>
 
-        <div class="footer-tag">
-            <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
-            <span>Page 16</span>
-        </div>
+        
     </div>
+</td></tr></tbody>
+        <tfoot><tr><td style="height: 18mm; border: none; padding: 0;"></td></tr></tfoot>
+    </table>
 </body>
 </html>`;
 
