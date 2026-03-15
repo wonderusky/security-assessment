@@ -140,7 +140,7 @@ const html = `<!DOCTYPE html>
     </div>
 
     <!-- PAGE 3: EXECUTIVE SUMMARY -->
-    <div class="page">
+    <div class="page" style="page-break-before: always;">
         
         <h1>1. Executive Summary</h1>
         <p>This Security Assessment analyzes IDEX Corp's network security posture for the period February 27 &ndash; March 9, 2026, based on Panorama statsdump archives, threat log CSV exports (65,534 rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF dated February 27 &ndash; March 6, 2026. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
