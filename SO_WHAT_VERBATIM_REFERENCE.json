@@ -1,0 +1,28 @@
+{
+  "C2_Activity": [
+    "idexdmz.com is not a generic C2 domain — someone specifically registered a domain designed to look like IDEX's own infrastructure. This level of targeting means IDEX is a deliberate, named victim, not collateral damage from a mass campaign.",
+    "okta-ema.com is a fake Okta login page. Any employee who clicked a phishing link and entered their password there handed an attacker the keys to every system protected by IDEX's single sign-on. 1,163 internal hits means this isn't theoretical.",
+    "BPFDoor is a sophisticated Linux backdoor used by nation-state threat actors (attributed to China-linked groups). Its presence in DNS logs means something on your network may already be running it.",
+    "CRITICAL INVESTIGATION NEEDED: 10.57.11.173 and 10.57.11.174 appear to be internal DNS resolvers — the firewall sees them as the source of 48,000+ C2 queries, but they are just forwarding requests on behalf of real infected endpoints. Go to those DNS servers, enable debug logging, and filter query logs for the malicious domains — every client IP that appears is a confirmed infected host. The true scope of this infection is not yet known.",
+    "The firewall is logging these but 'alert' actions mean some C2 traffic was observed, not blocked. Without Advanced DNS Security or DNS sinkholing, these beacons will continue and the infected client list will keep growing."
+  ],
+  "Vulnerabilities": [
+    "Identity is the Perimeter — When we see a named user account connected to an exploit, it's no longer a machine-level event; it's an identity-level compromise. The attacker has a valid user context.",
+    "Log4j RCE — This is not a probe. This is a successful remote command execution. The attacker effectively owns the targeted application server.",
+    "Brute Force Trends — Persistent SSH/WRM brute forcing indicates an attacker who has bypassed the edge and is now aggressively hunting for internal credentials.",
+    "Application Vulnerability — ms-ds-smbv3 hits indicate that attackers are exploiting legacy protocols to move through the network. This highlights a critical lack of internal micro-segmentation.",
+    "Data Leakage Probes — 108 critical /etc/passwd probes via web-browsing show active attempts to exfiltrate system configuration and user data."
+  ],
+  "Lateral_Movement": [
+    "East-West Visibility — SMB and WRM should never cross from user segments to server segments without explicit policy. This is the hallmark of a ransomware infection spreading.",
+    "Lateral Sprawl — Large volumes of WRM traffic is not a login; it's a data transfer or a configuration change. The attacker is moving deeper into the corporate core.",
+    "Unmanaged Sprawl — 30 remote access tools means there is no standard for secure access. Any of these 30 tools can be used as a 'living off the land' back door.",
+    "VNC Risk — Unencrypted sessions mean passwords and screen data are being sent in the clear across your network."
+  ],
+  "SaaS_Risk": [
+    "35.49 TB of data flowing through 114 SaaS apps with zero security certifications means IDEX has no contractual assurance these vendors protect customer data, no audit rights, and no recourse if a breach occurs. This is not a theoretical risk — several SaaS data breaches in 2024-2025 originated from exactly this category.",
+    "microsoft-dynamics-crm has a known data breach history and moved 59.21 GB through IDEX's network this period. If CRM data includes customer PII, financial terms, or deal information, those are regulatory exposure items (GDPR, CCPA).",
+    "BitTorrent at 15.86 GB on a corporate network is an acceptable use policy violation and a malware delivery vector. Torrent files are a primary delivery mechanism for trojanized software.",
+    "Risk-4 traffic at 53% of all bandwidth means more than half of IDEX's network capacity is carrying high-risk application traffic. Industry best practice is to have Risk-4/5 traffic below 10% of total bandwidth."
+  ]
+}

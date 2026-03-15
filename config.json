@@ -1,0 +1,8 @@
+{
+  "gemini_api_key": "AIzaSyCJeG2MmeU9JTw3oYx0nA4yaQnlRC1ovT8",
+  "gemini_model": "gemini-2.5-flash",
+  "llm_enabled": true,
+  "preparer_name": "John Shelest",
+  "preparer_title": "Palo Alto Networks Solutions Consultant",
+  "preparer_email": "jshelest@paloaltonetworks.com"
+}
