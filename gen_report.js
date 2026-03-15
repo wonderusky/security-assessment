@@ -82,9 +82,10 @@ const html = `<!DOCTYPE html>
         .so-what-item:nth-child(even) { background-color: ${C.altBg}; }
         .footer-tag { position: absolute; bottom: 15mm; left: 25mm; right: 25mm; font-size: 10px; color: ${C.mid}; border-top: 1px solid #eee; padding-top: 5px; display: flex; justify-content: space-between; }
         .code-block { background-color: #1E1E1E; color: #D4D4D4; border: none; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; margin: 10px 0; white-space: pre-wrap; }
+        .keep-together { page-break-inside: avoid; }
         @media print {
             body { background: none; }
-            .page { margin: 0; box-shadow: none; page-break-after: always; }
+            .page { margin: 0; box-shadow: none; min-height: 297mm; height: auto; overflow: visible; padding: 15mm 20mm; page-break-after: always; }
         }
     </style>
 </head>
@@ -205,23 +206,27 @@ const html = `<!DOCTYPE html>
             <div class="so-what-item"><strong>› Intempio Persistence</strong> &mdash; 16k hits across multiple hosts indicates a coordinated C2 campaign inside the ${CN} network.</div>
         </div>
 
-        <h3>2.2 Top Compromised Source IPs</h3>
-        ${renderTable(['Source IP', 'Zone', 'Hits', 'Unique Threats', 'Primary C2 Domains'], [
-            ['10.57.11.173', 'Internal → MPLS', '24,011', '24', 'azure* / pbx* / officeaddons'],
-            ['10.57.11.174', 'Internal → MPLS', '24,002', '24', 'azure* / pbx* / officeaddons'],
-            ['10.65.131.251', 'L4-BU_ENT → idex_ipsec', '1,066', '1', 'intempio.com'],
-            ['10.58.163.251', 'L4-BU_ENT → idex_ipsec', '1,062', '1', 'intempio.com'],
-            ['10.65.114.9', 'L4-BU_ENT → idex_ipsec', '1,304', '2', 'intempio.com (two dest)'],
-            ['10.45.84.3', 'Internal → idex_ipsec', '1,037+946', '1', 'intempio.com (two dest)'],
-            ['10.102.154.250', 'L4-BU_ENT → idex_ipsec + WAN', '1,030+952', '2', 'intempio.com + WAN (195.229.241.222)'],
-            ['10.55.227.3', 'Internal → idex_ipsec', '573', '1', 'intempio.com']
-        ], ['15%', '25%', '10%', '10%', '40%'])}
+        <div class="keep-together">
+            <h3>2.2 Top Compromised Source IPs</h3>
+            ${renderTable(['Source IP', 'Zone', 'Hits', 'Unique Threats', 'Primary C2 Domains'], [
+                ['10.57.11.173', 'Internal → MPLS', '24,011', '24', 'azure* / pbx* / officeaddons'],
+                ['10.57.11.174', 'Internal → MPLS', '24,002', '24', 'azure* / pbx* / officeaddons'],
+                ['10.65.131.251', 'L4-BU_ENT → idex_ipsec', '1,066', '1', 'intempio.com'],
+                ['10.58.163.251', 'L4-BU_ENT → idex_ipsec', '1,062', '1', 'intempio.com'],
+                ['10.65.114.9', 'L4-BU_ENT → idex_ipsec', '1,304', '2', 'intempio.com (two dest)'],
+                ['10.45.84.3', 'Internal → idex_ipsec', '1,037+946', '1', 'intempio.com (two dest)'],
+                ['10.102.154.250', 'L4-BU_ENT → idex_ipsec + WAN', '1,030+952', '2', 'intempio.com + WAN (195.229.241.222)'],
+                ['10.55.227.3', 'Internal → idex_ipsec', '573', '1', 'intempio.com']
+            ], ['15%', '25%', '10%', '10%', '40%'])}
+        </div>
 
-        <h3>2.3 WildFire Detections (statsv2 XML, zone-filtered)</h3>
-        ${renderTable(['Detection Type', 'Count', 'Severity / Note'], [
-            ['DNS Malware / Spyware', '8,825,702', 'Aggregate statsv2'],
-            ['DNS C2 / Spyware', '322,389', 'Aggregate statsv2']
-        ])}
+        <div class="keep-together">
+            <h3>2.3 WildFire Detections (statsv2 XML, zone-filtered)</h3>
+            ${renderTable(['Detection Type', 'Count', 'Severity / Note'], [
+                ['DNS Malware / Spyware', '8,825,702', 'Aggregate statsv2'],
+                ['DNS C2 / Spyware', '322,389', 'Aggregate statsv2']
+            ])}
+        </div>
         <div class="footer-tag">
             <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
             <span>Page 4</span>
@@ -294,23 +299,27 @@ const html = `<!DOCTYPE html>
             <div class="so-what-item"><strong>› Lateral Sprawl</strong> &mdash; 24.4 MB of WRM traffic is not a login; it's a data transfer or a configuration change. The attacker is moving deeper into the ${CN} core.</div>
         </div>
 
-        <h3>4.2 SMB Cross-Segment Flows</h3>
-        ${renderTable(['Source IP', 'Source Zone', 'Dest IP / Zone', 'Protocol', 'Data'], [
-            ['10.8.229.17', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '2.8 MB'],
-            ['10.65.112.202', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '1.4 MB'],
-            ['10.224.40.29', 'Production', '10.224.46.143 / Servers', 'SMB / TCP 445', '792 KB'],
-            ['10.8.228.43', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '124 KB']
-        ])}
+        <div class="keep-together">
+            <h3>4.2 SMB Cross-Segment Flows</h3>
+            ${renderTable(['Source IP', 'Source Zone', 'Dest IP / Zone', 'Protocol', 'Data'], [
+                ['10.8.229.17', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '2.8 MB'],
+                ['10.65.112.202', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '1.4 MB'],
+                ['10.224.40.29', 'Production', '10.224.46.143 / Servers', 'SMB / TCP 445', '792 KB'],
+                ['10.8.228.43', 'L5-BU_OFFICE', 'L4-BU_ENT', 'SMB / TCP 445', '124 KB']
+            ])}
+        </div>
 
-        <h3>4.3 Remote Access Sprawl</h3>
-        ${renderTable(['Application', 'Bandwidth', 'Sessions', 'Risk', 'Note'], [
-            ['windows-remote-management', '2.92 TB', '19.8M', '1', 'Brute force abuse detected'],
-            ['vnc-base', '570 GB', '192', { text: '5', color: C.red }, 'Unencrypted sessions'],
-            ['ms-rdp', '21.0 GB', '12,754', { text: '4', color: C.amber }, 'Policy review needed'],
-            ['anydesk', '16.5 GB', '684', '3', 'Consumer-grade tool'],
-            ['splashtop-remote', '12.4 GB', '112', '4', 'Bypasses security policy'],
-            ['teamviewer-base', '5.8 GB', '45', '5', 'External control risk']
-        ])}
+        <div class="keep-together">
+            <h3>4.3 Remote Access Sprawl</h3>
+            ${renderTable(['Application', 'Bandwidth', 'Sessions', 'Risk', 'Note'], [
+                ['windows-remote-management', '2.92 TB', '19.8M', '1', 'Brute force abuse detected'],
+                ['vnc-base', '570 GB', '192', { text: '5', color: C.red }, 'Unencrypted sessions'],
+                ['ms-rdp', '21.0 GB', '12,754', { text: '4', color: C.amber }, 'Policy review needed'],
+                ['anydesk', '16.5 GB', '684', '3', 'Consumer-grade tool'],
+                ['splashtop-remote', '12.4 GB', '112', '4', 'Bypasses security policy'],
+                ['teamviewer-base', '5.8 GB', '45', '5', 'External control risk']
+            ])}
+        </div>
 
         <div class="so-what-box">
             <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
@@ -335,29 +344,35 @@ const html = `<!DOCTYPE html>
             <div class="so-what-item"><strong>› Shadow IT</strong> &mdash; 114 uncertified apps are being used by employees. These are outside the control of IT Security, representing unvetted risks and terms of service.</div>
         </div>
 
-        <h3>5.1 SaaS Hosting Risk</h3>
-        ${renderTable(['Risk Category', 'App Count', 'Bandwidth', 'Notable Apps'], [
-            ['No Security Certifications', '114', '35.49 TB', 'azure-storage-accounts-base'],
-            ['Known Data Breaches', '8', '59.38 GB', 'microsoft-dynamics-crm'],
-            ['Poor Terms of Service', '51', '42.19 GB', 'teamviewer, ringcentral'],
-            ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail']
-        ])}
+        <div class="keep-together">
+            <h3>5.1 SaaS Hosting Risk</h3>
+            ${renderTable(['Risk Category', 'App Count', 'Bandwidth', 'Notable Apps'], [
+                ['No Security Certifications', '114', '35.49 TB', 'azure-storage-accounts-base'],
+                ['Known Data Breaches', '8', '59.38 GB', 'microsoft-dynamics-crm'],
+                ['Poor Terms of Service', '51', '42.19 GB', 'teamviewer, ringcentral'],
+                ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail']
+            ])}
+        </div>
 
-        <h1>6. Panorama System Profile</h1>
-        ${renderTable(['Parameter', 'Value'], [
-            ['Hostname', 'PanoramaAZ03'],
-            ['Management IP', '10.249.0.10'],
-            ['Platform', 'VMware Virtual Platform'],
-            ['Serial Number', '000702101482'],
-            ['PAN-OS Version', '11.1.10-h1'],
-            ['Managed Device Groups', '80+']
-        ])}
+        <div class="keep-together">
+            <h1>6. Panorama System Profile</h1>
+            ${renderTable(['Parameter', 'Value'], [
+                ['Hostname', 'PanoramaAZ03'],
+                ['Management IP', '10.249.0.10'],
+                ['Platform', 'VMware Virtual Platform'],
+                ['Serial Number', '000702101482'],
+                ['PAN-OS Version', '11.1.10-h1'],
+                ['Managed Device Groups', '80+']
+            ])}
+        </div>
 
-        <h3>6.1 Content Staleness &mdash; CRITICAL</h3>
-        ${renderTable(['Component', 'Version', 'Last Updated', 'Staleness'], [
-            ['Content Pack', '9063-9866', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }],
-            ['AV Signatures', '5454-5981', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }]
-        ])}
+        <div class="keep-together">
+            <h3>6.1 Content Staleness &mdash; CRITICAL</h3>
+            ${renderTable(['Component', 'Version', 'Last Updated', 'Staleness'], [
+                ['Content Pack', '9063-9866', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }],
+                ['AV Signatures', '5454-5981', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }]
+            ])}
+        </div>
         <div class="footer-tag">
             <span>&copy; 2026 Palo Alto Networks | Proprietary & Confidential</span>
             <span>Page 7</span>
