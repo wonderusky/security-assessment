@@ -321,22 +321,47 @@ const html = `<!DOCTYPE html>
     <div class="page">
         
         <h1>5. Application Risk & SaaS Exposure</h1>
-        <p>Total bandwidth: 125.17 TB. 411 SaaS applications detected (44.3% of all traffic vs. 0.4% industry average baseline).</p>
+        <p>Total bandwidth observed: 125.17 TB. 411 SaaS applications were detected (55.62% of all apps vs. 49% industry average). SaaS bandwidth of 55.43 TB accounts for 44.3% of all traffic vs. 0.4% industry average &mdash; driven primarily by Azure storage usage.</p>
 
         <div class="keep-together">
-            <h3>5.1 SaaS Hosting Risk</h3>
+            <h3>5.1 Bandwidth by Risk Level</h3>
+            ${renderTable(['Risk Level', 'Bandwidth (TB)', '% of Total', 'Description'], [
+                [{ text: 'Risk 1 (Low)', color: C.green }, '61.72', '35.0%', 'Business-necessary, low-risk protocols'],
+                ['Risk 2', '8.83', '5.0%', 'Moderate-risk, some policy action needed'],
+                ['Risk 3', '11.47', '6.5%', 'Elevated risk, review recommended'],
+                [{ text: 'Risk 4 (High)', color: C.amber }, '93.64', '53.0%', 'High-risk &mdash; dominant risk category'],
+                [{ text: 'Risk 5 (Critical)', color: C.red }, '0.87', '0.5%', 'VNC, BitTorrent, FTP, SMTP relay']
+            ])}
+        </div>
+
+        <div class="keep-together">
+            <h3>5.2 Top High-Risk Applications (Risk 4&ndash;5, by bandwidth)</h3>
+            ${renderTable(['Application', 'Bandwidth', 'Risk', 'Action Required'], [
+                ['azure-storage-accounts-base', '35,386 GB', { text: '4', color: C.amber }, 'Review DLP posture; 114 apps with no certifications'],
+                ['ssl (encrypted traffic)', '33,665 GB', { text: '4', color: C.amber }, 'SSL inspection coverage required'],
+                ['web-browsing', '3,715 GB', { text: '4', color: C.amber }, 'Multiple CVEs observed (see §3.2)'],
+                ['ms-update', '2,772 GB', { text: '4', color: C.amber }, 'Verify patch management pipeline'],
+                ['sip (VoIP)', '1,198 GB', { text: '4', color: C.amber }, 'SIPVicious scanner detected on DMZ'],
+                ['vnc-base', '570 GB', { text: '5', color: C.red }, 'Risk-5, 192 sessions &mdash; block or restrict'],
+                ['bittorrent', '15.86 GB', { text: '5', color: C.red }, 'Policy violation &mdash; block immediately'],
+                ['ftp', '4.51 GB', { text: '5', color: C.red }, 'Unencrypted file transfer &mdash; restrict']
+            ])}
+        </div>
+
+        <div class="keep-together">
+            <h3>5.3 SaaS Hosting Risk (411 SaaS Apps Observed)</h3>
             ${renderTable(['Risk Category', 'App Count', 'Bandwidth', 'Notable Apps'], [
-                ['No Security Certifications', '114', '35.49 TB', 'azure-storage-accounts-base'],
-                ['Known Data Breaches', '8', '59.38 GB', 'microsoft-dynamics-crm'],
-                ['Poor Terms of Service', '51', '42.19 GB', 'teamviewer, ringcentral'],
-                ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail']
+                ['No Security Certifications', '114', '35.49 TB', 'azure-storage-accounts-base (35.39 TB)'],
+                ['Poor Terms of Service', '51', '42.19 GB', 'new-relic, teamviewer, ringcentral'],
+                ['Known Data Breaches', '8', '59.38 GB', 'microsoft-dynamics-crm (59.21 GB), yahoo-mail'],
+                ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail, fastviewer']
             ])}
         </div>
 
         <div class="so-what-box">
             <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
-            <div class="so-what-item"><strong>› Data Exfiltration Risk</strong> &mdash; 44% SaaS bandwidth with zero DLP means you are blind to where your sensitive corporate intellectual property is being uploaded.</div>
-            <div class="so-what-item"><strong>› Shadow IT</strong> &mdash; 114 uncertified apps are being used by employees. These are outside the control of IT Security, representing unvetted risks and terms of service.</div>
+            <div class="so-what-item"><strong>› Uncertified Data Sprawl</strong> &mdash; 35.49 TB of data flowing through 114 SaaS apps with zero security certifications means IDEX has no visibility into where or how that data is stored.</div>
+            <div class="so-what-item"><strong>› Shadow IT Exposure</strong> &mdash; 59.38 GB of data sent to apps with known data breaches puts IDEX corporate intellectual property at direct risk of exposure.</div>
         </div>
 
         <div class="keep-together">
