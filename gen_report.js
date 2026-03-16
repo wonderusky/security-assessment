@@ -126,12 +126,11 @@ const html = `<!DOCTYPE html>
         ${renderFindingCard(5, 'Your firewall hasn\'t learned anything new since September 2025.', 'Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible to your security stack. Unless traffic is being inspected upstream by another security gateway, this is a critical blind spot that takes 30 minutes to fix in Panorama.', false)}
         ${renderFindingCard(6, 'Ransomware has a clear, open path through your network right now.', 'WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway to turn one infected workstation into a company-wide encryption event. Validation of intended segmentation policy is required.', false)}
 
-        <p style="margin-top: 25px; font-size: 11px; color: ${C.mid};">The detailed technical evidence supporting each of the findings above follows in the sections below.</p>
-        
     </div>
 
     <!-- PAGE 3: EXECUTIVE SUMMARY -->
     <div class="page" style="page-break-before: always;">
+        <p style="margin-top: 15px; font-size: 11px; color: ${C.mid};">The detailed technical evidence supporting each of the findings above follows in the sections below.</p>
         
         <h1>1. Executive Summary</h1>
         <p>This Security Assessment analyzes IDEX Corp's network security posture for the period February 27 &ndash; March 9, 2026, based on Panorama statsdump archives, threat log CSV exports (65,534 rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF dated February 27 &ndash; March 6, 2026. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
