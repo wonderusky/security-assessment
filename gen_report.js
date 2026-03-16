@@ -209,7 +209,7 @@ const html = `<!DOCTYPE html>
             ${renderTable(['Detection Type', 'Count', 'Severity / Note'], [
                 ['DNS Malware / Spyware', '8,825,702', 'Aggregate statsv2'],
                 ['DNS C2 / Spyware', '322,389', 'Aggregate statsv2']
-            ])}
+            ], ['40%', '30%', '30%'])}
         </div>
 
         <div class="keep-together">
@@ -225,7 +225,7 @@ const html = `<!DOCTYPE html>
                     style = `color: ${C.red}; font-weight: bold;`;
                 }
                 return [{ text: c.country, color: style ? C.red : '' }, { text: c.hits.toLocaleString(), color: style ? C.red : '' }];
-            }))}
+            }), ['70%', '30%'])}
         </div>
 
         <div class="so-what-box">
@@ -383,8 +383,11 @@ const html = `<!DOCTYPE html>
                 ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail, fastviewer']
             ], ['25%', '15%', '15%', '45%'])}
         </div>
+    </div>
 
-        <div class="keep-together">
+    <!-- PAGE 5 CONTINUED: ENCRYPTED EXPOSURE -->
+    <div class="page">
+        <div class="keep-together" style="margin-top: 10px;">
             <h3>5.4 Encrypted Traffic Exposure</h3>
             <p>SSL and encrypted-tunnel applications account for 33.66 TB of all traffic. Without SSL inspection deployed, this represents a massive visibility gap where malware, C2 beaconing, and data exfiltration cannot be detected or stopped by the firewall.</p>
             ${renderTable(['Metric', 'Bandwidth', 'Percentage of Total Traffic', 'Status'], [
@@ -394,12 +397,17 @@ const html = `<!DOCTYPE html>
             ], ['40%', '20%', '25%', '15%'])}
         </div>
 
-        <div class="so-what-box">
+        <div class="so-what-box" style="margin-top: 20px;">
             <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
             <div class="so-what-item"><strong>› Uncertified Data Sprawl</strong> &mdash; 35.49 TB of data flowing through 114 SaaS apps with zero security certifications means IDEX has no visibility into where or how that data is stored.</div>
             <div class="so-what-item"><strong>› Shadow IT Exposure</strong> &mdash; 59.38 GB of data sent to apps with known data breaches puts IDEX corporate intellectual property at direct risk of exposure.</div>
             <div class="so-what-item"><strong>› Encrypted Blind Spot</strong> &mdash; 33.6 TB of encrypted traffic is passing through the perimeter uninspected. If attackers exfiltrate data or malware communicates via HTTPS, the firewall cannot see it. SSL decryption is a critical requirement.</div>
         </div>
+        
+    </div>
+
+    <!-- PAGE 6: SYSTEM PROFILE -->
+    <div class="page">
 
         <div class="keep-together">
             <h1>6. Panorama System Profile</h1>
