@@ -210,6 +210,22 @@ const html = `<!DOCTYPE html>
             ])}
         </div>
 
+        <div class="keep-together">
+            <h3>2.4 Top Inbound Threat Sources (Geolocation)</h3>
+            <p>Analysis of inbound sessions identifies significant traffic from hostile or high-risk nation states. This highlights external exposure to persistent threats.</p>
+            ${renderTable(['Country', 'Sessions'], (D.sourceCountries && D.sourceCountries.length > 0 ? D.sourceCountries : [
+                {'country': 'China', 'hits': 3274047},
+                {'country': 'Russian Federation', 'hits': 31197},
+                {'country': 'Iran Islamic Republic Of', 'hits': 52}
+            ]).map(c => {
+                let style = '';
+                if (['China', 'Russian Federation', 'Iran Islamic Republic Of', 'Korea Democratic Peoples Republic Of'].includes(c.country)) {
+                    style = `color: ${C.red}; font-weight: bold;`;
+                }
+                return [{ text: c.country, color: style ? C.red : '' }, { text: c.hits.toLocaleString(), color: style ? C.red : '' }];
+            }))}
+        </div>
+
         <div class="so-what-box">
             <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
             <div class="so-what-item"><strong>› Persistent Beaconing</strong> &mdash; 55 internal IPs are actively "calling home." This isn't just malware; it's a persistent foothold. The attacker is waiting for the right moment to pivot.</div>
@@ -325,6 +341,17 @@ const html = `<!DOCTYPE html>
         
     </div>
 
+    
+        <div class="keep-together">
+            <h3>5.4 Encrypted Traffic Exposure</h3>
+            <p>SSL and encrypted-tunnel applications account for 33.66 TB of all traffic. Without SSL inspection deployed, this represents a massive visibility gap where malware, C2 beaconing, and data exfiltration cannot be detected or stopped by the firewall.</p>
+            ${renderTable(['Metric', 'Bandwidth', 'Percentage of Total Traffic', 'Status'], [
+                ['Encrypted Traffic (SSL/IPsec)', '33.66 TB', '26.8%', { text: 'Uninspected ⚠', color: C.red }],
+                ['Total Risk-4 Traffic', '93.64 TB', '74.8%', 'Elevated Risk'],
+                ['SSL as % of Risk-4', '—', '35.9%', 'Blind Spot']
+            ])}
+        </div>
+
     <!-- PAGE 7: SAAS & SYSTEM -->
     <div class="page">
         
@@ -370,6 +397,7 @@ const html = `<!DOCTYPE html>
             <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
             <div class="so-what-item"><strong>› Uncertified Data Sprawl</strong> &mdash; 35.49 TB of data flowing through 114 SaaS apps with zero security certifications means IDEX has no visibility into where or how that data is stored.</div>
             <div class="so-what-item"><strong>› Shadow IT Exposure</strong> &mdash; 59.38 GB of data sent to apps with known data breaches puts IDEX corporate intellectual property at direct risk of exposure.</div>
+            <div class="so-what-item"><strong>› Encrypted Blind Spot</strong> &mdash; 33.6 TB of encrypted traffic is passing through the perimeter uninspected. If attackers exfiltrate data or malware communicates via HTTPS, the firewall cannot see it. SSL decryption is a critical requirement.</div>
         </div>
 
         <div class="keep-together">
@@ -415,10 +443,26 @@ const html = `<!DOCTYPE html>
         
     </div>
 
+    
+    <!-- PAGE 8.5: RISK MATRIX -->
+    <div class="keep-together">
+        <h1>8. Risk Scoring Summary</h1>
+        <p>The following matrix maps the primary findings to their assessed Likelihood and Business Impact.</p>
+        ${renderTable(['Finding', 'Likelihood', 'Impact', 'Risk Score'], [
+            ['Log4j RCE (idexna\\bidservices)', {text: 'High (Confirmed)', color: C.red}, {text: 'Critical', color: C.red}, {text: 'CRITICAL', color: C.red}],
+            ['Outdated Content Pack (174 days)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'CRITICAL', color: C.red}],
+            ['Brand-squatting (idexdmz.com)', {text: 'High (Active)', color: C.red}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
+            ['Uninspected SSL (33.6 TB)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
+            ['SaaS Data Exfiltration Risk', {text: 'Medium', color: C.amber}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
+            ['WRM/SMB Lateral Movement', {text: 'Medium', color: C.amber}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}],
+            ['BPFDoor / Nation-State Implants', {text: 'Low (Targeted)', color: C.green}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}]
+        ])}
+    </div>
+
     <!-- PAGE 8: ROADMAP -->
     <div class="page">
         
-        <h1>8. Prioritized Remediation Roadmap</h1>
+        <h1>9. Prioritized Remediation Roadmap</h1>
         <p>Remediation items are ordered by risk priority. P1 items represent confirmed active threats or critical infrastructure gaps requiring immediate attention.</p>
 
         <h3>P1 &mdash; Immediate Actions (0&ndash;7 Days)</h3>
