@@ -445,18 +445,20 @@ const html = `<!DOCTYPE html>
 
     
     <!-- PAGE 8.5: RISK MATRIX -->
-    <div class="keep-together">
-        <h1>8. Risk Scoring Summary</h1>
-        <p>The following matrix maps the primary findings to their assessed Likelihood and Business Impact.</p>
-        ${renderTable(['Finding', 'Likelihood', 'Impact', 'Risk Score'], [
-            ['Log4j RCE (idexna\\bidservices)', {text: 'High (Confirmed)', color: C.red}, {text: 'Critical', color: C.red}, {text: 'CRITICAL', color: C.red}],
-            ['Outdated Content Pack (174 days)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'CRITICAL', color: C.red}],
-            ['Brand-squatting (idexdmz.com)', {text: 'High (Active)', color: C.red}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
-            ['Uninspected SSL (33.6 TB)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
-            ['SaaS Data Exfiltration Risk', {text: 'Medium', color: C.amber}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
-            ['WRM/SMB Lateral Movement', {text: 'Medium', color: C.amber}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}],
-            ['BPFDoor / Nation-State Implants', {text: 'Low (Targeted)', color: C.green}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}]
-        ])}
+    <div class="page">
+        <div class="keep-together">
+            <h1>8. Risk Scoring Summary</h1>
+            <p>The following matrix maps the primary findings to their assessed Likelihood and Business Impact.</p>
+            ${renderTable(['Finding', 'Likelihood', 'Impact', 'Risk Score'], [
+                ['Log4j RCE (idexna\\bidservices)', {text: 'High (Confirmed)', color: C.red}, {text: 'Critical', color: C.red}, {text: 'CRITICAL', color: C.red}],
+                ['Outdated Content Pack (174 days)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'CRITICAL', color: C.red}],
+                ['Brand-squatting (idexdmz.com)', {text: 'High (Active)', color: C.red}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
+                ['Uninspected SSL (33.6 TB)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
+                ['SaaS Data Exfiltration Risk', {text: 'Medium', color: C.amber}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
+                ['WRM/SMB Lateral Movement', {text: 'Medium', color: C.amber}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}],
+                ['BPFDoor / Nation-State Implants', {text: 'Low (Targeted)', color: C.green}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}]
+            ])}
+        </div>
     </div>
 
     <!-- PAGE 8: ROADMAP -->
