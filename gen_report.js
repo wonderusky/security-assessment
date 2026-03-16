@@ -342,16 +342,6 @@ const html = `<!DOCTYPE html>
     </div>
 
     
-        <div class="keep-together">
-            <h3>5.4 Encrypted Traffic Exposure</h3>
-            <p>SSL and encrypted-tunnel applications account for 33.66 TB of all traffic. Without SSL inspection deployed, this represents a massive visibility gap where malware, C2 beaconing, and data exfiltration cannot be detected or stopped by the firewall.</p>
-            ${renderTable(['Metric', 'Bandwidth', 'Percentage of Total Traffic', 'Status'], [
-                ['Encrypted Traffic (SSL/IPsec)', '33.66 TB', '26.8%', { text: 'Uninspected ⚠', color: C.red }],
-                ['Total Risk-4 Traffic', '93.64 TB', '74.8%', 'Elevated Risk'],
-                ['SSL as % of Risk-4', '—', '35.9%', 'Blind Spot']
-            ])}
-        </div>
-
     <!-- PAGE 7: SAAS & SYSTEM -->
     <div class="page">
         
@@ -364,9 +354,8 @@ const html = `<!DOCTYPE html>
                 [{ text: 'Risk 1 (Low)', color: C.green }, '61.72', '35.0%', 'Business-necessary, low-risk protocols'],
                 ['Risk 2', '8.83', '5.0%', 'Moderate-risk, some policy action needed'],
                 ['Risk 3', '11.47', '6.5%', 'Elevated risk, review recommended'],
-                [{ text: 'Risk 4 (High)', color: C.amber }, '93.64', '53.0%', 'High-risk &mdash; dominant risk category'],
-                [{ text: 'Risk 5 (Critical)', color: C.red }, '0.87', '0.5%', 'VNC, BitTorrent, FTP, SMTP relay']
-            ])}
+                [{ text: 'Risk 4 & 5 (High / Critical)', color: C.red }, '94.51', '53.5%', 'High-risk &mdash; VNC, BitTorrent, FTP, SMTP relay']
+            ], ['25%', '15%', '15%', '45%'])}
         </div>
 
         <div class="keep-together">
@@ -380,7 +369,7 @@ const html = `<!DOCTYPE html>
                 ['vnc-base', '570 GB', { text: '5', color: C.red }, 'Risk-5, 192 sessions &mdash; block or restrict'],
                 ['bittorrent', '15.86 GB', { text: '5', color: C.red }, 'Policy violation &mdash; block immediately'],
                 ['ftp', '4.51 GB', { text: '5', color: C.red }, 'Unencrypted file transfer &mdash; restrict']
-            ])}
+            ], ['35%', '15%', '10%', '40%'])}
         </div>
 
         <div class="keep-together">
@@ -390,7 +379,17 @@ const html = `<!DOCTYPE html>
                 ['Poor Terms of Service', '51', '42.19 GB', 'new-relic, teamviewer, ringcentral'],
                 ['Known Data Breaches', '8', '59.38 GB', 'microsoft-dynamics-crm (59.21 GB), yahoo-mail'],
                 ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail, fastviewer']
-            ])}
+            ], ['25%', '15%', '15%', '45%'])}
+        </div>
+
+        <div class="keep-together">
+            <h3>5.4 Encrypted Traffic Exposure</h3>
+            <p>SSL and encrypted-tunnel applications account for 33.66 TB of all traffic. Without SSL inspection deployed, this represents a massive visibility gap where malware, C2 beaconing, and data exfiltration cannot be detected or stopped by the firewall.</p>
+            ${renderTable(['Metric', 'Bandwidth', 'Percentage of Total Traffic', 'Status'], [
+                ['Encrypted Traffic (SSL/IPsec)', '33.66 TB', '26.8%', { text: 'Uninspected ⚠', color: C.red }],
+                ['Total Risk-4 Traffic', '93.64 TB', '74.8%', 'Elevated Risk'],
+                ['SSL as % of Risk-4', '—', '35.9%', 'Blind Spot']
+            ], ['40%', '20%', '25%', '15%'])}
         </div>
 
         <div class="so-what-box">
@@ -457,7 +456,7 @@ const html = `<!DOCTYPE html>
                 ['SaaS Data Exfiltration Risk', {text: 'Medium', color: C.amber}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
                 ['WRM/SMB Lateral Movement', {text: 'Medium', color: C.amber}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}],
                 ['BPFDoor / Nation-State Implants', {text: 'Low (Targeted)', color: C.green}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}]
-            ])}
+            ], ['45%', '25%', '15%', '15%'])}
         </div>
     </div>
 
