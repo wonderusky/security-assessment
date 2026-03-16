@@ -414,9 +414,11 @@ const html = `<!DOCTYPE html>
         <div class="keep-together">
             <h3>6.1 Content Staleness &mdash; CRITICAL</h3>
             ${renderTable(['Component', 'Version', 'Last Updated', 'Staleness'], [
-                ['Content Pack', '9063-9866', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }],
-                ['AV Signatures', '5454-5981', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }]
-            ])}
+                ['Content Pack', '9063-9866', 'Sep 15, 2025', { text: '174 days stale', color: C.red }],
+                ['AV Signatures', '5454-5981', 'Sep 15, 2025', { text: '174 days stale', color: C.red }],
+                ['Threat Signatures', '9063-9866', 'Sep 15, 2025', { text: '174 days stale', color: C.red }],
+                ['GlobalProtect', '6.0.4', 'Jan 10, 2026', 'Up to date']
+            ], ['30%', '20%', '25%', '25%'])}
         </div>
         
     </div>
