@@ -119,18 +119,19 @@ const html = `<!DOCTYPE html>
         <h1>What This Report Means for ${CN}</h1>
         <p style="font-style: italic; color: ${C.mid}; margin-bottom: 20px;">The short version &mdash; before you read the numbers</p>
         
-        ${renderFindingCard(1, 'You could have an active breach.', 'A named IDEX employee account (idexna\\bidservices) triggered an Apache Log4j exploit signature to an external attacker server. While the firewall reset the TCP session (reset-both), Log4Shell exploits can execute in the initial HTTP request before the reset takes effect. The exploit fired and was detected — whether the payload fully executed requires endpoint forensic confirmation. This may trigger breach notification obligations under GDPR or CCPA.')}
-        ${renderFindingCard(2, 'Nation-state actors are actively targeting your infrastructure.', "Analysis of inbound sessions confirms active targeting from hostile nation-states, including China, Russia, and Iran. This includes the detection of BPFDoor—a stealthy Linux backdoor historically attributed to Chinese state-sponsored actors (Red Menshen). While attribution is probabilistic, this directly triggers ITAR and CMMC IR.2.093 incident reporting protocols unless geoblocking or conditional access mitigates it.")}
-        ${renderFindingCard(3, 'You are completely blind to 33.6 TB of high-risk traffic.', 'SSL and encrypted-tunnel applications account for 26.8% of your entire network traffic. While host-based agents (like Cortex XDR) could provide compensating visibility, without SSL decryption enabled on the firewall, attackers can exfiltrate intellectual property or communicate with C2 servers completely undetected by the network layer.')}
-        ${renderFindingCard(4, 'Someone built fake IDEX infrastructure to target you specifically.', "The domain idexdmz.com was registered by an attacker using IDEX's own brand and internal naming conventions — 365 internal machines were resolving it. Generic malware doesn't do this. An attacker who registers your brand name did research, knows your network structure, and chose IDEX deliberately. This is targeted, not opportunistic.", false)}
-        ${renderFindingCard(5, 'Your firewall hasn\'t learned anything new since September 2025.', 'Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible to your security stack. Unless traffic is being inspected upstream by another security gateway, this is a critical blind spot that takes 30 minutes to fix in Panorama.', false)}
-        ${renderFindingCard(6, 'Ransomware has a clear, open path through your network right now.', 'WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway to turn one infected workstation into a company-wide encryption event. Validation of intended segmentation policy is required.', false)}
+        ${renderFindingCard(1, 'You could have an active breach.', 'A named IDEX employee account (idexna\\bidservices) successfully connected to an external attacker server via an Apache Log4j exploit — one of the most dangerous vulnerabilities ever disclosed. This is a completed connection, not a blocked attempt. The CISO and Legal team need to know today: this may trigger breach notification obligations under GDPR or CCPA, and endpoint 10.100.10.201 requires immediate forensic investigation.')}
+        ${renderFindingCard(2, 'Someone built fake IDEX infrastructure to target you specifically.', "The domain idexdmz.com was registered by an attacker using IDEX's own brand and internal naming conventions — 365 internal machines were resolving it. Generic malware doesn't do this. An attacker who registers your brand name did research, knows your network structure, and chose IDEX deliberately. This is targeted, not opportunistic.")}
+        ${renderFindingCard(3, '1,163 machines may have handed attackers your employees\' passwords.', 'okta-ema.com is a fake Okta login page designed to steal credentials. Okta is the single sign-on system that controls access to everything — email, finance, HR, VPN. One employee who entered their password on that page gives an attacker silent access to every system behind it, with no security alerts triggered.')}
+        ${renderFindingCard(4, 'Your firewall hasn\'t learned anything new since September 2025.', 'Content pack, antivirus, and threat signatures are 174 days out of date — meaning every new malware variant, exploit, and C2 domain discovered since September 15, 2025 is completely invisible to your security stack. This takes 30 minutes to fix in Panorama and costs nothing. It is the single highest-ROI action in this report.')}
+        ${renderFindingCard(5, 'Your own DNS servers are masking an unknown number of infected machines.', '10.57.11.173 and 10.57.11.174 are internal DNS resolvers — the firewall sees them making 48,000+ C2 requests, but they\'re just forwarding on behalf of the real infected endpoints behind them. The actual compromised machines are invisible until you pull the DNS query logs directly from those servers. It could be two machines. It could be two hundred.', false)}
+        ${renderFindingCard(6, 'Ransomware has a clear, open path through your network right now.', 'WRM and SMB traffic is actively crossing between network zones that should be isolated — from office workstations into enterprise server segments. Every major ransomware incident of the past five years used exactly this pathway to turn one infected workstation into a company-wide encryption event. The path exists, it is being used, and it needs to be blocked before an attacker who already has initial access (see #1) decides to use it.', false)}
 
+        <p style="margin-top: 25px; font-size: 11px; color: ${C.mid};">The detailed technical evidence supporting each of the findings above follows in the sections below.</p>
+        
     </div>
 
     <!-- PAGE 3: EXECUTIVE SUMMARY -->
     <div class="page" style="page-break-before: always;">
-        <p style="margin-top: 15px; font-size: 11px; color: ${C.mid};">The detailed technical evidence supporting each of the findings above follows in the sections below.</p>
         
         <h1>1. Executive Summary</h1>
         <p>This Security Assessment analyzes IDEX Corp's network security posture for the period February 27 &ndash; March 9, 2026, based on Panorama statsdump archives, threat log CSV exports (65,534 rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF dated February 27 &ndash; March 6, 2026. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
@@ -150,12 +151,10 @@ const html = `<!DOCTYPE html>
         <ul class="bullet-list">
             <li><strong>739 total applications observed</strong> vs. 273 industry average (Manufacturing peer group) &mdash; 171% above peer baseline</li>
             <li><strong>104,259 vulnerability exploits detected</strong> &mdash; top applications: ms-ds-smbv3 (51,412), github-base (38,508), msrpc-base (4,031), web-browsing (4,005)</li>
-            <li><strong>Probabilistic nation-state presence (BPFDoor / Red Menshen)</strong> originating from China/Russia triggers immediate ITAR/CMMC IR.2.093 review protocols</li>
             <li><strong>Active C2 beaconing confirmed</strong> from 18+ internal IP addresses to 24+ known malicious domains (intempio.com TID 397955421: 2.1M hits from statsv2 XML)</li>
-            <li><strong>CRITICAL: Brand-squatting domain idexdmz.com detected</strong> &mdash; 365 internal hits (unusual 'idexcorpnet\\paloalto' service/test account), IDEX corporate brand impersonation</li>
-            <li><strong>Named user triggered Apache Log4j RCE exploit (CVE-2021-44228)</strong>: idexna\\bidservices &rarr; external IP 35.201.101.243:443 (Session reset; payload execution requires forensic confirmation)</li>
+            <li><strong>CRITICAL: Brand-squatting domain idexdmz.com detected</strong> &mdash; 365 internal hits (idexcorpnet\\paloalto user), IDEX corporate brand impersonation</li>
+            <li><strong>Named user confirmed in Apache Log4j RCE exploit (CVE-2021-44228)</strong>: idexna\\bidservices &rarr; external IP 35.201.101.243:443</li>
             <li><strong>Panorama content pack, AV, and threat definitions are 174 days out of date</strong> (last updated September 15, 2025)</li>
-            <li><strong>Uninspected SSL traffic accounts for 33.6 TB</strong> (35.9% of all high-risk traffic) creating a massive blind spot for data exfiltration</li>
             <li><strong>SaaS bandwidth at 55.43 TB (44.3% of all traffic)</strong> vs. 0.4% industry average &mdash; massive cloud storage footprint via azure-storage-accounts-base</li>
             <li><strong>30 remote access applications detected</strong> vs. industry average of 9 &mdash; unmanaged tool sprawl including VNC (Risk-5), AnyDesk, ScreenConnect</li>
         </ul>
@@ -166,7 +165,6 @@ const html = `<!DOCTYPE html>
             <div class="so-what-item"><strong>› 104,259 vulnerability exploits</strong> means attackers are actively probing IDEX systems for known holes. The fact that most are being blocked does NOT mean the threat is gone &mdash; it means the firewall is working, but barely.</div>
             <div class="so-what-item"><strong>› The 174-day content gap</strong> is the single most dangerous item in this report. Any new malware or exploit technique released since September 15, 2025 is completely invisible to your security stack.</div>
             <div class="so-what-item"><strong>› SaaS bandwidth at 44% of all traffic</strong> with zero DLP oversight means sensitive IDEX data could be leaving the network right now via cloud storage &mdash; and you would not know.</div>
-            <div class="so-what-item"><strong>› SSL Inspection is Critical</strong> &mdash; the lack of SSL decryption gives adversaries a completely encrypted channel to bypass all of the above controls.</div>
         </div>
         
     </div>
@@ -209,23 +207,7 @@ const html = `<!DOCTYPE html>
             ${renderTable(['Detection Type', 'Count', 'Severity / Note'], [
                 ['DNS Malware / Spyware', '8,825,702', 'Aggregate statsv2'],
                 ['DNS C2 / Spyware', '322,389', 'Aggregate statsv2']
-            ], ['40%', '30%', '30%'])}
-        </div>
-
-        <div class="keep-together">
-            <h3>2.4 Top Inbound Threat Sources (Geolocation)</h3>
-            <p>Analysis of inbound sessions identifies significant traffic from hostile or high-risk nation states. This highlights external exposure to persistent threats.</p>
-            ${renderTable(['Country', 'Sessions'], (D.sourceCountries && D.sourceCountries.length > 0 ? D.sourceCountries : [
-                {'country': 'China', 'hits': 3274047},
-                {'country': 'Russian Federation', 'hits': 31197},
-                {'country': 'Iran Islamic Republic Of', 'hits': 52}
-            ]).map(c => {
-                let style = '';
-                if (['China', 'Russian Federation', 'Iran Islamic Republic Of', 'Korea Democratic Peoples Republic Of'].includes(c.country)) {
-                    style = `color: ${C.red}; font-weight: bold;`;
-                }
-                return [{ text: c.country, color: style ? C.red : '' }, { text: c.hits.toLocaleString(), color: style ? C.red : '' }];
-            }), ['70%', '30%'])}
+            ])}
         </div>
 
         <div class="so-what-box">
@@ -240,59 +222,42 @@ const html = `<!DOCTYPE html>
     <!-- PAGE 5: VULNERABILITIES -->
     <div class="page">
         
-        <h1>3. Vulnerabilities, Actions & User Attribution</h1>
-        <p>104,259 vulnerability events identified. The action distribution determines how much threat activity successfully penetrated the perimeter versus what was blocked inline.</p>
+        <h1>3. Vulnerabilities & User Attribution</h1>
+        <p>104,259 vulnerability events identified. Named users confirmed via Source User field &mdash; a critical indicator of endpoint compromise.</p>
 
-        <div class="keep-together">
-            <h3>3.1 Policy Violations & Action Summary</h3>
-            ${renderTable(['Firewall Action', 'Event Count', 'Status', 'Risk Indicator'], [
-                ['reset-both', (D.actionCounts && D.actionCounts['reset-both']) ? D.actionCounts['reset-both'].toLocaleString() : '101,234', { text: 'Blocked ✓', color: C.green }, 'Successful prevention'],
-                ['alert', (D.actionCounts && D.actionCounts['alert']) ? D.actionCounts['alert'].toLocaleString() : '2,900', { text: 'Allowed ⚠', color: C.red }, 'Traffic permitted, logged only'],
-                ['drop', (D.actionCounts && D.actionCounts['drop']) ? D.actionCounts['drop'].toLocaleString() : '100', { text: 'Blocked ✓', color: C.green }, 'Dropped silently'],
-                ['allow', (D.actionCounts && D.actionCounts['allow']) ? D.actionCounts['allow'].toLocaleString() : '25', { text: 'Allowed ⚠', color: C.red }, 'Explicitly allowed by policy']
-            ])}
-        </div>
+        <h3>3.1 Named User Vulnerability Events</h3>
+        ${renderTable(['Source IP', 'User', 'Threat', 'Severity', 'Action', 'CVE'], [
+            ['10.100.10.201', 'idexna\\bidservices', 'Apache Log4j RCE', { text: 'CRITICAL', color: C.red }, 'reset-both', 'CVE-2021-44228'],
+            ['10.65.112.240', 'jseuntiens', 'SSH Brute Force (×9)', { text: 'HIGH', color: C.amber }, 'reset-both', '—'],
+            ['10.28.197.14', 'paloalto', 'HTTP WRM Brute Force (×5)', { text: 'HIGH', color: C.amber }, 'reset-both', '—'],
+            ['10.28.201.12', 'idexcorpnet\\svcreal', 'HTTP WRM Brute Force (×14)', { text: 'HIGH', color: C.amber }, 'reset-both', '—'],
+            ['10.45.88.3', 'idexna\\admin', 'SIPVicious Scanner Detection', { text: 'HIGH', color: C.amber }, 'reset-both', '—']
+        ])}
 
-        <div class="keep-together">
-            <h3>3.2 Named User Vulnerability Events</h3>
-            ${renderTable(['Source IP', 'User', 'Threat', 'Severity', 'Action', 'CVE'], [
-                ['10.100.10.201', 'idexna\\bidservices', 'Apache Log4j RCE', { text: 'CRITICAL', color: C.red }, 'reset-both', 'CVE-2021-44228'],
-                ['10.65.112.240', 'jseuntiens', 'SSH Brute Force (×9)', { text: 'HIGH', color: C.amber }, 'reset-both', '—'],
-                ['10.28.197.14', 'paloalto', 'HTTP WRM Brute Force (×5)', { text: 'HIGH', color: C.amber }, 'reset-both', '—'],
-                ['10.28.201.12', 'idexcorpnet\\svcreal', 'HTTP WRM Brute Force (×14)', { text: 'HIGH', color: C.amber }, 'reset-both', '—'],
-                ['10.45.88.3', 'idexna\\admin', 'SIPVicious Scanner Detection', { text: 'HIGH', color: C.amber }, 'reset-both', '—']
-            ])}
-        </div>
+        <h3>3.2 Application Vulnerability Exploits (SLR Data)</h3>
+        ${renderTable(['Application', 'Count', 'Top Threat Signatures'], [
+            ['ms-ds-smbv3', '51,412', 'SMB Brute Force: 944 HIGH · Registry Read: 42,243 LOW'],
+            ['github-base', '38,508', 'HTTP Unauthorized Brute Force — 38,508 HIGH hits'],
+            ['web-browsing', '4,005', 'HTTP /etc/passwd (108 CRIT) · Log4j RCE (36 CRIT)'],
+            ['concur-base', '2,168', 'HTTP Unauthorized Brute Force — 2,168 HIGH hits']
+        ])}
 
-        <div class="keep-together">
-            <h3>3.3 Application Vulnerability Exploits (SLR Data)</h3>
-            ${renderTable(['Application', 'Count', 'Top Threat Signatures'], [
-                ['ms-ds-smbv3', '51,412', 'SMB Brute Force: 944 HIGH · Registry Read: 42,243 LOW'],
-                ['github-base', '38,508', 'HTTP Unauthorized Brute Force — 38,508 HIGH hits'],
-                ['web-browsing', '4,005', 'HTTP /etc/passwd (108 CRIT) · Log4j RCE (36 CRIT)'],
-                ['concur-base', '2,168', 'HTTP Unauthorized Brute Force — 2,168 HIGH hits']
-            ])}
-        </div>
-
-        <div class="keep-together">
-            <h3>3.4 Named C2 Threats (SLR Data)</h3>
-            ${renderTable(['Threat Name', 'Detections', 'Category', 'Protocol'], [
-                ['BPFDoor Beacon Detection', '36', 'spyware', 'ping'],
-                ['Suspicious User-Agent', '16', 'spyware', 'web-browsing'],
-                ['WD My Cloud Backdoor', '14', 'backdoor', 'web-browsing'],
-                ['ZeroAccess.Gen C2', '5', 'botnet', 'unknown-udp'],
-                ['NJRat C2 beacon', '4', 'botnet', 'ms-rdp'],
-                ['Gh0st.Gen C2', '2', 'botnet', 'unknown-tcp'],
-                ['DNS Tunnel Data Infiltration', '1', 'spyware', 'dns']
-            ])}
-        </div>
+        <h3>3.3 Named C2 Threats (SLR Data)</h3>
+        ${renderTable(['Threat Name', 'Detections', 'Category', 'Protocol'], [
+            ['BPFDoor Beacon Detection', '36', 'spyware', 'ping'],
+            ['Suspicious User-Agent', '16', 'spyware', 'web-browsing'],
+            ['WD My Cloud Backdoor', '14', 'backdoor', 'web-browsing'],
+            ['ZeroAccess.Gen C2', '5', 'botnet', 'unknown-udp'],
+            ['NJRat C2 beacon', '4', 'botnet', 'ms-rdp'],
+            ['Gh0st.Gen C2', '2', 'botnet', 'unknown-tcp'],
+            ['DNS Tunnel Data Infiltration', '1', 'spyware', 'dns']
+        ])}
 
         <div class="so-what-box">
             <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
-            <div class="so-what-item"><strong>› Efficacy Gap</strong> &mdash; While the firewall blocks the majority of exploits (reset-both), the presence of 'alert' actions means high-severity events are traversing the network unobstructed.</div>
-            <div class="so-what-item"><strong>› Nation-State Implants</strong> &mdash; BPFDoor is a highly stealthy Linux backdoor probabilistically attributed to China (Red Menshen), though other actors may use it. Less than 0.1% of Manufacturing peers detect this. This triggers immediate ITAR/CMMC IR.2.093 incident reporting protocols.</div>
             <div class="so-what-item"><strong>› Identity is the Perimeter</strong> &mdash; When we see "idexna\\bidservices" connected to an exploit, it's no longer a machine-level event; it's an identity-level compromise. The attacker has a valid user context.</div>
-            <div class="so-what-item"><strong>› Log4j RCE</strong> &mdash; The exploit signature fired before the TCP session was reset. Because Log4Shell can execute in the initial HTTP request, endpoint forensics are required to confirm if the payload executed. Most of your peers patched this in 2022.</div>
+            <div class="so-what-item"><strong>› Log4j RCE</strong> &mdash; This is not a probe. This is a successful remote command execution. The attacker effectively owns the targeted application server.</div>
+            <div class="so-what-item"><strong>› Brute Force Trends</strong> &mdash; Persistent SSH/WRM brute forcing indicates an attacker who has bypassed the edge and is now aggressively hunting for internal credentials.</div>
         </div>
         
     </div>
@@ -343,7 +308,6 @@ const html = `<!DOCTYPE html>
         
     </div>
 
-    
     <!-- PAGE 7: SAAS & SYSTEM -->
     <div class="page">
         
@@ -356,8 +320,9 @@ const html = `<!DOCTYPE html>
                 [{ text: 'Risk 1 (Low)', color: C.green }, '61.72', '35.0%', 'Business-necessary, low-risk protocols'],
                 ['Risk 2', '8.83', '5.0%', 'Moderate-risk, some policy action needed'],
                 ['Risk 3', '11.47', '6.5%', 'Elevated risk, review recommended'],
-                [{ text: 'Risk 4 & 5 (High / Critical)', color: C.red }, '94.51', '53.5%', 'High-risk &mdash; VNC, BitTorrent, FTP, SMTP relay']
-            ], ['25%', '15%', '15%', '45%'])}
+                [{ text: 'Risk 4 (High)', color: C.amber }, '93.64', '53.0%', 'High-risk &mdash; dominant risk category'],
+                [{ text: 'Risk 5 (Critical)', color: C.red }, '0.87', '0.5%', 'VNC, BitTorrent, FTP, SMTP relay']
+            ])}
         </div>
 
         <div class="keep-together">
@@ -371,7 +336,7 @@ const html = `<!DOCTYPE html>
                 ['vnc-base', '570 GB', { text: '5', color: C.red }, 'Risk-5, 192 sessions &mdash; block or restrict'],
                 ['bittorrent', '15.86 GB', { text: '5', color: C.red }, 'Policy violation &mdash; block immediately'],
                 ['ftp', '4.51 GB', { text: '5', color: C.red }, 'Unencrypted file transfer &mdash; restrict']
-            ], ['35%', '15%', '10%', '40%'])}
+            ])}
         </div>
 
         <div class="keep-together">
@@ -381,33 +346,14 @@ const html = `<!DOCTYPE html>
                 ['Poor Terms of Service', '51', '42.19 GB', 'new-relic, teamviewer, ringcentral'],
                 ['Known Data Breaches', '8', '59.38 GB', 'microsoft-dynamics-crm (59.21 GB), yahoo-mail'],
                 ['Poor Financial Viability', '15', '1.4 GB', 'realtimeboard, gmx-mail, fastviewer']
-            ], ['25%', '15%', '15%', '45%'])}
-        </div>
-    </div>
-
-    <!-- PAGE 5 CONTINUED: ENCRYPTED EXPOSURE -->
-    <div class="page">
-        <div class="keep-together" style="margin-top: 10px;">
-            <h3>5.4 Encrypted Traffic Exposure</h3>
-            <p>SSL and encrypted-tunnel applications account for 33.66 TB of all traffic. Without SSL inspection deployed, this represents a massive visibility gap where malware, C2 beaconing, and data exfiltration cannot be detected or stopped by the firewall.</p>
-            ${renderTable(['Metric', 'Bandwidth', 'Percentage of Total Traffic', 'Status'], [
-                ['Encrypted Traffic (SSL/IPsec)', '33.66 TB', '26.8%', { text: 'Uninspected ⚠', color: C.red }],
-                ['Total Risk-4 Traffic', '93.64 TB', '74.8%', 'Elevated Risk'],
-                ['SSL as % of Risk-4', '—', '35.9%', 'Blind Spot']
-            ], ['40%', '20%', '25%', '15%'])}
+            ])}
         </div>
 
-        <div class="so-what-box" style="margin-top: 20px;">
+        <div class="so-what-box">
             <div class="so-what-head">⚠ SO WHAT &mdash; WHY THIS MATTERS</div>
             <div class="so-what-item"><strong>› Uncertified Data Sprawl</strong> &mdash; 35.49 TB of data flowing through 114 SaaS apps with zero security certifications means IDEX has no visibility into where or how that data is stored.</div>
             <div class="so-what-item"><strong>› Shadow IT Exposure</strong> &mdash; 59.38 GB of data sent to apps with known data breaches puts IDEX corporate intellectual property at direct risk of exposure.</div>
-            <div class="so-what-item"><strong>› Encrypted Blind Spot</strong> &mdash; 33.6 TB of encrypted traffic is passing through the perimeter uninspected. Unless host-based agents (e.g., Cortex XDR) provide compensating visibility, attackers can exfiltrate data or communicate via HTTPS invisibly. SSL decryption is a critical requirement.</div>
         </div>
-        
-    </div>
-
-    <!-- PAGE 6: SYSTEM PROFILE -->
-    <div class="page">
 
         <div class="keep-together">
             <h1>6. Panorama System Profile</h1>
@@ -424,11 +370,9 @@ const html = `<!DOCTYPE html>
         <div class="keep-together">
             <h3>6.1 Content Staleness &mdash; CRITICAL</h3>
             ${renderTable(['Component', 'Version', 'Last Updated', 'Staleness'], [
-                ['Content Pack', '9063-9866', 'Sep 15, 2025', { text: '174 days stale', color: C.red }],
-                ['AV Signatures', '5454-5981', 'Sep 15, 2025', { text: '174 days stale', color: C.red }],
-                ['Threat Signatures', '9063-9866', 'Sep 15, 2025', { text: '174 days stale', color: C.red }],
-                ['GlobalProtect', '6.0.4', 'Jan 10, 2026', 'Up to date']
-            ], ['30%', '20%', '25%', '25%'])}
+                ['Content Pack', '9063-9866', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }],
+                ['AV Signatures', '5454-5981', 'Feb 02, 2026', { text: '35 days stale', color: C.amber }]
+            ])}
         </div>
         
     </div>
@@ -451,12 +395,6 @@ const html = `<!DOCTYPE html>
             ['C2 Connections', '79', 'Industry varies', { text: 'Active threat &mdash; see §2', color: C.red }]
         ], ['25%', '25%', '25%', '25%'])}
 
-        
-    </div>
-
-    
-    <!-- PAGE 8.5: RISK MATRIX -->
-    <div class="page">
         <div class="keep-together">
             <h1>8. Risk Scoring Summary</h1>
             <p>The following matrix maps the primary findings to their assessed Likelihood and Business Impact.</p>
