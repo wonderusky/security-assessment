@@ -103,11 +103,11 @@ const html = `<!DOCTYPE html>
         <div style="margin-top: 100px;">
             <div style="color: ${C.orange}; font-size: 44px; font-weight: bold; line-height: 1;">${CN}</div>
             <div style="font-size: 34px; font-weight: bold; margin-bottom: 20px;">Security Assessment</div>
-            <div style="font-size: 16px; color: ${C.mid}; font-style: italic; margin-bottom: 10px;">${month} &middot; Report Period: ${D.sourceFiles.find(f => f.type === 'Threat Logs').period}</div>
+            <div style="font-size: 16px; color: ${C.mid}; font-style: italic; margin-bottom: 10px;">${month} &middot; Report Period: February 27 &ndash; March 9, 2026</div>
             
             <div style="margin-top: 40px; font-size: 13px; line-height: 1.6;">
-                <strong>Prepared by:</strong> ${D.preparer ? D.preparer.name : 'John Shelest'} | ${D.preparer ? D.preparer.title : 'Palo Alto Networks Solutions Consultant'}<br>
-                <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; ${(D.totalRows || 0).toLocaleString()} Threat Log Rows
+                <strong>Prepared by:</strong> John Shelest | Palo Alto Networks Solutions Consultant<br>
+                <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; 65,534 Threat Log Rows
             </div>
         </div>
         
@@ -134,7 +134,7 @@ const html = `<!DOCTYPE html>
     <div class="page" style="page-break-before: always;">
         
         <h1>1. Executive Summary</h1>
-        <p>This Security Assessment analyzes ${CN}'s network security posture for the period ${D.sourceFiles.find(f => f.type === 'Threat Logs').period}, based on Panorama statsdump archives, threat log CSV exports (${(D.totalRows || 0).toLocaleString()} rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
+        <p>This Security Assessment analyzes IDEX Corp's network security posture for the period February 27 &ndash; March 9, 2026, based on Panorama statsdump archives, threat log CSV exports (65,534 rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF dated February 27 &ndash; March 6, 2026. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
 
         <div style="display: flex; margin: 20px -8px;">
             ${renderKPI('739', 'Total Applications', C.dark)}
@@ -400,56 +400,50 @@ const html = `<!DOCTYPE html>
             <p>The following matrix maps the primary findings to their assessed Likelihood and Business Impact.</p>
             ${renderTable(['Finding', 'Likelihood', 'Impact', 'Risk Score'], [
                 ['Log4j RCE (idexna\\bidservices)', {text: 'High (Confirmed)', color: C.red}, {text: 'Critical', color: C.red}, {text: 'CRITICAL', color: C.red}],
-                ['Outdated Content Pack (174 days)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'CRITICAL', color: C.red}],
-                ['Brand-squatting (idexdmz.com)', {text: 'High (Active)', color: C.red}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
-                ['Uninspected SSL (33.6 TB)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
+                ['Outdated Content Pack (182 days)', {text: 'High', color: C.red}, {text: 'High', color: C.amber}, {text: 'CRITICAL', color: C.red}],
+                ['Okta Phishing (okta-ema.com)', {text: 'High (Active)', color: C.red}, {text: 'Critical', color: C.red}, {text: 'CRITICAL', color: C.red}],
                 ['SaaS Data Exfiltration Risk', {text: 'Medium', color: C.amber}, {text: 'High', color: C.amber}, {text: 'HIGH', color: C.amber}],
-                ['WRM/SMB Lateral Movement', {text: 'Medium', color: C.amber}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}],
-                ['BPFDoor / Nation-State Implants', {text: 'Low (Targeted)', color: C.green}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}]
-            ], ['45%', '25%', '15%', '15%'])}
+                ['WRM/SMB Lateral Movement', {text: 'Medium', color: C.amber}, {text: 'Critical', color: C.red}, {text: 'HIGH', color: C.amber}]
+            ], ['45%', '20%', '15%', '20%'])}
         </div>
     </div>
 
     <!-- PAGE 8: ROADMAP -->
-    <div class="page">
+    <div class="page" style="page-break-before: always;">
         
         <h1>9. Prioritized Remediation Roadmap</h1>
         <p>Remediation items are ordered by risk priority. P1 items represent confirmed active threats or critical infrastructure gaps requiring immediate attention.</p>
 
         <h3>P1 &mdash; Immediate Actions (0&ndash;7 Days)</h3>
         <ul class="bullet-list">
-            <li><strong>Update Panorama content pack, AV, and threat signatures immediately</strong> &mdash; 174 days of exposure to undetected threats</li>
-            <li><strong>Isolate 10.57.11.173 and 10.57.11.174</strong> &mdash; 24,000+ spyware hits each, 24 unique C2 domains, Internal zone</li>
-            <li><strong>Initiate incident investigation for idexna\\bidservices</strong> &mdash; confirmed Log4j RCE (CVE-2021-44228) to external IP 35.201.101.243</li>
-            <li><strong>Block idexdmz.com at DNS and firewall layer</strong> &mdash; IDEX brand squatting, internal hosts actively resolving this domain</li>
-            <li><strong>Block okta-ema.com</strong> &mdash; Okta impersonation domain, 1,163 hits from internal hosts (identity credential risk)</li>
+            <li><strong>Update Panorama content pack, AV, and threat signatures immediately</strong> &mdash; 182 days of exposure to undetected threats</li>
+            <li><strong>Pull DNS query logs from 10.57.11.173 and 10.57.11.174</strong> &mdash; these resolvers are masking the real list of infected endpoints</li>
+            <li><strong>Initiate incident investigation for idexna\\bidservices on 10.100.10.201</strong> &mdash; confirmed Log4j RCE (CVE-2021-44228) to external IP 35.201.101.243</li>
+            <li><strong>Block okta-ema.com and force Okta password resets</strong> &mdash; Okta credential phishing page with 1,163 internal hits</li>
         </ul>
 
         <h3>P2 &mdash; Short-Term Actions (7&ndash;30 Days)</h3>
         <ul class="bullet-list">
-            <li><strong>Remediate idexcorpnet\\jseuntiens</strong> &mdash; SSH brute force from L5-BU_OFFICE to L2-Cont (9 events, reset-both)</li>
-            <li><strong>Investigate WRM lateral movement: 10.65.131.251 &rarr; INTERNAL</strong> (24.4 MB cross-segment flow on port 5985)</li>
-            <li><strong>Audit and restrict VNC (570 GB, Risk-5, 192 sessions)</strong> &mdash; determine if managed or shadow deployment</li>
-            <li><strong>Restrict BitTorrent, FTP, open-vpn, and zerotier per acceptable use policy</strong> &mdash; Risk-4/5 personal apps</li>
-            <li><strong>Conduct SaaS app review for 114 uncertified SaaS apps</strong> accounting for 35.49 TB of bandwidth</li>
-            <li><strong>Review and remediate 51 SaaS apps with poor Terms of Service</strong> (42.19 GB)</li>
-            <li><strong>Validate all 30 remote access tools against approved application catalog</strong> &mdash; disable unauthorized tools</li>
+            <li><strong>Remediate idexcorpnet\\jseuntiens SSH brute force</strong> from 10.65.112.240</li>
+            <li><strong>Investigate WRM lateral movement: 10.65.131.251 &rarr; idex_ipsec</strong> (11.7 MB cross-segment flow)</li>
+            <li><strong>Validate SMB segmentation policy</strong> &mdash; 6 cross-zone SMB flows detected</li>
+            <li><strong>Audit and restrict 30 remote access tools</strong> vs. industry average of 9 &mdash; disable unauthorized tools</li>
+            <li><strong>Conduct application review for high-risk apps</strong> &mdash; 739 total applications observed</li>
         </ul>
 
         <h3>P3 &mdash; Strategic Investments (30&ndash;90 Days)</h3>
         <ul class="bullet-list">
-            <li><strong>Deploy Advanced DNS Security</strong> to block C2 beaconing in real-time (BPFDoor, NJRat, Gh0st signatures active)</li>
-            <li><strong>Implement Next-Generation CASB</strong> for 65K+ SaaS application visibility, data classification, and DLP enforcement</li>
-            <li><strong>Enforce network micro-segmentation</strong> to prevent WRM/SMB cross-segment lateral movement (L4-BU_ENT &harr; INTERNAL)</li>
+            <li><strong>Deploy Advanced DNS Security</strong> to block C2 beaconing in real-time</li>
+            <li><strong>Implement Next-Generation CASB</strong> for SaaS application visibility, data classification, and DLP enforcement</li>
+            <li><strong>Enforce network micro-segmentation</strong> to prevent WRM/SMB cross-segment lateral movement</li>
             <li><strong>Enable Cortex XDR on endpoints</strong> to correlate network telemetry with host-level activity for named users</li>
-            <li><strong>Deploy SSL/TLS inspection</strong> to gain visibility into 33.6 TB of currently opaque SSL traffic</li>
+            <li><strong>Deploy SSL/TLS inspection</strong> to gain visibility into encrypted traffic</li>
         </ul>
-
         
     </div>
 
     <!-- PAGE 15: APPENDIX - DNS INVESTIGATION -->
-    <div class="page">
+    <div class="page" style="page-break-before: always;">
         
         
         <h1 style="font-size: 20px; margin-top: 0;">Appendix: Identifying Infected Clients Behind DNS Servers</h1>
