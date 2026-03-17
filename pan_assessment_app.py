@@ -319,6 +319,41 @@ def sniff_csv(path):
     except Exception as e:
         return f'error({e})'
 
+def load_statsdump(path, log):
+    data = {'panorama': {}, 'source_countries': []}
+    if not path or not os.path.exists(path): return data
+    log('  Parsing statsdump/techsupport...')
+    try:
+        import tarfile
+        import xml.etree.ElementTree as ET
+        
+        # 1. Panorama profile extraction (existing logic)
+        # We will stub this for now and just add source countries
+        
+        with tarfile.open(path, 'r:*') as t:
+            for member in t.getmembers():
+                if member.name == 'reports/SourceCountryReport.xml':
+                    f = t.extractfile(member)
+                    tree = ET.parse(f)
+                    root = tree.getroot()
+                    
+                    countries = []
+                    for entry in root.findall('.//entry'):
+                        country = entry.find('srcloc').text if entry.find('srcloc') is not None else 'Unknown'
+                        hits_node = entry.find('sessions')
+                        hits = int(hits_node.text) if hits_node is not None else 0
+                        
+                        # Filter out internal/RFC1918 networks masquerading as countries
+                        if country != 'Unknown' and not country[0].isdigit():
+                            countries.append({'country': country, 'hits': hits})
+                    
+                    data['source_countries'] = sorted(countries, key=lambda x: -x['hits'])[:10]
+                    log(f"    Loaded {len(data['source_countries'])} source countries")
+                    break
+    except Exception as e:
+        log(f"    Error parsing statsdump: {e}")
+    return data
+
 def sniff_statsdump(path):
     """Detect statsdump archives (.tgz/.tar/.gz/.zip) OR extracted directories."""
     try:
@@ -447,6 +482,7 @@ def parse_threat_name(name):
 
 def load_threat_csv(path, log):
     spyware, vulns = [], []
+    action_counts = defaultdict(int)
     log('  Parsing threat CSV...')
     with open(path, newline='', encoding='utf-8', errors='replace') as f:
         for i, row in enumerate(csv.reader(f)):
@@ -457,15 +493,19 @@ def load_threat_csv(path, log):
             src_zone = row[16].strip()
             threat   = row[32].strip()
             severity = row[34].strip()
-            action   = row[21].strip() if len(row) > 21 else ''
+            action   = row[21].strip() if len(row) > 21 else 'unknown'
             dst_ip   = row[8].strip()  if len(row) > 8  else ''
             if src_zone in SKIP_ZONES: continue
+            
+            # Tally actions for the Policy Violations section
+            action_counts[action] += 1
+            
             if subtype == 'spyware':
                 spyware.append((src_ip, src_user, src_zone, threat, severity))
             elif subtype == 'vulnerability':
                 vulns.append((src_ip, src_user, src_zone, threat, severity, action, dst_ip))
     log(f'    Spyware: {len(spyware):,}  |  Vulnerability: {len(vulns):,}')
-    return spyware, vulns
+    return spyware, vulns, dict(action_counts)
 
 def analyze_spyware(rows, log):
     ip_hits  = defaultdict(int); ip_zone  = {}
@@ -572,7 +612,8 @@ def get_csv_date_range(path):
         lines = [l for l in tail.splitlines() if l.strip()]
         last = lines[-1] if lines else ''
         s, e = extract(first), extract(last)
-        if s and e: return s if s == e else f"{s} - {e}"
+        if s and e:
+            return s if s == e else f"{min(s, e)} - {max(s, e)}"
         if s: return s
     except: pass
     return "Period Unknown"
@@ -588,11 +629,14 @@ def generate(source_dir, customer_name, output_dir, log):
 
     # Parse CSVs
     log('Parsing data...')
-    sp, vu = load_threat_csv(files['threat'], log)
+    sp, vu, action_counts = load_threat_csv(files['threat'], log)
     dns, infected, top_doms, dom_tids, top_ips = analyze_spyware(sp, log)
     smb = load_smb(files['traffic'], log) if files['traffic'] else []
     wrm = load_wrm(files['traffic'], log) if files['traffic'] else []
 
+    # Parse statsdump
+    stats_data = load_statsdump(files['statsdump'], log)
+    
     threat_period  = get_csv_date_range(files['threat'])
     traffic_period = get_csv_date_range(files['traffic']) if files['traffic'] else 'N/A'
 
@@ -613,10 +657,12 @@ def generate(source_dir, customer_name, output_dir, log):
                           for ip, d in top_ips],
         'smbFlows':      smb,
         'wrmFlows':      wrm,
+        'actionCounts':  action_counts,
         'vulnEvents':    [{'src_ip': r[0], 'user': r[1], 'zone': r[2],
                            'threat': r[3], 'severity': r[4],
                            'action': r[5], 'dst_ip': r[6]}
                           for r in vu],
+        'sourceCountries': stats_data.get('source_countries', []),
         # SLR fields — populated from statsdump/SLR when available, else '—'
         'slr': {},
         # Panorama profile — populated from statsdump when available

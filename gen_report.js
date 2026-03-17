@@ -103,11 +103,11 @@ const html = `<!DOCTYPE html>
         <div style="margin-top: 100px;">
             <div style="color: ${C.orange}; font-size: 44px; font-weight: bold; line-height: 1;">${CN}</div>
             <div style="font-size: 34px; font-weight: bold; margin-bottom: 20px;">Security Assessment</div>
-            <div style="font-size: 16px; color: ${C.mid}; font-style: italic; margin-bottom: 10px;">${month} &middot; Report Period: February 27 &ndash; March 9, 2026</div>
+            <div style="font-size: 16px; color: ${C.mid}; font-style: italic; margin-bottom: 10px;">${month} &middot; Report Period: ${D.sourceFiles.find(f => f.type === 'Threat Logs').period}</div>
             
             <div style="margin-top: 40px; font-size: 13px; line-height: 1.6;">
-                <strong>Prepared by:</strong> John Shelest | Palo Alto Networks Solutions Consultant<br>
-                <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; 65,534 Threat Log Rows
+                <strong>Prepared by:</strong> ${D.preparer ? D.preparer.name : 'John Shelest'} | ${D.preparer ? D.preparer.title : 'Palo Alto Networks Solutions Consultant'}<br>
+                <strong>Source Data:</strong> Panorama PAN-OS 11.1.10-h1 &middot; 80+ Managed Device Groups &middot; ${(D.totalRows || 0).toLocaleString()} Threat Log Rows
             </div>
         </div>
         
@@ -134,7 +134,7 @@ const html = `<!DOCTYPE html>
     <div class="page" style="page-break-before: always;">
         
         <h1>1. Executive Summary</h1>
-        <p>This Security Assessment analyzes IDEX Corp's network security posture for the period February 27 &ndash; March 9, 2026, based on Panorama statsdump archives, threat log CSV exports (65,534 rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF dated February 27 &ndash; March 6, 2026. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
+        <p>This Security Assessment analyzes ${CN}'s network security posture for the period ${D.sourceFiles.find(f => f.type === 'Threat Logs').period}, based on Panorama statsdump archives, threat log CSV exports (${(D.totalRows || 0).toLocaleString()} rows after zone filtering), traffic logs, and the Security Lifecycle Review (SLR) PDF. Internal zone filter applied: all traffic with Source Zone &ne; 'untrust' and &ne; 'guest' is treated as internally-sourced.</p>
 
         <div style="display: flex; margin: 20px -8px;">
             ${renderKPI('739', 'Total Applications', C.dark)}
